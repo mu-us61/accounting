@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from . import models
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -46,3 +47,10 @@ def logout_view(request):
     logout(request)
     # Redirect to a success page.
     return redirect("home_view_name")
+
+
+@login_required
+def profile_view(request):
+    # user_profile = UserProfile.objects.get(user=request.user)
+    user_profile = "deneme"
+    return render(request, "app_base/profile.html", {"user_profile": user_profile})
