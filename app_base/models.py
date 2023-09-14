@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -41,10 +42,24 @@ class MuUser(AbstractUser):
     ciktilar_GBP = models.IntegerField(default=0)
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
 class Islemler(models.Model):
     islem_tarihi = models.DateField(auto_now=True, auto_now_add=False)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
+    tags = models.ManyToManyField(Tag)
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
 
