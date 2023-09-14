@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="description" content="">
+        <meta name="keywords" content="HTML, CSS, JavaScript">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+    </head>
+    <body>
+        <div>
+            {% include "app_base/navbar.html" %}
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+</html>
