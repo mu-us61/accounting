@@ -4,7 +4,12 @@ from django.contrib.auth.hashers import check_password
 from . import models
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
+def bakiye_view(request):
+    users = models.MuUser.objects.all()  # Retrieve all MuUser objects from the database
+    context = {"users": users}
+    return render(request, "app_base/bakiye.html", context)
 
 
 def home_view(request):

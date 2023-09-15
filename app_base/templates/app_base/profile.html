@@ -1,5 +1,25 @@
-Bakiye +
-Geçmiş hareketler +
-Etiketler +
-Kullanıcılar +
-Kullanıcı grupları +
+{% extends "app_base/base.html" %}
+{% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'bakiye_view_name' %}">Bakiye</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home_view_name' %}">Geçmiş Hareketler</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home_view_name' %}">Etiketler</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home_view_name' %}">Kullanıcılar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home_view_name' %}">Kullanıcı Grupları</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home_view_name' %}">+</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock content %}

@@ -38,8 +38,8 @@ class MuUser(AbstractUser):
     ciktilar_GBP = models.IntegerField(default=0)
 
     bakiye_Sek = models.IntegerField(default=0)
-    girdiler_GBP = models.IntegerField(default=0)
-    ciktilar_GBP = models.IntegerField(default=0)
+    girdiler_Sek = models.IntegerField(default=0)
+    ciktilar_Sek = models.IntegerField(default=0)
 
 
 class Tag(models.Model):
@@ -80,5 +80,5 @@ class Islemler(models.Model):
     ciktilar_GBP = models.IntegerField(default=0)
 
     bakiye_Sek = models.IntegerField(default=0)
-    girdiler_GBP = models.IntegerField(default=0)
-    ciktilar_GBP = models.IntegerField(default=0)
+    girdiler_Sek = models.IntegerField(default=0)
+    ciktilar_Sek = models.IntegerField(default=0)

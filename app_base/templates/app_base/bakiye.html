@@ -1,1 +1,31 @@
-bakiyeler olcak ama ayrintilar lazim
+{% extends "app_base/base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="border">Users</th>
+                        <th class="border">TL</th>
+                        <th class="border">Dolar</th>
+                        <th class="border">Euro</th>
+                        <th class="border">GBP</th>
+                        <th class="border">Sek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td class="border">{{ user.username }}</td>
+                            <td class="border">{{ user.bakiye_TL }}</td>
+                            <td class="border">{{ user.bakiye_Dolar }}</td>
+                            <td class="border">{{ user.bakiye_Euro }}</td>
+                            <td class="border">{{ user.bakiye_GBP }}</td>
+                            <td class="border">{{ user.bakiye_Sek }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

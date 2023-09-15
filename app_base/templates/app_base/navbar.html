@@ -1,25 +1,35 @@
-<ul>
-    <li>
-        <a href={% url "home_view_name" %}>Home</a>
-    </li>
-    {% if user.is_authenticated %}
-        <li>
-            <span>Hello {{ user.username }}</span>
-        </li>
-    {% endif %}
-    {% if user.is_authenticated %}
-        <li class="right">
-            <a href=" {% url 'passchange_view_name' %} ">Change Password</a>
-        </li>
-        <li class="right">
-            <a href=" {% url 'logout_view_name' %} ">Logout</a>
-        </li>
-        <li class="right">
-            <a href=" {% url 'profile_view_name' %} ">Profile</a>
-        </li>
-    {% else %}
-        <li class="right">
-            <a href=" {% url 'login_view_name' %} ">Login</a>
-        </li>
-    {% endif %}
-</ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home_view_name' %}">Home</a>
+    <!-- Add a button for mobile navigation -->
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <span class="nav-link">Hello {{ user.username }}</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'passchange_view_name' %}">Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout_view_name' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile_view_name' %}">Profile</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login_view_name' %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
