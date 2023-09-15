@@ -16,3 +16,11 @@ class RemoveUserFromGroupForm(forms.Form):
         label="Select Users to Remove",
         widget=forms.CheckboxSelectMultiple(),
     )
+
+
+class MuUserForm(forms.ModelForm):
+    class Meta:
+        model = MuUser
+        fields = "__all__"
+        # exclude = ["pk"]
+        # fields = ["email", "username", "password"]  # Adjust fields as needed # TODO gerekli alanlar eklencek

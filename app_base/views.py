@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from . import models
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from .forms import AddUserToGroupForm, RemoveUserFromGroupForm
+from .forms import AddUserToGroupForm, RemoveUserFromGroupForm, MuUserForm
 
 
 # Create your views here.
@@ -122,3 +122,42 @@ def groupcreate_view(request):
                 return redirect("usergroups_view_name")  # Redirect to a group list view
 
     return render(request, "app_base/groupcreate.html")
+
+
+# //-------------------------------------------------~~-------------------------------------------------
+
+
+def muuserlist_view(request):
+    users = models.MuUser.objects.all()
+    return render(request, "app_base/userlist.html", {"users": users})
+
+
+def muusercreate_view(request):
+    if request.method == "POST":
+        form = MuUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("muuserlist_view_name")
+    else:
+        form = MuUserForm()
+    return render(request, "app_base/usercreate.html", {"form": form})
+
+
+def muuserupdate_view(request, pk):
+    user = get_object_or_404(models.MuUser, pk=pk)
+    if request.method == "POST":
+        form = MuUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("muuserlist_view_name")
+    else:
+        form = MuUserForm(instance=user)
+    return render(request, "app_base/userupdate.html", {"form": form, "user": user})
+
+
+def muuserdelete_view(request, pk):
+    user = get_object_or_404(models.MuUser, pk=pk)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('muuserlist_view_name')
+    return render(request, 'app_base/userdelete.html', {'user': user})
