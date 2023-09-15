@@ -1,0 +1,26 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <div class="container mt-4">
+        <h2>Group Details - {{ group.name }}</h2>
+        <!-- Display users in the group -->
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">{{ user.username }}</li>
+            {% empty %}
+                <li class="list-group-item">No users in this group.</li>
+            {% endfor %}
+        </ul>
+        <!-- Add User Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ add_user_form.as_p }}
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+        <!-- Remove User Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ remove_user_form.as_p }}
+            <button type="submit" class="btn btn-danger">Remove User(s)</button>
+        </form>
+    </div>
+{% endblock content %}

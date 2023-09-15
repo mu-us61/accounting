@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from . import models
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from .forms import AddUserToGroupForm, RemoveUserFromGroupForm
 
 
 # Create your views here.
@@ -59,3 +61,64 @@ def profile_view(request):
     # user_profile = UserProfile.objects.get(user=request.user)
     user_profile = "deneme"
     return render(request, "app_base/profile.html", {"user_profile": user_profile})
+
+
+# //-------------------------------------------------~~-------------------------------------------------
+
+
+def usergroups_view(request):
+    groups = Group.objects.all()
+    return render(request, "app_base/grouppage.html", {"groups": groups})
+
+
+# def groupdetail_view(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     users = group.user_set.all()
+#     return render(request, "app_base/groupdetail.html", {"group": group, "users": users})
+
+
+def groupdetail_view(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    users = group.user_set.all()
+
+    if request.method == "POST":
+        add_user_form = AddUserToGroupForm(request.POST)
+        remove_user_form = RemoveUserFromGroupForm(request.POST)
+
+        if add_user_form.is_valid():
+            user_to_add = add_user_form.cleaned_data["user"]
+            group.user_set.add(user_to_add)
+
+        if remove_user_form.is_valid():
+            users_to_remove = remove_user_form.cleaned_data["users"]
+            group.user_set.remove(*users_to_remove)
+
+        return redirect("groupdetail_view_name", group_id=group_id)
+
+    else:
+        add_user_form = AddUserToGroupForm()
+        remove_user_form = RemoveUserFromGroupForm()
+
+    return render(
+        request,
+        "app_base/groupdetail.html",
+        {
+            "group": group,
+            "users": users,
+            "add_user_form": add_user_form,
+            "remove_user_form": remove_user_form,
+        },
+    )
+
+
+def groupcreate_view(request):
+    if request.method == "POST":
+        group_name = request.POST.get("group_name")
+        if group_name:
+            group, created = Group.objects.get_or_create(name=group_name)
+            if created:
+                # Group created successfully
+                # You can perform any additional actions here
+                return redirect("usergroups_view_name")  # Redirect to a group list view
+
+    return render(request, "app_base/groupcreate.html")
