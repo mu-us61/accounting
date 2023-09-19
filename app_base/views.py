@@ -157,7 +157,7 @@ def muuserupdate_view(request, pk):
 
 def muuserdelete_view(request, pk):
     user = get_object_or_404(models.MuUser, pk=pk)
-    if request.method == 'POST':
+    if request.method == "POST":
         user.delete()
-        return redirect('muuserlist_view_name')
-    return render(request, 'app_base/userdelete.html', {'user': user})
+        return redirect("muuserlist_view_name")
+    return render(request, "app_base/userdelete.html", {"user": user})

@@ -59,7 +59,11 @@ class Islemler(models.Model):
     islem_tarihi = models.DateField(auto_now=True, auto_now_add=False)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
+    kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
+    kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
+
     tags = models.ManyToManyField(Tag)
+
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
 
