@@ -20,26 +20,10 @@ class MuUser(AbstractUser):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     bakiye_TL = models.IntegerField(default=0)
-    girdiler_TL = models.IntegerField(default=0)
-    ciktilar_TL = models.IntegerField(default=0)
-    # girdikaynagi =
-    # ciktikaynagi =
-
     bakiye_Euro = models.IntegerField(default=0)
-    girdiler_Euro = models.IntegerField(default=0)
-    ciktilar_Euro = models.IntegerField(default=0)
-
     bakiye_Dolar = models.IntegerField(default=0)
-    girdiler_Dolar = models.IntegerField(default=0)
-    ciktilar_Dolar = models.IntegerField(default=0)
-
     bakiye_GBP = models.IntegerField(default=0)
-    girdiler_GBP = models.IntegerField(default=0)
-    ciktilar_GBP = models.IntegerField(default=0)
-
     bakiye_Sek = models.IntegerField(default=0)
-    girdiler_Sek = models.IntegerField(default=0)
-    ciktilar_Sek = models.IntegerField(default=0)
 
 
 class Tag(models.Model):
@@ -56,33 +40,34 @@ class Tag(models.Model):
 
 
 class Islemler(models.Model):
-    islem_tarihi = models.DateField(auto_now=True, auto_now_add=False)
+    islem_tarihi = models.DateTimeField(auto_now_add=True)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
     kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
+    # TODO burda illa user icinde mi olmasi lazim, yoksa baska user tablosumu olmali, password zorunlu anonimler nasil uye yapilcak
 
     tags = models.ManyToManyField(Tag)
 
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
 
-    bakiye_TL = models.IntegerField(default=0)
+    bakiye_ilk_TL = models.IntegerField(default=0)  # islem olmadan onceki userin bakiye
     girdiler_TL = models.IntegerField(default=0)
     ciktilar_TL = models.IntegerField(default=0)
 
-    bakiye_Euro = models.IntegerField(default=0)
+    bakiye_ilk_Euro = models.IntegerField(default=0)
     girdiler_Euro = models.IntegerField(default=0)
     ciktilar_Euro = models.IntegerField(default=0)
 
-    bakiye_Dolar = models.IntegerField(default=0)
+    bakiye_ilk_Dolar = models.IntegerField(default=0)
     girdiler_Dolar = models.IntegerField(default=0)
     ciktilar_Dolar = models.IntegerField(default=0)
 
-    bakiye_GBP = models.IntegerField(default=0)
+    bakiye_ilk_GBP = models.IntegerField(default=0)
     girdiler_GBP = models.IntegerField(default=0)
     ciktilar_GBP = models.IntegerField(default=0)
 
-    bakiye_Sek = models.IntegerField(default=0)
+    bakiye_ilk_Sek = models.IntegerField(default=0)
     girdiler_Sek = models.IntegerField(default=0)
     ciktilar_Sek = models.IntegerField(default=0)
