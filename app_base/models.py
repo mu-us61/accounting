@@ -51,7 +51,7 @@ class Islemler(models.Model):
 
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
-
+    # bakiye turu
     bakiye_ilk_TL = models.IntegerField(default=0)  # islem olmadan onceki userin bakiye
     girdiler_TL = models.IntegerField(default=0)
     ciktilar_TL = models.IntegerField(default=0)
