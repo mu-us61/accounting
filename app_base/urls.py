@@ -15,4 +15,11 @@ urlpatterns = [
     path("users/create/", views.muusercreate_view, name="muusercreate_view_name"),
     path("users/<int:pk>/update/", views.muuserupdate_view, name="muuserupdate_view_name"),
     path("users/<int:pk>/delete/", views.muuserdelete_view, name="muuserdelete_view_name"),
+    # //----------------------------------------------------------------------------------------------------
+    # Transaction URLs
+    path("transactions/", views.TransactionList.as_view(), name="transaction_list_name"),
+    path("transactions/create/", views.CreateTransaction.as_view(), name="transaction_create_name"),
+    path("transactions/<int:pk>/", views.TransactionDetail.as_view(), name="transaction_detail_name"),
+    path("transactions/<int:pk>/edit/", views.UpdateTransaction.as_view(), name="transaction_edit_name"),
+    path("transactions/<int:pk>/delete/", views.DeleteTransaction.as_view(), name="transaction_delete_name"),
 ]

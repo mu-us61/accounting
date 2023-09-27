@@ -3,6 +3,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from . import models
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .models import Islemler, MuUser
+from .forms import TransactionForm
+from django.urls import reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .models import Islemler
+from .forms import TransactionForm
 
 # from django.contrib.auth.models import Group
 from .forms import AddUserToGroupForm, RemoveUserFromGroupForm, MuUserForm
@@ -162,3 +175,78 @@ def muuserdelete_view(request, pk):
         user.delete()
         return redirect("muuserlist_view_name")
     return render(request, "app_base/userdelete.html", {"user": user})
+
+
+# //-------------------------------------------------~Transactions~-------------------------------------------------
+
+
+@method_decorator(login_required, name="dispatch")
+class TransactionList(View):
+    template_name = "app_base/transaction_list.html"
+
+    def get(self, request):
+        transactions = Islemler.objects.filter(islemsahibi=request.user)
+        return render(request, self.template_name, {"transactions": transactions})
+
+
+@method_decorator(login_required, name="dispatch")
+class CreateTransaction(View):
+    template_name = "app_base/create_transaction.html"
+
+    def get(self, request):
+        form = TransactionForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.islemsahibi = request.user
+            transaction.save()
+            # Update balances here if needed
+            return redirect("transaction-list")
+        return render(request, self.template_name, {"form": form})
+
+
+@method_decorator(login_required, name="dispatch")
+class TransactionDetail(View):
+    template_name = "app_base/transaction_detail.html"
+
+    def get(self, request, pk):
+        transaction = Islemler.objects.get(pk=pk, islemsahibi=request.user)
+        return render(request, self.template_name, {"transaction": transaction})
+
+
+# Existing views...
+
+
+@method_decorator(login_required, name="dispatch")
+class UpdateTransaction(View):
+    template_name = "app_base/update_transaction.html"
+
+    def get(self, request, pk):
+        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        form = TransactionForm(instance=transaction)
+        return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+    def post(self, request, pk):
+        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()
+            # Update balances here if needed
+            return redirect("transaction-list")
+        return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+
+@method_decorator(login_required, name="dispatch")
+class DeleteTransaction(View):
+    def get(self, request, pk):
+        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        return render(request, "app_base/delete_transaction.html", {"transaction": transaction})
+
+    def post(self, request, pk):
+        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        transaction.delete()
+        # Update balances here if needed
+        return redirect("transaction-list")

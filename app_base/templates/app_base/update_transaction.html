@@ -1,0 +1,10 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Edit Transaction</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="{% url 'transaction_list_name' %}">Back to List</a>
+{% endblock content %}

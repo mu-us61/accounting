@@ -1,0 +1,12 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Transaction List</h2>
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <a href="{% url 'transaction_detail_name' transaction.pk %}">{{ transaction.islem_ismi }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'transaction_create_name' %}">Create Transaction</a>
+{% endblock content %}
