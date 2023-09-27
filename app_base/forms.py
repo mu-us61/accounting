@@ -21,6 +21,6 @@ class RemoveUserFromGroupForm(forms.Form):
 class MuUserForm(forms.ModelForm):
     class Meta:
         model = MuUser
-        fields = "__all__"
+        # fields = "__all__"
         # exclude = ["pk"]
-        # fields = ["email", "username", "password"]  # Adjust fields as needed # TODO gerekli alanlar eklencek
+        fields = ["username", "password", "first_name", "last_name","bakiye_TL","bakiye_Dolar","bakiye_Euro","bakiye_GBP","bakiye_Sek"]  # Adjust fields as needed # TODO gerekli alanlar eklencek

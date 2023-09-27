@@ -1,21 +1,39 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <h1 class="mb-4">User List</h1>
-        <ul class="list-group">
-            {% for user in users %}
-                <li class="list-group-item">
-                    {{ user.username }} - {{ user.email }}
-                    <a href="{% url 'muuserupdate_view_name' user.pk %}"
-                       class="btn btn-primary btn-sm float-end">Edit</a>
-                    <a href="{% url 'muuserdelete_view_name' user.pk %}"
-                       class="btn btn-danger btn-sm float-end me-2">Delete</a>
-                </li>
-            {% empty %}
-                <li class="list-group-item">No users available.</li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'muusercreate_view_name' %}"
-           class="btn btn-success mt-3">Create User</a>
+    <div class="block">
+        <a class="button" href="{% url 'muusercreate_view_name' %}">Yeni kullanici olustur</a>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <!-- Your table content -->
+            <thead>
+                <tr>
+                    <th>Kullanici Adi</th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>Duzenle</th>
+                    <th>Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th>{{ user.username }}</th>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>
+                            <a href="{% url 'muuserupdate_view_name' user.pk %}">Duzenle</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'muuserdelete_view_name' user.pk %}">Sil</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <th>kayitli kullanici yok</th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock content %}

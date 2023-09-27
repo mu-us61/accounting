@@ -1,13 +1,12 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <h1 class="mb-4">Delete User</h1>
-        <p>Are you sure you want to delete {{ user.username }}?</p>
+    <div>
+        <h1>Kullanici Silme Islemi</h1>
+        <p>{{ user.username }} kullanicisini silmek istediginizden eminmisiniz ?</p>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <button type="submit">Evet, Sil</button>
         </form>
-        <a href="{% url 'muuserlist_view_name' %}"
-           class="btn btn-secondary mt-3">Cancel</a>
+        <a class="button" href="{% url 'muuserlist_view_name' %}">Iptal</a>
     </div>
 {% endblock content %}

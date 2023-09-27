@@ -4,6 +4,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.text import slugify
+from django.contrib.auth.models import Group
 
 # Create your models here.
 
@@ -20,8 +21,8 @@ class MuUser(AbstractUser):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     bakiye_TL = models.IntegerField(default=0)
-    bakiye_Euro = models.IntegerField(default=0)
     bakiye_Dolar = models.IntegerField(default=0)
+    bakiye_Euro = models.IntegerField(default=0)
     bakiye_GBP = models.IntegerField(default=0)
     bakiye_Sek = models.IntegerField(default=0)
 
@@ -71,3 +72,8 @@ class Islemler(models.Model):
     bakiye_ilk_Sek = models.IntegerField(default=0)
     girdiler_Sek = models.IntegerField(default=0)
     ciktilar_Sek = models.IntegerField(default=0)
+
+
+class MuGroup(Group):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    # TODO admin sayfasina eklencek

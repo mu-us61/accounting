@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from . import models
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
+
+# from django.contrib.auth.models import Group
 from .forms import AddUserToGroupForm, RemoveUserFromGroupForm, MuUserForm
 
 
@@ -67,7 +68,7 @@ def profile_view(request):
 
 
 def usergroups_view(request):
-    groups = Group.objects.all()
+    groups = models.MuGroup.objects.all()
     return render(request, "app_base/grouppage.html", {"groups": groups})
 
 
@@ -78,7 +79,7 @@ def usergroups_view(request):
 
 
 def groupdetail_view(request, group_id):
-    group = Group.objects.get(pk=group_id)
+    group = models.MuGroup.objects.get(pk=group_id)
     users = group.user_set.all()
 
     if request.method == "POST":
@@ -115,7 +116,7 @@ def groupcreate_view(request):
     if request.method == "POST":
         group_name = request.POST.get("group_name")
         if group_name:
-            group, created = Group.objects.get_or_create(name=group_name)
+            group, created = models.MuGroup.objects.get_or_create(name=group_name)
             if created:
                 # Group created successfully
                 # You can perform any additional actions here

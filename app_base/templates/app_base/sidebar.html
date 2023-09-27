@@ -1,54 +1,28 @@
 <div class="menu-container">
     <aside class="menu">
         <!-- ... (your sidebar content) ... -->
-        <p class="menu-label">General</p>
+        {% comment %} <p class="menu-label">General</p> {% endcomment %}
         <ul class="menu-list">
             <li>
-                <a>Dashboard</a>
+                <a href="{% url 'muuserlist_view_name' %}">Kullanıcılar</a>
             </li>
             <li>
-                <a>Customers</a>
-            </li>
-        </ul>
-        <p class="menu-label">Administration</p>
-        <ul class="menu-list">
-            <li>
-                <a>Team Settings</a>
+                <a href="{% url 'usergroups_view_name' %}">Kullanıcı Grupları</a>
             </li>
             <li>
-                <a class="is-active">Manage Your Team</a>
-                <ul>
-                    <li>
-                        <a>Members</a>
-                    </li>
-                    <li>
-                        <a>Plugins</a>
-                    </li>
-                    <li>
-                        <a>Add a member</a>
-                    </li>
-                </ul>
+                <a href="{% url 'bakiye_view_name' %}">Bakiye</a>
             </li>
             <li>
-                <a>Invitations</a>
+                <a href="{% url 'home_view_name' %}">Etiketler not yet</a>
             </li>
             <li>
-                <a>Cloud Storage Environment Settings</a>
+                <a href="{% url 'home_view_name' %}">Geçmiş Hareketler not yet</a>
             </li>
             <li>
-                <a>Authentication</a>
-            </li>
-        </ul>
-        <p class="menu-label">Transactions</p>
-        <ul class="menu-list">
-            <li>
-                <a>Payments</a>
+                <a href="{% url 'home_view_name' %}">Islemler not yet</a>
             </li>
             <li>
-                <a>Transfers</a>
-            </li>
-            <li>
-                <a>Balance</a>
+                <a href="{% url 'home_view_name' %}">Yeni Islem</a>
             </li>
         </ul>
     </aside>
