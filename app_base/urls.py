@@ -22,4 +22,10 @@ urlpatterns = [
     path("transactions/<int:pk>/", views.TransactionDetail.as_view(), name="transaction_detail_name"),
     path("transactions/<int:pk>/edit/", views.UpdateTransaction.as_view(), name="transaction_edit_name"),
     path("transactions/<int:pk>/delete/", views.DeleteTransaction.as_view(), name="transaction_delete_name"),
+    # //-------------------------------------------------~~-------------------------------------------------
+    path("tag/", views.tag_list, name="tag_list_name"),
+    path("tag/create/", views.tag_create, name="tag_create_name"),
+    path("tag/<slug:slug>/", views.tag_detail, name="tag_detail_name"),
+    path("tag/<slug:slug>/update/", views.tag_update, name="tag_update_name"),
+    path("tag/<slug:slug>/delete/", views.tag_delete, name="tag_delete_name"),
 ]

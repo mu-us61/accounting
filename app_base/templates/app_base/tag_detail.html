@@ -1,0 +1,8 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Tag Detail</h2>
+    <p>Name: {{ tag.name }}</p>
+    <a href="{% url 'tag_update_name' tag.slug %}">Edit</a>
+    <a href="{% url 'tag_delete_name' tag.slug %}">Delete</a>
+    <a href="{% url 'tag_list_name' %}">Back to Tag List</a>
+{% endblock content %}

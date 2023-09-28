@@ -16,6 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import Islemler
 from .forms import TransactionForm
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Tag
+from .forms import TagForm
 
 # from django.contrib.auth.models import Group
 from .forms import AddUserToGroupForm, RemoveUserFromGroupForm, MuUserForm
@@ -204,8 +207,11 @@ class CreateTransaction(View):
             transaction.islemsahibi = request.user
             transaction.save()
             # Update balances here if needed
-            return redirect("transaction-list")
+            return redirect("transaction_list_name")
         return render(request, self.template_name, {"form": form})
+
+
+# TODO bakiyelerin yeniden yapimida yapilicak
 
 
 @method_decorator(login_required, name="dispatch")
@@ -235,7 +241,7 @@ class UpdateTransaction(View):
         if form.is_valid():
             form.save()
             # Update balances here if needed
-            return redirect("transaction-list")
+            return redirect("transaction_list_name")
         return render(request, self.template_name, {"form": form, "transaction": transaction})
 
 
@@ -249,4 +255,51 @@ class DeleteTransaction(View):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
         transaction.delete()
         # Update balances here if needed
-        return redirect("transaction-list")
+        return redirect("transaction_list_name")
+
+
+# //----------------------------------~ TAGS ETIKETLER ~-------------------------------------------------
+
+
+def tag_list(request):
+    tags = Tag.objects.all()
+    return render(request, "app_base/tag_list.html", {"tags": tags})
+
+
+def tag_detail(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    return render(request, "app_base/tag_detail.html", {"tag": tag})
+
+
+def tag_create(request):
+    if request.method == "POST":
+        form = TagForm(request.POST)
+        if form.is_valid():
+            tag = form.save()
+            return redirect("tag_detail_name", slug=tag.slug)
+    else:
+        form = TagForm()
+    return render(request, "app_base/tag_form.html", {"form": form})
+
+
+def tag_update(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    if request.method == "POST":
+        form = TagForm(request.POST, instance=tag)
+        if form.is_valid():
+            tag = form.save()
+            return redirect("tag_detail_name", slug=tag.slug)
+    else:
+        form = TagForm(instance=tag)
+    return render(request, "app_base/tag_form.html", {"form": form, "tag": tag})
+
+
+def tag_delete(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    if request.method == "POST":
+        tag.delete()
+        return redirect("tag_list_name")
+    return render(request, "app_base/tag_confirm_delete.html", {"tag": tag})
+
+
+# //-------------------------------------------------~~-------------------------------------------------

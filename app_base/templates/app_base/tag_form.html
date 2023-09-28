@@ -1,0 +1,23 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>
+        {% if tag %}
+            Edit Tag
+        {% else %}
+            Create Tag
+        {% endif %}
+    </h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">
+            {% if tag %}
+                Update
+            {% else %}
+                Create
+            {% endif %}
+            Tag
+        </button>
+    </form>
+    <a href="{% url 'tag_list_name' %}">Back to Tag List</a>
+{% endblock content %}

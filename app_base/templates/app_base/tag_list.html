@@ -1,0 +1,14 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Tag List</h2>
+    <ul>
+        {% for tag in tags %}
+            <li>
+                <a href="{% url 'tag_detail_name' tag.slug %}">{{ tag.name }}</a>
+            </li>
+        {% empty %}
+            <li>No tags available.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'tag_create_name' %}">Create New Tag</a>
+{% endblock content %}
