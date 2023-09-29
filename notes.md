@@ -1,9 +1,9 @@
 - [ ] html de sidebar ve main content height goreceli , icerige gore degisiyor
 - [ ] kullanici listesi pagination olmalimi
-- [?] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
-- [?] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
+- [ ] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
+- [ ] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
 - [ ] sayfada yetkiliyse goster,  misafirler edit yapamasin
 - [ ] admin sayfasi tammi olmasi lazim
 - [ ] para birimleri interger double mi olmali
-- [ ] sifre degisiminde yanlis sifrede uyari vermedi
+- [X] sifre degisiminde yanlis sifrede uyari vermedi
 - [ ] pdf yukleme

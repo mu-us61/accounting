@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.contrib import messages
 
 from . import models
 
@@ -38,6 +39,7 @@ def passchange_view(request):
             logout(request)
             return redirect("home_view_name")
         else:
+            messages.error(request, "Tekrar deneyiniz")
             return render(request, template_name="app_base/change_password.html")
 
     if request.method == "GET":
@@ -54,7 +56,7 @@ def login_view(request):
             # Redirect to a success page.
             return redirect("home_view_name")
         else:
-            # Return an 'invalid login' error message.
+            messages.error(request, "Tekrar deneyiniz")
             return render(request, template_name="app_base/login.html")
     if request.method == "GET":
         return render(request, template_name="app_base/login.html")

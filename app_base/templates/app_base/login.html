@@ -2,7 +2,10 @@
 {% block content %}
     <div class="column is-half m-auto">
         <div class="box">
-            <h1 class="title">Kullanıcı Girişi</h1>
+            <h1 class="title has-text-centered">Kullanıcı Girişi</h1>
+            {% if messages %}
+                {% for message in messages %}<div class="notification is-danger">{{ message }}</div>{% endfor %}
+            {% endif %}
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="field">
