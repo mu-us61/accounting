@@ -28,4 +28,7 @@ urlpatterns = [
     path("tag/<slug:slug>/", views.tag_detail, name="tag_detail_name"),
     path("tag/<slug:slug>/update/", views.tag_update, name="tag_update_name"),
     path("tag/<slug:slug>/delete/", views.tag_delete, name="tag_delete_name"),
+    # //-------------------------------------------------~~-------------------------------------------------
+    path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
+    path("monthlyspendings", views.monthly_spendings, name="monthly_spendings_name"),
 ]

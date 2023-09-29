@@ -1,0 +1,54 @@
+{% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Transaction Table</h2>
+    <form method="get" action="{% url 'transaction_table_name' %}">
+        <label for="filter">Filter by:</label>
+        <select name="filter" id="filter">
+            <option value="">All</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+        <label for="tags">Tags:</label>
+        <select name="tags" id="tags" multiple>
+            {% for tag in all_tags %}<option value="{{ tag.id }}">{{ tag.name }}</option>{% endfor %}
+        </select>
+        <label for="order">Order by:</label>
+        <select name="order" id="order">
+            <option value="">Default</option>
+            <option value="date">Date</option>
+            <option value="amount">Amount</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Amount</th>
+                <th>Tags</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.kimden_geldi }}</td>
+                    <td>{{ transaction.kime_gitti }}</td>
+                    <td>{{ transaction.bakiye_ilk_TL }}</td>
+                    <td>
+                        {% for tag in transaction.tags.all %}
+                            {{ tag.name }}
+                            {% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ transaction.islem_tarihi }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No transactions found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

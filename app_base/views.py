@@ -1,40 +1,33 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import datetime
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
-from . import models
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from .models import Islemler, MuUser
-from .forms import TransactionForm
+from django.db.models import Q, Sum
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Islemler
-from .forms import TransactionForm
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tag
-from .forms import TagForm
+from django.views import View
 
-# from django.contrib.auth.models import Group
-from .forms import AddUserToGroupForm, RemoveUserFromGroupForm, MuUserForm
+from . import models
+
+from .forms import AddUserToGroupForm, MuUserForm, RemoveUserFromGroupForm, TagForm, TransactionForm
+from .models import Islemler, MuUser, Tag
 
 
-# Create your views here.
+# //------------------------~ ANASAYFA ~--------------------------------------------------------------------------
+def home_view(request):
+    return render(request, template_name="app_base/home.html")
+
+
+# //------------------------~ BAKIYE ~--------------------------------------------------------------------------
 def bakiye_view(request):
     users = models.MuUser.objects.all()  # Retrieve all MuUser objects from the database
     context = {"users": users}
     return render(request, "app_base/bakiye.html", context)
 
 
-def home_view(request):
-    return render(request, template_name="app_base/home.html")
-
-
+# //------------------------~ AUTHENTICATION ~--------------------------------------------------------------------------
 def passchange_view(request):
     if request.method == "POST":
         hashed_pass = request.user.password
@@ -80,18 +73,10 @@ def profile_view(request):
     return render(request, "app_base/profile.html", {"user_profile": user_profile})
 
 
-# //-------------------------------------------------~~-------------------------------------------------
-
-
+# //------------------------~ USER GROUPS ~--------------------------------------------------------------------------
 def usergroups_view(request):
     groups = models.MuGroup.objects.all()
     return render(request, "app_base/grouppage.html", {"groups": groups})
-
-
-# def groupdetail_view(request, group_id):
-#     group = Group.objects.get(pk=group_id)
-#     users = group.user_set.all()
-#     return render(request, "app_base/groupdetail.html", {"group": group, "users": users})
 
 
 def groupdetail_view(request, group_id):
@@ -141,9 +126,7 @@ def groupcreate_view(request):
     return render(request, "app_base/groupcreate.html")
 
 
-# //-------------------------------------------------~~-------------------------------------------------
-
-
+# //------------------------~ USER LIST ~--------------------------------------------------------------------------
 def muuserlist_view(request):
     users = models.MuUser.objects.all()
     return render(request, "app_base/userlist.html", {"users": users})
@@ -180,9 +163,7 @@ def muuserdelete_view(request, pk):
     return render(request, "app_base/userdelete.html", {"user": user})
 
 
-# //-------------------------------------------------~Transactions~-------------------------------------------------
-
-
+# //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
 @method_decorator(login_required, name="dispatch")
 class TransactionList(View):
     template_name = "app_base/transaction_list.html"
@@ -211,9 +192,6 @@ class CreateTransaction(View):
         return render(request, self.template_name, {"form": form})
 
 
-# TODO bakiyelerin yeniden yapimida yapilicak
-
-
 @method_decorator(login_required, name="dispatch")
 class TransactionDetail(View):
     template_name = "app_base/transaction_detail.html"
@@ -221,9 +199,6 @@ class TransactionDetail(View):
     def get(self, request, pk):
         transaction = Islemler.objects.get(pk=pk, islemsahibi=request.user)
         return render(request, self.template_name, {"transaction": transaction})
-
-
-# Existing views...
 
 
 @method_decorator(login_required, name="dispatch")
@@ -258,9 +233,7 @@ class DeleteTransaction(View):
         return redirect("transaction_list_name")
 
 
-# //----------------------------------~ TAGS ETIKETLER ~-------------------------------------------------
-
-
+# //------------------------~ TAGGING ~--------------------------------------------------------------------------
 def tag_list(request):
     tags = Tag.objects.all()
     return render(request, "app_base/tag_list.html", {"tags": tags})
@@ -302,4 +275,94 @@ def tag_delete(request, slug):
     return render(request, "app_base/tag_confirm_delete.html", {"tag": tag})
 
 
-# //-------------------------------------------------~~-------------------------------------------------
+# //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
+@method_decorator(login_required, name="dispatch")
+class TransactionTable(View):
+    template_name = "app_base/transaction_table.html"
+
+    def get(self, request):
+        # Get all transactions
+        transactions = Islemler.objects.all()
+
+        # Filter by income or expense
+        param_filter = request.GET.get("filter", None)
+        if param_filter == "income":
+            transactions = transactions.filter(kime_gitti__isnull=False)
+        elif param_filter == "expense":
+            transactions = transactions.filter(kimden_geldi__isnull=False)
+
+        # Filter by tags
+        tag_filter = request.GET.getlist("tags")
+        if tag_filter:
+            # Create a Q object to filter transactions by tags
+            tag_query = Q()
+            for tag_id in tag_filter:
+                tag_query |= Q(tags__id=tag_id)
+            transactions = transactions.filter(tag_query)
+
+        # Order by date or amount
+        param_order = request.GET.get("order", None)
+        if param_order == "date":
+            transactions = transactions.order_by("islem_tarihi")
+        elif param_order == "amount":
+            transactions = transactions.order_by("girdiler_TL", "ciktilar_TL")
+
+        # Get all tags
+        all_tags = Tag.objects.all()  # Replace 'Tag' with your actual tag model name
+
+        # Pass filtered transactions and all tags to the template
+        return render(request, self.template_name, {"transactions": transactions, "all_tags": all_tags})
+
+
+# //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
+
+
+def monthly_spendings(request):
+    # Get the selected year and month from the request
+    selected_year = int(request.GET.get("year", datetime.date.today().year))
+    selected_month = int(request.GET.get("month", datetime.date.today().month))
+
+    # Create a list of month names in Turkish
+    month_names_tr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+
+    # Generate the range of years from 2023 to 2035
+    year_range = list(range(2023, 2036))
+
+    # Create a list of tuples for months with their numbers and names
+    months_with_numbers = [(i + 1, month_names_tr[i]) for i in range(len(month_names_tr))]
+
+    # Calculate the first day of the selected month
+    first_day_of_month = datetime.date(selected_year, selected_month, 1)
+
+    # Calculate the last day of the selected month
+    if selected_month == 12:
+        last_day_of_month = datetime.date(selected_year + 1, 1, 1) - datetime.timedelta(days=1)
+    else:
+        last_day_of_month = datetime.date(selected_year, selected_month + 1, 1) - datetime.timedelta(days=1)
+
+    # Retrieve the monthly spendings grouped by tags for the selected month and year
+    monthly_spendings = Islemler.objects.filter(islem_tarihi__range=(first_day_of_month, last_day_of_month)).values("tags__name").annotate(total_ciktilar_TL=Sum("ciktilar_TL"), total_ciktilar_Euro=Sum("ciktilar_Euro"), total_ciktilar_Dolar=Sum("ciktilar_Dolar"), total_ciktilar_GBP=Sum("ciktilar_GBP"), total_ciktilar_Sek=Sum("ciktilar_Sek"))
+
+    # Prepare the data for Chart.js
+    labels = [entry["tags__name"] for entry in monthly_spendings]
+    ciktilar_TL = [entry["total_ciktilar_TL"] for entry in monthly_spendings]
+    ciktilar_Euro = [entry["total_ciktilar_Euro"] for entry in monthly_spendings]
+    ciktilar_Dolar = [entry["total_ciktilar_Dolar"] for entry in monthly_spendings]
+    ciktilar_GBP = [entry["total_ciktilar_GBP"] for entry in monthly_spendings]
+    ciktilar_Sek = [entry["total_ciktilar_Sek"] for entry in monthly_spendings]
+
+    context = {
+        "labels": labels,
+        "ciktilar_TL": ciktilar_TL,
+        "ciktilar_Euro": ciktilar_Euro,
+        "ciktilar_Dolar": ciktilar_Dolar,
+        "ciktilar_GBP": ciktilar_GBP,
+        "ciktilar_Sek": ciktilar_Sek,
+        "selected_year": selected_year,
+        "selected_month": selected_month,
+        "month_names_tr": month_names_tr,
+        "year_range": year_range,  # Pass the year range to the template
+        "months_with_numbers": months_with_numbers,  # Pass the list of months with numbers and names
+    }
+
+    return render(request, "app_base/monthly_spendings.html", context)

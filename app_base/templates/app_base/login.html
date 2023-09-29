@@ -1,16 +1,40 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    login
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h1 class="title">Kullanıcı Girişi</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label" for="username_id">Kullanıcı Adı</label>
+                    <div class="control">
+                        <input type="text" name="username" id="username_id" class="input" placeholder="Kullanıcı Adı" autocomplete="off">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="password_id">Şifre</label>
+                    <div class="control">
+                        <input type="password" name="password" id="password_id" class="input" placeholder="Şifre">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Onay</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
+    Kullanici Girisi
     <form action="" method="post">
         {% csrf_token %}
-        <label for="username_id">Username</label>
-        <input type="text"
-               name="username"
-               id="username_id"
-               placeholder="username"
-               autocomplete="off">
-        <label for="password_id">Password</label>
+        <label for="username_id">Kullanici adi</label>
+        <input type="text" name="username" id="username_id" placeholder="kullanici adi" autocomplete="off">
+        <label for="password_id">Sifre</label>
         <input type="password" name="password" id="password_id">
-        <input type="submit" name="submit" value="submit">
+        <button type="submit">Onay</button>
     </form>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

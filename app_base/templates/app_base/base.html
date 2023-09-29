@@ -12,14 +12,20 @@
         </title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        <style>
+            .main-content {
+                {% comment %} height: 100vh; {% endcomment %}
+                min-height: calc(100vh - 56px); /* Adjust for your navbar height in pixels */
+            }
+        </style>
     </head>
     <body x-data="{ muside: false }">
         {% include "app_base/navbar.html" %}
         <div class="columns">
             <!-- Sidebar -->
-            <div class="column is-2 has-background-grey-light" x-bind:class="{ 'is-hidden': muside }">{% include "app_base/sidebar.html" %}</div>
+            <div class="column is-2 has-background-grey-darker" x-bind:class="{ 'is-hidden': muside }">{% include "app_base/sidebar.html" %}</div>
             <!-- Content -->
-            <div class="column has-background-grey-lighter">
+            <div class="column has-background-link-light main-content">
                 {% block content %}
                 {% endblock content %}
             </div>

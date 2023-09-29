@@ -1,28 +1,31 @@
 <div class="menu-container">
-    <aside class="menu">
+    <aside class="menu ">
         <!-- ... (your sidebar content) ... -->
         {% comment %} <p class="menu-label">General</p> {% endcomment %}
-        <ul class="menu-list">
+        <ul class="menu-list ">
             <li>
-                <a href="{% url 'muuserlist_view_name' %}">Kullanıcılar</a>
+                <a class="button is-dark has-text-left" href="{% url 'muuserlist_view_name' %}">Kullanıcılar</a>
             </li>
             <li>
-                <a href="{% url 'usergroups_view_name' %}">Kullanıcı Grupları</a>
+                <a class="button is-dark has-text-left" href="{% url 'usergroups_view_name' %}">Kullanıcı Grupları</a>
             </li>
             <li>
-                <a href="{% url 'bakiye_view_name' %}">Bakiye</a>
+                <a class="button is-dark has-text-left" href="{% url 'bakiye_view_name' %}">Bakiye</a>
             </li>
             <li>
-                <a href="{% url 'tag_list_name' %}">Etiketler not yet</a>
+                <a class="button is-dark has-text-left" href="{% url 'tag_list_name' %}">Etiketler not yet</a>
             </li>
             <li>
-                <a href="{% url 'home_view_name' %}">Geçmiş Hareketler not yet</a>
+                <a class="button is-dark has-text-left" href="{% url 'transaction_table_name' %}">Geçmiş Hareketler</a>
             </li>
             <li>
-                <a href="{% url 'transaction_list_name' %}">Islemler</a>
+                <a class="button is-dark has-text-left" href="{% url 'monthly_spendings_name' %}">Aylik Harcamalar</a>
             </li>
             <li>
-                <a href="{% url 'transaction_create_name' %}">Yeni Islem</a>
+                <a class="button is-dark has-text-left" href="{% url 'transaction_list_name' %}">Islemler</a>
+            </li>
+            <li>
+                <a class="button is-dark has-text-left" href="{% url 'transaction_create_name' %}">Yeni Islem</a>
             </li>
         </ul>
     </aside>

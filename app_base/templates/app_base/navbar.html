@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="navbar has-background-light" x-data="{ open: false }">
+<nav class="navbar has-background-white" x-data="{ open: false }">
     <div class="navbar-brand">
         <!-- navbar items, navbar burger... -->
         <a class="navbar-item" x-on:click="muside = !muside">
@@ -17,10 +17,9 @@
         <!-- navbar start, navbar end -->
         <div class="navbar-start">
             <!-- navbar items -->
-            <a class="navbar-item" href="{% url "home_view_name" %}">Anasayfa</a>
+            <a class="navbar-item is-info is-light" href="{% url "home_view_name" %}">Anasayfa</a>
             {% if user.is_authenticated %}
-                <a class="navbar-item">{{ user.username }}</a>
-                {% comment %} <a class="navbar-item" href="{% url 'profile_view_name' %}">Profil</a> {% endcomment %}
+                <span class="navbar-item">{{ user.username }}</span>
             {% else %}
             {% endif %}
         </div>
@@ -29,10 +28,10 @@
             <div class="navbar-item">
                 <div class="buttons">
                     {% if user.is_authenticated %}
-                        <a class="button is-light" href="{% url 'logout_view_name' %}">Cikis</a>
-                        <a class="button" href="{% url 'passchange_view_name' %}">Sifre Degisimi</a>
+                        <a class="button is-info is-light" href="{% url 'logout_view_name' %}">Cikis</a>
+                        <a class="button is-light" href="{% url 'passchange_view_name' %}">Sifre Degisimi</a>
                     {% else %}
-                        <a class="button is-light" href="{% url 'login_view_name' %}">Giris</a>
+                        <a class="button is-info is-light" href="{% url 'login_view_name' %}">Giris</a>
                     {% endif %}
                 </div>
             </div>

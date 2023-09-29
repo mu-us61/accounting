@@ -7,7 +7,7 @@ from .models import Tag
 class AddUserToGroupForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=MuUser.objects.all(),
-        label="Select User to Add",
+        label="Eklemek icin kullanici sec",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
@@ -15,7 +15,7 @@ class AddUserToGroupForm(forms.Form):
 class RemoveUserFromGroupForm(forms.Form):
     users = forms.ModelMultipleChoiceField(
         queryset=MuUser.objects.all(),
-        label="Select Users to Remove",
+        label="Silinecek kullanicilari sec",
         widget=forms.CheckboxSelectMultiple(),
     )
 

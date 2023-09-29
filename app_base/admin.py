@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import MuUser, Islemler
+from .models import MuUser, Islemler, MuGroup, Tag
 
 
 class CustomUserAdmin(admin.ModelAdmin):
@@ -22,3 +22,6 @@ class CustomUserAdmin(admin.ModelAdmin):
 admin.site.register(MuUser, CustomUserAdmin)
 
 admin.site.register(Islemler)
+
+admin.site.register(MuGroup)
+admin.site.register(Tag)
