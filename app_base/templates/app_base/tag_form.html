@@ -1,4 +1,40 @@
 {% extends "app_base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="column is-half m-auto">
+        <div class="box mt-4">
+            <h2 class="title has-text-centered">
+                {% if tag %}
+                    Tag Duzenle
+                {% else %}
+                    Tag Olustur
+                {% endif %}
+            </h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="{{ form.name.id_for_label }}" class="label">Tag Ismi Giriniz</label>
+                    <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">
+                            {% if tag %}
+                                Duzenle
+                            {% else %}
+                                Olustur
+                            {% endif %}
+                        </button>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'tag_list_name' %}" class="button is-link">Tag Listesine Don</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
 {% block content %}
     <h2>
         {% if tag %}
@@ -20,4 +56,4 @@
         </button>
     </form>
     <a href="{% url 'tag_list_name' %}">Back to Tag List</a>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

@@ -1,5 +1,22 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="column is-half m-auto">
+        <div class="box mt-4">
+            {% comment %} <h1 class="title has-text-centered">Create Group</h1> {% endcomment %}
+            <a class="button is-primary" href="{% url 'groupcreate_view_name' %}">Yeni Grup olustur</a>
+            <h1 class="title has-text-centered">Grup Listesi</h1>
+            <ul class="list">
+                {% for group in groups %}
+                    <li>
+                        <a href="{% url 'groupdetail_view_name' group.id %}">{{ group.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <div class="container mt-4">
         <h2>Create Group</h2>
         <a href=" {% url "groupcreate_view_name" %} ">create a group</a>
@@ -16,4 +33,4 @@
             {% endfor %}
         </ul>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

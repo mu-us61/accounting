@@ -12,8 +12,8 @@ from django.contrib import messages
 
 from . import models
 
-from .forms import AddUserToGroupForm, MuUserForm, RemoveUserFromGroupForm, TagForm, TransactionForm
-from .models import Islemler, MuUser, Tag
+from .forms import MuUserForm, TagForm, TransactionForm
+from .models import Islemler, MuUser, Tag, MuGroup
 
 
 # //------------------------~ ANASAYFA ~--------------------------------------------------------------------------
@@ -82,37 +82,24 @@ def usergroups_view(request):
 
 
 def groupdetail_view(request, group_id):
-    group = models.MuGroup.objects.get(pk=group_id)
-    users = group.user_set.all()
+    group = get_object_or_404(MuGroup, pk=group_id)
+    all_users = MuUser.objects.all()
 
-    if request.method == "POST":
-        add_user_form = AddUserToGroupForm(request.POST)
-        remove_user_form = RemoveUserFromGroupForm(request.POST)
+    # Handle adding users
+    if request.method == "POST" and "add_users" in request.POST:
+        selected_users_ids = request.POST.getlist("add_user")
+        group.user_set.add(*selected_users_ids)
 
-        if add_user_form.is_valid():
-            user_to_add = add_user_form.cleaned_data["user"]
-            group.user_set.add(user_to_add)
+    # Handle removing users
+    if request.method == "POST" and "remove_users" in request.POST:
+        selected_users_ids = request.POST.getlist("remove_user")
+        group.user_set.remove(*selected_users_ids)
 
-        if remove_user_form.is_valid():
-            users_to_remove = remove_user_form.cleaned_data["users"]
-            group.user_set.remove(*users_to_remove)
-
-        return redirect("groupdetail_view_name", group_id=group_id)
-
-    else:
-        add_user_form = AddUserToGroupForm()
-        remove_user_form = RemoveUserFromGroupForm()
-
-    return render(
-        request,
-        "app_base/groupdetail.html",
-        {
-            "group": group,
-            "users": users,
-            "add_user_form": add_user_form,
-            "remove_user_form": remove_user_form,
-        },
-    )
+    context = {
+        "group": group,
+        "all_users": all_users,
+    }
+    return render(request, "app_base/groupdetail.html", context)
 
 
 def groupcreate_view(request):
@@ -142,6 +129,7 @@ def muusercreate_view(request):
             return redirect("muuserlist_view_name")
     else:
         form = MuUserForm()
+
     return render(request, "app_base/usercreate.html", {"form": form})
 
 
@@ -251,7 +239,7 @@ def tag_create(request):
         form = TagForm(request.POST)
         if form.is_valid():
             tag = form.save()
-            return redirect("tag_detail_name", slug=tag.slug)
+            return redirect("tag_list_name")
     else:
         form = TagForm()
     return render(request, "app_base/tag_form.html", {"form": form})

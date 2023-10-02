@@ -3,7 +3,9 @@
     <div class="navbar-brand">
         <!-- navbar items, navbar burger... -->
         <a class="navbar-item" x-on:click="muside = !muside">
-            <i class="bi bi-book"></i>
+            <span class="iconify icon is-medium" data-icon="tabler:layout-sidebar-left-expand-filled"></span>
+            {% comment %} <span class="icon is-medium"><i class="bi bi-layout-sidebar"></i></span> {% endcomment %}
+            {% comment %} style="font-size: 2rem; color: cornflowerblue;" {% endcomment %}
         </a>
         <!-- burgere is-active konursa 3 cizgi X olur -->
         <a class="navbar-burger" data-target="navbarmenu_id" x-on:click="open = !open" x-bind:class="{ 'is-active': open }">

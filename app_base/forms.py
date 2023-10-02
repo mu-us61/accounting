@@ -4,22 +4,6 @@ from .models import Islemler
 from .models import Tag
 
 
-class AddUserToGroupForm(forms.Form):
-    user = forms.ModelChoiceField(
-        queryset=MuUser.objects.all(),
-        label="Eklemek icin kullanici sec",
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
-
-
-class RemoveUserFromGroupForm(forms.Form):
-    users = forms.ModelMultipleChoiceField(
-        queryset=MuUser.objects.all(),
-        label="Silinecek kullanicilari sec",
-        widget=forms.CheckboxSelectMultiple(),
-    )
-
-
 class MuUserForm(forms.ModelForm):
     class Meta:
         model = MuUser

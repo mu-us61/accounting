@@ -1,10 +1,34 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    <h2>Confirm Deletion</h2>
-    <p>Are you sure you want to delete the tag "{{ tag.name }}"?</p>
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="box mt-4">
+                <h2 class="title has-text-centered">Silme Onayı</h2>
+                <div class="content">
+                    <p>Bu tagi silmeyi onaylıyor musunuz "{{ tag.name }}"?</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-danger">Evet, Sil</button>
+                        </div>
+                        <div class="control">
+                            <a href="{% url 'tag_list_name' %}" class="button is-link">Hayır, İptal</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
+    <h2>Silme Onayi</h2>
+    <p>Bu tagi silmeyi onayliyormusunuz "{{ tag.name }}"?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Yes, Delete</button>
+        <button type="submit">Evet, Sil</button>
     </form>
-    <a href="{% url 'tag_list_name' %}">No, Cancel</a>
-{% endblock content %}
+    <a href="{% url 'tag_list_name' %}">Hayir, Iptal</a>
+{% endblock content %} {% endcomment %}

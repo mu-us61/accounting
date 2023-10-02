@@ -1,18 +1,36 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="column is-half m-auto">
+        <div class="box mt-4">
+            <h2 class="title has-text-centered">Create a Group</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label" for="group_name">Group Name</label>
+                    <div class="control">
+                        <input type="text" class="input" id="group_name" name="group_name" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Create Group</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <div class="container mt-4">
         <h2>Create a Group</h2>
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="group_name" class="form-label">Group Name</label>
-                <input type="text"
-                       class="form-control"
-                       id="group_name"
-                       name="group_name"
-                       required>
+                <input type="text" class="form-control" id="group_name" name="group_name" required>
             </div>
             <button type="submit" class="btn btn-primary">Create Group</button>
         </form>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

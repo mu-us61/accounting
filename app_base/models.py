@@ -5,17 +5,15 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-
 
 class MuUser(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
-    username = models.CharField(_("username"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("A user with that username already exists.")})
-    first_name = models.CharField(_("first name"), max_length=150, blank=True)
-    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    username = models.CharField(_("Kullanıcı Adı"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("Bu isimde bir kullanici zaten var")})
+    first_name = models.CharField(_("İsim"), max_length=150, blank=True)
+    last_name = models.CharField(_("Soyisim"), max_length=150, blank=True)
     email = models.EmailField(_("email address"), blank=True)
-    is_staff = models.BooleanField(_("staff status"), default=False, help_text=_("Designates whether the user can log into this admin site."))
+    is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
     is_active = models.BooleanField(_("active"), default=True, help_text=_("Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."))
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
@@ -45,7 +43,6 @@ class Islemler(models.Model):
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
     kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
-    # TODO burda illa user icinde mi olmasi lazim, yoksa baska user tablosumu olmali, password zorunlu anonimler nasil uye yapilcak
 
     tags = models.ManyToManyField(Tag)
 

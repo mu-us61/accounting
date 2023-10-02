@@ -1,5 +1,27 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h1 class="title has-text-centered">Kullanıcı Silme İşlemi</h1>
+            <div class="block">
+                <p>{{ user.username }} kullanıcısını silmek istediğinizden emin misiniz?</p>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-danger" type="submit">Evet, Sil</button>
+                    </div>
+                    <div class="control">
+                        <a class="button is-link" href="{% url 'muuserlist_view_name' %}">İptal</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <div>
         <h1>Kullanici Silme Islemi</h1>
         <p>{{ user.username }} kullanicisini silmek istediginizden eminmisiniz ?</p>
@@ -9,4 +31,4 @@
         </form>
         <a class="button" href="{% url 'muuserlist_view_name' %}">Iptal</a>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

@@ -7,3 +7,6 @@
 - [ ] para birimleri interger double mi olmali
 - [X] sifre degisiminde yanlis sifrede uyari vermedi
 - [ ] pdf yukleme
+- [ ] how to fine grain form.as_p customization
+- [ ] kullanicilarda duzenle deyince ustteki admin degisiyor,
+- [ ] kullanicilarda duzenlemeyi sadece yetkililere ac

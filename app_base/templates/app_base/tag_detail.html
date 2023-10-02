@@ -1,8 +1,34 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="box mt-4">
+                <h2 class="title has-text-centered">Tag Detayi</h2>
+                <div class="content">
+                    <p>
+                        <strong>Tag Ismi :</strong> {{ tag.name }}
+                    </p>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <a href="{% url 'tag_update_name' tag.slug %}" class="button is-primary">Duzenle</a>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'tag_delete_name' tag.slug %}" class="button is-danger">Sil</a>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'tag_list_name' %}" class="button is-link">Tag Listesine Don</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <h2>Tag Detail</h2>
     <p>Name: {{ tag.name }}</p>
     <a href="{% url 'tag_update_name' tag.slug %}">Edit</a>
     <a href="{% url 'tag_delete_name' tag.slug %}">Delete</a>
     <a href="{% url 'tag_list_name' %}">Back to Tag List</a>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

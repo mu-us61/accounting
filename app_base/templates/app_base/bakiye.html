@@ -1,5 +1,36 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="container mt-4">
+        <div class="table-container">
+            <table class="table is-bordered is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                        <th>TL</th>
+                        <th>Dolar</th>
+                        <th>Euro</th>
+                        <th>GBP</th>
+                        <th>Sek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.bakiye_TL }}</td>
+                            <td>{{ user.bakiye_Dolar }}</td>
+                            <td>{{ user.bakiye_Euro }}</td>
+                            <td>{{ user.bakiye_GBP }}</td>
+                            <td>{{ user.bakiye_Sek }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <div class="container">
         <div class="table-responsive">
             <table class="table table-bordered">
@@ -28,4 +59,4 @@
             </table>
         </div>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

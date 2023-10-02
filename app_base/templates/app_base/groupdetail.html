@@ -1,26 +1,88 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <h2>Group Details - {{ group.name }}</h2>
-        <!-- Display users in the group -->
-        <ul class="list-group">
-            {% for user in users %}
-                <li class="list-group-item">{{ user.username }}</li>
-            {% empty %}
-                <li class="list-group-item">No users in this group.</li>
-            {% endfor %}
-        </ul>
-        <!-- Add User Form -->
-        <form method="post">
-            {% csrf_token %}
-            {{ add_user_form.as_p }}
-            <button type="submit" class="btn btn-primary">Add User</button>
-        </form>
-        <!-- Remove User Form -->
-        <form method="post">
-            {% csrf_token %}
-            {{ remove_user_form.as_p }}
-            <button type="submit" class="btn btn-danger">Remove User(s)</button>
-        </form>
+    <div class="block">
+        <h1 class="title has-text-centered">{{ group.name }}</h1>
+    </div>
+    <div class="columns m-auto">
+        <div class="column">
+            <h2 class="subtitle">Grup Uyeleri</h2>
+            <ul>
+                {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
+            </ul>
+        </div>
+        <div class="column">
+            <h2 class="subtitle">Gruba Ekle</h2>
+            <form method="post">
+                {% csrf_token %}
+                <ul>
+                    {% for user in all_users %}
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" name="add_user" value="{{ user.id }}" {% if user in group.user_set.all %}checked{% endif %}>
+                                {{ user.username }}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" name="add_users" class="button is-primary">Ekle</button>
+            </form>
+        </div>
+        <div class="column">
+            <h2 class="subtitle">Gruptan Sil</h2>
+            <form method="post">
+                {% csrf_token %}
+                <ul>
+                    {% for user in group.user_set.all %}
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" name="remove_user" value="{{ user.id }}">
+                                {{ user.username }}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" name="remove_users" class="button is-danger">Sil</button>
+            </form>
+        </div>
     </div>
 {% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
+    <h1>{{ group.name }} Detail</h1>
+    <h2>Group Members</h2>
+    <ul>
+        {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
+    </ul>
+    <h2>Add Users</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Select users to add:</h3>
+        <ul>
+            {% for user in all_users %}
+                <li>
+                    <label>
+                        <input type="checkbox" name="add_user" value="{{ user.id }}" {% if user in group.user_set.all %}checked{% endif %}>
+                        {{ user.username }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit" name="add_users">Add Users</button>
+    </form>
+    <h2>Remove Users</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Select users to remove:</h3>
+        <ul>
+            {% for user in group.user_set.all %}
+                <li>
+                    <label>
+                        <input type="checkbox" name="remove_user" value="{{ user.id }}">
+                        {{ user.username }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit" name="remove_users">Remove Users</button>
+    </form>
+{% endblock content %} {% endcomment %}
