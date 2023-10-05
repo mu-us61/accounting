@@ -17,3 +17,4 @@
 - [ ] her login sayfasinda o kisim bos degil admin yaziyor duzelt
 - [ ] islemlerde id belki iyi olurdu her islemin kendi istmi
 - [ ] margin top consistency
+- [ ] 404 page customized

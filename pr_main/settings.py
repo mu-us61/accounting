@@ -58,7 +58,7 @@ ROOT_URLCONF = "pr_main.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -129,3 +129,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ## MuCustom ############################
 
 AUTH_USER_MODEL = "app_base.MuUser"
+STATICFILES_DIRS = [BASE_DIR / "static"]
