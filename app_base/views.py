@@ -363,11 +363,16 @@ def monthly_spendings(request):
         12: _("Aralık"),
     }
 
+    # Get the current year and month for default values
+    current_date = datetime.date.today()
+    current_year = current_date.year
+    current_month = current_date.month
+
     # Get the list of available tags for filtering
     tags = Tag.objects.all()
 
-    selected_year = int(request.POST.get("year", years[0])) if request.method == "POST" else years[0]
-    selected_month = int(request.POST.get("month", 1)) if request.method == "POST" else 1
+    selected_year = int(request.POST.get("year", current_year)) if request.method == "POST" else current_year
+    selected_month = int(request.POST.get("month", current_month)) if request.method == "POST" else current_month
     selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
     selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
 
