@@ -2,14 +2,25 @@ from django import forms
 from .models import MuUser  # Import your custom user model
 from .models import Islemler
 from .models import Tag
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class MuUserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = MuUser
         # fields = "__all__"
         # exclude = ["pk"]
         fields = ["username", "password", "first_name", "last_name", "bakiye_TL", "bakiye_Dolar", "bakiye_Euro", "bakiye_GBP", "bakiye_Sek"]  # Adjust fields as needed # TODO gerekli alanlar eklencek
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # Use set_password to hash the password
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
 
 # //-------------------------------------------------~~-------------------------------------------------

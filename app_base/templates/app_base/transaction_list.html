@@ -1,5 +1,34 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="columns is-centered">
+        <div class="column is-three-quarters">
+            <div class="box mt-4">
+                <h2 class="title has-text-centered">Transaction List</h2>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Islem Ismi</th>
+                            <th>Islem Tarihi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'transaction_detail_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
+                                </td>
+                                <td>{{ transaction.islem_tarihi }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% comment %} <a href="{% url 'transaction_create_name' %}" class="button is-primary">Create Transaction</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <h2>Transaction List</h2>
     <ul>
         {% for transaction in transactions %}
@@ -9,4 +38,4 @@
         {% endfor %}
     </ul>
     <a href="{% url 'transaction_create_name' %}">Create Transaction</a>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

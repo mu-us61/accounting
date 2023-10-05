@@ -1,10 +1,123 @@
 {% extends "app_base/base.html" %}
+{% load widget_tweaks %}
 {% block content %}
-    <h2>Create Transaction</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create</button>
-    </form>
-    <a href="{% url 'transaction_list_name' %}">Back to List</a>
+    <div class="column is-half m-auto">
+        <div class="box mt-4">
+            <h1 class="title has-text-centered">Yeni Islem Olustur</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label">Kimden Geldi</label>
+                    <div class="control">
+                        <select name="{{ form.kimden_geldi.name }}" id="{{ form.kimden_geldi.id_for_label }}" class="select2">
+                            <option value="" selected>Select an option</option>
+                            {% for choice in form.kimden_geldi.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Kime Gitti</label>
+                    <div class="control">
+                        <select name="{{ form.kime_gitti.name }}" id="{{ form.kime_gitti.id_for_label }}" class="select2">
+                            <option value="" selected>Select an option</option>
+                            {% for choice in form.kime_gitti.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Tags</label>
+                    <div class="control">
+                        <select name="{{ form.tags.name }}" id="{{ form.tags.id_for_label }}" class="select2" multiple>
+                            {% for choice in form.tags.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">İşlem İsmi</label>
+                    <div class="control">{% render_field form.islem_ismi %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">İşlem Açıklaması</label>
+                    <div class="control">{% render_field form.islem_aciklamasi %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Bakiye İlk TL</label>
+                    <div class="control">{% render_field form.bakiye_ilk_TL %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Girdiler TL</label>
+                    <div class="control">{% render_field form.girdiler_TL %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Çıktılar TL</label>
+                    <div class="control">{% render_field form.ciktilar_TL %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Bakiye İlk Euro</label>
+                    <div class="control">{% render_field form.bakiye_ilk_Euro %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Girdiler Euro</label>
+                    <div class="control">{% render_field form.girdiler_Euro %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Çıktılar Euro</label>
+                    <div class="control">{% render_field form.ciktilar_Euro %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Bakiye İlk Dolar</label>
+                    <div class="control">{% render_field form.bakiye_ilk_Dolar %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Girdiler Dolar</label>
+                    <div class="control">{% render_field form.girdiler_Dolar %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Çıktılar Dolar</label>
+                    <div class="control">{% render_field form.ciktilar_Dolar %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Bakiye İlk GBP</label>
+                    <div class="control">{% render_field form.bakiye_ilk_GBP %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Girdiler GBP</label>
+                    <div class="control">{% render_field form.girdiler_GBP %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Çıktılar GBP</label>
+                    <div class="control">{% render_field form.ciktilar_GBP %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Bakiye İlk SEK</label>
+                    <div class="control">{% render_field form.bakiye_ilk_Sek %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Girdiler SEK</label>
+                    <div class="control">{% render_field form.girdiler_Sek %}</div>
+                </div>
+                <div class="field">
+                    <label class="label">Çıktılar SEK</label>
+                    <div class="control">{% render_field form.ciktilar_Sek %}</div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Create</button>
+                    </div>
+                    <a href="{% url 'transaction_list_name' %}" class="button is-link">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for kimden_geldi, kime_gitti, and tags fields
+            $(".select2").select2({
+                // Add your Select2 options here
+                placeholder: "Select an option",
+                allowClear: true,
+                width: '100%', // Set the width to 100% to fix the width issue
+            });
+        });
+    </script>
 {% endblock content %}

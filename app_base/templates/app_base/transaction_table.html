@@ -1,54 +1,62 @@
 {% extends "app_base/base.html" %}
 {% block content %}
-    <h2>Transaction Table</h2>
-    <form method="get" action="{% url 'transaction_table_name' %}">
-        <label for="filter">Filter by:</label>
-        <select name="filter" id="filter">
-            <option value="">All</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-        </select>
-        <label for="tags">Tags:</label>
-        <select name="tags" id="tags" multiple>
-            {% for tag in all_tags %}<option value="{{ tag.id }}">{{ tag.name }}</option>{% endfor %}
-        </select>
-        <label for="order">Order by:</label>
-        <select name="order" id="order">
-            <option value="">Default</option>
-            <option value="date">Date</option>
-            <option value="amount">Amount</option>
-        </select>
-        <button type="submit">Apply</button>
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Amount</th>
-                <th>Tags</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-                <tr>
-                    <td>{{ transaction.kimden_geldi }}</td>
-                    <td>{{ transaction.kime_gitti }}</td>
-                    <td>{{ transaction.bakiye_ilk_TL }}</td>
-                    <td>
-                        {% for tag in transaction.tags.all %}
-                            {{ tag.name }}
-                            {% if not forloop.last %},{% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>{{ transaction.islem_tarihi }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5">No transactions found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock content %}
+    <div class="container">
+        <h1 class="title has-text-centered">Transaction Table</h1>
+        <div class="table-container">
+            <table class="table is-bordered is-striped is-narrow is-hoverable">
+                <thead>
+                    <tr>
+                        <th>Kimden Geldi</th>
+                        <th>Kime Gitti</th>
+                        <th>Tags</th>
+                        <th>İşlem İsmi</th>
+                        <th>İşlem Açıklaması</th>
+                        <th>Bakiye İlk TL</th>
+                        <th>Girdiler TL</th>
+                        <th>Çıktılar TL</th>
+                        <th>Bakiye İlk Euro</th>
+                        <th>Girdiler Euro</th>
+                        <th>Çıktılar Euro</th>
+                        <th>Bakiye İlk Dolar</th>
+                        <th>Girdiler Dolar</th>
+                        <th>Çıktılar Dolar</th>
+                        <th>Bakiye İlk GBP</th>
+                        <th>Girdiler GBP</th>
+                        <th>Çıktılar GBP</th>
+                        <th>Bakiye İlk Sek</th>
+                        <th>Girdiler Sek</th>
+                        <th>Çıktılar Sek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.kimden_geldi }}</td>
+                            <td>{{ transaction.kime_gitti }}</td>
+                            <td>
+                                {% for tag in transaction.tags.all %}{{ tag.name }}{% endfor %}
+                            </td>
+                            <td>{{ transaction.islem_ismi }}</td>
+                            <td>{{ transaction.islem_aciklamasi }}</td>
+                            <td>{{ transaction.bakiye_ilk_TL }}</td>
+                            <td>{{ transaction.girdiler_TL }}</td>
+                            <td>{{ transaction.ciktilar_TL }}</td>
+                            <td>{{ transaction.bakiye_ilk_Euro }}</td>
+                            <td>{{ transaction.girdiler_Euro }}</td>
+                            <td>{{ transaction.ciktilar_Euro }}</td>
+                            <td>{{ transaction.bakiye_ilk_Dolar }}</td>
+                            <td>{{ transaction.girdiler_Dolar }}</td>
+                            <td>{{ transaction.ciktilar_Dolar }}</td>
+                            <td>{{ transaction.bakiye_ilk_GBP }}</td>
+                            <td>{{ transaction.girdiler_GBP }}</td>
+                            <td>{{ transaction.ciktilar_GBP }}</td>
+                            <td>{{ transaction.bakiye_ilk_Sek }}</td>
+                            <td>{{ transaction.girdiler_Sek }}</td>
+                            <td>{{ transaction.ciktilar_Sek }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

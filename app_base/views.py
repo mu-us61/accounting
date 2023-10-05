@@ -159,7 +159,8 @@ class TransactionList(View):
     template_name = "app_base/transaction_list.html"
 
     def get(self, request):
-        transactions = Islemler.objects.filter(islemsahibi=request.user)
+        # transactions = Islemler.objects.order_by('-islem_tarihi')  # Order by date in descending order
+        transactions = Islemler.objects.filter(islemsahibi=request.user).order_by("-islem_tarihi")
         return render(request, self.template_name, {"transactions": transactions})
 
 
@@ -172,11 +173,14 @@ class CreateTransaction(View):
         return render(request, self.template_name, {"form": form})
 
     def post(self, request):
+        print(request.POST)
         form = TransactionForm(request.POST)
         if form.is_valid():
+            # print(form)
             transaction = form.save(commit=False)
             transaction.islemsahibi = request.user
             transaction.save()
+            form.save_m2m()
             # Update balances here if needed
             return redirect("transaction_list_name")
         return render(request, self.template_name, {"form": form})
@@ -271,37 +275,61 @@ class TransactionTable(View):
     template_name = "app_base/transaction_table.html"
 
     def get(self, request):
-        # Get all transactions
-        transactions = Islemler.objects.all()
+        # transactions = Islemler.objects.order_by("-islem_tarihi")  # Order by date in descending order
+        transactions = Islemler.objects.prefetch_related("tags").all()
 
-        # Filter by income or expense
-        param_filter = request.GET.get("filter", None)
-        if param_filter == "income":
-            transactions = transactions.filter(kime_gitti__isnull=False)
-        elif param_filter == "expense":
-            transactions = transactions.filter(kimden_geldi__isnull=False)
+        # transactions = Islemler.objects.prefetch_related("tags").order_by("-islem_tarihi")
+        # Debug: Print transactions and their tags to the console
 
-        # Filter by tags
-        tag_filter = request.GET.getlist("tags")
-        if tag_filter:
-            # Create a Q object to filter transactions by tags
-            tag_query = Q()
-            for tag_id in tag_filter:
-                tag_query |= Q(tags__id=tag_id)
-            transactions = transactions.filter(tag_query)
+        # for transaction in transactions:
+        #     print(f"Transaction: {transaction.islem_ismi}")
+        #     for tag in transaction.tags.all():
+        #         print(f"  Tag: {tag.name}")
+        for obj in Islemler.objects.all():
+            print(obj.tags)
+        # for transaction in transactions:
+        #     print(f"Transaction: {transaction.islem_ismi}")
+        #     print(f"Tags: {transaction.tags.all()}")
 
-        # Order by date or amount
-        param_order = request.GET.get("order", None)
-        if param_order == "date":
-            transactions = transactions.order_by("islem_tarihi")
-        elif param_order == "amount":
-            transactions = transactions.order_by("girdiler_TL", "ciktilar_TL")
+        return render(request, self.template_name, {"transactions": transactions})
 
-        # Get all tags
-        all_tags = Tag.objects.all()  # Replace 'Tag' with your actual tag model name
 
-        # Pass filtered transactions and all tags to the template
-        return render(request, self.template_name, {"transactions": transactions, "all_tags": all_tags})
+# @method_decorator(login_required, name="dispatch")
+# class TransactionTable(View):
+#     template_name = "app_base/transaction_table.html"
+
+#     def get(self, request):
+#         # Get all transactions
+#         transactions = Islemler.objects.all()
+
+#         # Filter by income or expense
+#         param_filter = request.GET.get("filter", None)
+#         if param_filter == "income":
+#             transactions = transactions.filter(kime_gitti__isnull=False)
+#         elif param_filter == "expense":
+#             transactions = transactions.filter(kimden_geldi__isnull=False)
+
+#         # Filter by tags
+#         tag_filter = request.GET.getlist("tags")
+#         if tag_filter:
+#             # Create a Q object to filter transactions by tags
+#             tag_query = Q()
+#             for tag_id in tag_filter:
+#                 tag_query |= Q(tags__id=tag_id)
+#             transactions = transactions.filter(tag_query)
+
+#         # Order by date or amount
+#         param_order = request.GET.get("order", None)
+#         if param_order == "date":
+#             transactions = transactions.order_by("islem_tarihi")
+#         elif param_order == "amount":
+#             transactions = transactions.order_by("girdiler_TL", "ciktilar_TL")
+
+#         # Get all tags
+#         all_tags = Tag.objects.all()  # Replace 'Tag' with your actual tag model name
+
+#         # Pass filtered transactions and all tags to the template
+#         return render(request, self.template_name, {"transactions": transactions, "all_tags": all_tags})
 
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
