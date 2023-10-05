@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib import messages
+from django.utils.translation import gettext as _
 
 from . import models
 
@@ -334,53 +335,168 @@ class TransactionTable(View):
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
 
+from django.shortcuts import render
+from .models import Islemler
+
+from django.shortcuts import render
+from django.utils.translation import gettext as _
+from .models import Islemler, Tag
+
 
 def monthly_spendings(request):
-    # Get the selected year and month from the request
-    selected_year = int(request.GET.get("year", datetime.date.today().year))
-    selected_month = int(request.GET.get("month", datetime.date.today().month))
+    # Generate a list of years up to 2035
+    years = list(range(2023, 2036))
 
-    # Create a list of month names in Turkish
-    month_names_tr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+    # Create a dictionary to map month numbers to Turkish month names
+    months = {
+        1: _("Ocak"),
+        2: _("Şubat"),
+        3: _("Mart"),
+        4: _("Nisan"),
+        5: _("Mayıs"),
+        6: _("Haziran"),
+        7: _("Temmuz"),
+        8: _("Ağustos"),
+        9: _("Eylül"),
+        10: _("Ekim"),
+        11: _("Kasım"),
+        12: _("Aralık"),
+    }
 
-    # Generate the range of years from 2023 to 2035
-    year_range = list(range(2023, 2036))
+    # Get the list of available tags for filtering
+    tags = Tag.objects.all()
 
-    # Create a list of tuples for months with their numbers and names
-    months_with_numbers = [(i + 1, month_names_tr[i]) for i in range(len(month_names_tr))]
+    selected_year = int(request.POST.get("year", years[0])) if request.method == "POST" else years[0]
+    selected_month = int(request.POST.get("month", 1)) if request.method == "POST" else 1
+    selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
+    selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
 
-    # Calculate the first day of the selected month
-    first_day_of_month = datetime.date(selected_year, selected_month, 1)
+    # Filter Islemler based on selected year, month, ciktilar field, and tag
+    islemler = Islemler.objects.filter(
+        islem_tarihi__year=selected_year,
+        islem_tarihi__month=selected_month,
+        **{selected_ciktilar_field + "__gt": 0},  # Filter based on the selected ciktilar field
+    )
 
-    # Calculate the last day of the selected month
-    if selected_month == 12:
-        last_day_of_month = datetime.date(selected_year + 1, 1, 1) - datetime.timedelta(days=1)
-    else:
-        last_day_of_month = datetime.date(selected_year, selected_month + 1, 1) - datetime.timedelta(days=1)
+    # Apply tag filter if a tag is selected
+    if selected_tag:
+        islemler = islemler.filter(tags__name=selected_tag)
 
-    # Retrieve the monthly spendings grouped by tags for the selected month and year
-    monthly_spendings = Islemler.objects.filter(islem_tarihi__range=(first_day_of_month, last_day_of_month)).values("tags__name").annotate(total_ciktilar_TL=Sum("ciktilar_TL"), total_ciktilar_Euro=Sum("ciktilar_Euro"), total_ciktilar_Dolar=Sum("ciktilar_Dolar"), total_ciktilar_GBP=Sum("ciktilar_GBP"), total_ciktilar_Sek=Sum("ciktilar_Sek"))
-
-    # Prepare the data for Chart.js
-    labels = [entry["tags__name"] for entry in monthly_spendings]
-    ciktilar_TL = [entry["total_ciktilar_TL"] for entry in monthly_spendings]
-    ciktilar_Euro = [entry["total_ciktilar_Euro"] for entry in monthly_spendings]
-    ciktilar_Dolar = [entry["total_ciktilar_Dolar"] for entry in monthly_spendings]
-    ciktilar_GBP = [entry["total_ciktilar_GBP"] for entry in monthly_spendings]
-    ciktilar_Sek = [entry["total_ciktilar_Sek"] for entry in monthly_spendings]
+    # Calculate the sum of the selected ciktilar field
+    ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
 
     context = {
-        "labels": labels,
-        "ciktilar_TL": ciktilar_TL,
-        "ciktilar_Euro": ciktilar_Euro,
-        "ciktilar_Dolar": ciktilar_Dolar,
-        "ciktilar_GBP": ciktilar_GBP,
-        "ciktilar_Sek": ciktilar_Sek,
+        "years": years,
+        "months": months,
+        "tags": tags,
         "selected_year": selected_year,
         "selected_month": selected_month,
-        "month_names_tr": month_names_tr,
-        "year_range": year_range,  # Pass the year range to the template
-        "months_with_numbers": months_with_numbers,  # Pass the list of months with numbers and names
+        "selected_ciktilar_field": selected_ciktilar_field,
+        "selected_tag": selected_tag,
+        "ciktilar_sum": ciktilar_sum,
     }
 
     return render(request, "app_base/monthly_spendings.html", context)
+
+
+# def monthly_spendings(request):
+#     # Generate a list of years up to 2035
+#     years = list(range(2023, 2036))
+
+#     # Create a dictionary to map month numbers to Turkish month names
+#     months = {
+#         1: _('Ocak'),
+#         2: _('Şubat'),
+#         3: _('Mart'),
+#         4: _('Nisan'),
+#         5: _('Mayıs'),
+#         6: _('Haziran'),
+#         7: _('Temmuz'),
+#         8: _('Ağustos'),
+#         9: _('Eylül'),
+#         10: _('Ekim'),
+#         11: _('Kasım'),
+#         12: _('Aralık'),
+#     }
+
+#     selected_year = int(request.POST.get("year", years[0])) if request.method == "POST" else years[0]
+#     selected_month = int(request.POST.get("month", 1)) if request.method == "POST" else 1
+#     selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
+
+#     # Rest of the view code remains the same
+
+#     if request.method == "POST":
+#         selected_year = int(request.POST.get("year"))
+#         selected_month = int(request.POST.get("month"))
+#         selected_ciktilar_field = request.POST.get("ciktilar_field")
+
+#     # Filter Islemler based on selected year and month
+#     islemler = Islemler.objects.filter(
+#         islem_tarihi__year=selected_year,
+#         islem_tarihi__month=selected_month,
+#     )
+
+#     # Calculate the sum of the selected ciktilar field
+#     ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
+
+#     context = {
+#         "years": years,
+#         "months": months,
+#         "selected_year": selected_year,
+#         "selected_month": selected_month,
+#         "selected_ciktilar_field": selected_ciktilar_field,
+#         "ciktilar_sum": ciktilar_sum,
+#     }
+
+#     return render(request, "app_base/monthly_spendings.html", context)
+
+
+# def monthly_spendings(request):
+#     # Get the selected year and month from the request
+#     selected_year = int(request.GET.get("year", datetime.date.today().year))
+#     selected_month = int(request.GET.get("month", datetime.date.today().month))
+
+#     # Create a list of month names in Turkish
+#     month_names_tr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+
+#     # Generate the range of years from 2023 to 2035
+#     year_range = list(range(2023, 2036))
+
+#     # Create a list of tuples for months with their numbers and names
+#     months_with_numbers = [(i + 1, month_names_tr[i]) for i in range(len(month_names_tr))]
+
+#     # Calculate the first day of the selected month
+#     first_day_of_month = datetime.date(selected_year, selected_month, 1)
+
+#     # Calculate the last day of the selected month
+#     if selected_month == 12:
+#         last_day_of_month = datetime.date(selected_year + 1, 1, 1) - datetime.timedelta(days=1)
+#     else:
+#         last_day_of_month = datetime.date(selected_year, selected_month + 1, 1) - datetime.timedelta(days=1)
+
+#     # Retrieve the monthly spendings grouped by tags for the selected month and year
+#     monthly_spendings = Islemler.objects.filter(islem_tarihi__range=(first_day_of_month, last_day_of_month)).values("tags__name").annotate(total_ciktilar_TL=Sum("ciktilar_TL"), total_ciktilar_Euro=Sum("ciktilar_Euro"), total_ciktilar_Dolar=Sum("ciktilar_Dolar"), total_ciktilar_GBP=Sum("ciktilar_GBP"), total_ciktilar_Sek=Sum("ciktilar_Sek"))
+
+#     # Prepare the data for Chart.js
+#     labels = [entry["tags__name"] for entry in monthly_spendings]
+#     ciktilar_TL = [entry["total_ciktilar_TL"] for entry in monthly_spendings]
+#     ciktilar_Euro = [entry["total_ciktilar_Euro"] for entry in monthly_spendings]
+#     ciktilar_Dolar = [entry["total_ciktilar_Dolar"] for entry in monthly_spendings]
+#     ciktilar_GBP = [entry["total_ciktilar_GBP"] for entry in monthly_spendings]
+#     ciktilar_Sek = [entry["total_ciktilar_Sek"] for entry in monthly_spendings]
+
+#     context = {
+#         "labels": labels,
+#         "ciktilar_TL": ciktilar_TL,
+#         "ciktilar_Euro": ciktilar_Euro,
+#         "ciktilar_Dolar": ciktilar_Dolar,
+#         "ciktilar_GBP": ciktilar_GBP,
+#         "ciktilar_Sek": ciktilar_Sek,
+#         "selected_year": selected_year,
+#         "selected_month": selected_month,
+#         "month_names_tr": month_names_tr,
+#         "year_range": year_range,  # Pass the year range to the template
+#         "months_with_numbers": months_with_numbers,  # Pass the list of months with numbers and names
+#     }
+
+#     return render(request, "app_base/monthly_spendings.html", context)

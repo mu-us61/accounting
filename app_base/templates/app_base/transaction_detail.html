@@ -1,8 +1,36 @@
 {% extends "app_base/base.html" %}
 {% block content %}
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="box mt-4">
+                <h2 class="title has-text-centered">Islem Detayi</h2>
+                <div class="content">
+                    <p>
+                        <strong>Islem Ismi:</strong> {{ transaction.islem_ismi }}
+                    </p>
+                    <p>
+                        <strong>Islem Aciklamasi:</strong> {{ transaction.islem_aciklamasi }}
+                    </p>
+                    <!-- Add more details here as needed -->
+                    <p>
+                        <strong>Tarih:</strong> {{ transaction.islem_tarihi }}
+                    </p>
+                    <!-- Date added here -->
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <a href="{% url 'transaction_list_name' %}" class="button is-link">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "app_base/base.html" %}
+{% block content %}
     <h2>Transaction Detail</h2>
     <p>Name: {{ transaction.islem_ismi }}</p>
     <p>Description: {{ transaction.islem_aciklamasi }}</p>
     <!-- Add more details here as needed -->
     <a href="{% url 'transaction_list_name' %}">Back to List</a>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
