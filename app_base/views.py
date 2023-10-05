@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
@@ -7,14 +8,12 @@ from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import View
-from django.contrib import messages
 from django.utils.translation import gettext as _
+from django.views import View
 
 from . import models
-
 from .forms import MuUserForm, TagForm, TransactionForm
-from .models import Islemler, MuUser, Tag, MuGroup
+from .models import Islemler, MuGroup, MuUser, Tag
 
 
 # //------------------------~ ANASAYFA ~--------------------------------------------------------------------------
@@ -29,7 +28,7 @@ def bakiye_view(request):
     return render(request, "app_base/bakiye.html", context)
 
 
-# //------------------------~ AUTHENTICATION ~--------------------------------------------------------------------------
+# //------------------------~ AUTHENTICATIONS ~--------------------------------------------------------------------------
 def passchange_view(request):
     if request.method == "POST":
         hashed_pass = request.user.password
@@ -41,10 +40,10 @@ def passchange_view(request):
             return redirect("home_view_name")
         else:
             messages.error(request, "Tekrar deneyiniz")
-            return render(request, template_name="app_base/change_password.html")
+            return render(request, template_name="app_base/authentications/change_password.html")
 
     if request.method == "GET":
-        return render(request, template_name="app_base/change_password.html")
+        return render(request, template_name="app_base/authentications/change_password.html")
 
 
 def login_view(request):
@@ -58,9 +57,9 @@ def login_view(request):
             return redirect("home_view_name")
         else:
             messages.error(request, "Tekrar deneyiniz")
-            return render(request, template_name="app_base/login.html")
+            return render(request, template_name="app_base/authentications/login.html")
     if request.method == "GET":
-        return render(request, template_name="app_base/login.html")
+        return render(request, template_name="app_base/authentications/login.html")
 
 
 def logout_view(request):
@@ -73,13 +72,13 @@ def logout_view(request):
 def profile_view(request):
     # user_profile = UserProfile.objects.get(user=request.user)
     user_profile = "deneme"
-    return render(request, "app_base/profile.html", {"user_profile": user_profile})
+    return render(request, "app_base/authentications/profile.html", {"user_profile": user_profile})
 
 
 # //------------------------~ USER GROUPS ~--------------------------------------------------------------------------
 def usergroups_view(request):
     groups = models.MuGroup.objects.all()
-    return render(request, "app_base/grouppage.html", {"groups": groups})
+    return render(request, "app_base/groups/grouppage.html", {"groups": groups})
 
 
 def groupdetail_view(request, group_id):
@@ -100,7 +99,7 @@ def groupdetail_view(request, group_id):
         "group": group,
         "all_users": all_users,
     }
-    return render(request, "app_base/groupdetail.html", context)
+    return render(request, "app_base/groups/groupdetail.html", context)
 
 
 def groupcreate_view(request):
@@ -113,13 +112,13 @@ def groupcreate_view(request):
                 # You can perform any additional actions here
                 return redirect("usergroups_view_name")  # Redirect to a group list view
 
-    return render(request, "app_base/groupcreate.html")
+    return render(request, "app_base/groups/groupcreate.html")
 
 
-# //------------------------~ USER LIST ~--------------------------------------------------------------------------
+# //------------------------~ ACCOUNTS ~--------------------------------------------------------------------------
 def muuserlist_view(request):
     users = models.MuUser.objects.all()
-    return render(request, "app_base/userlist.html", {"users": users})
+    return render(request, "app_base/accounts/userlist.html", {"users": users})
 
 
 def muusercreate_view(request):
@@ -131,7 +130,7 @@ def muusercreate_view(request):
     else:
         form = MuUserForm()
 
-    return render(request, "app_base/usercreate.html", {"form": form})
+    return render(request, "app_base/accounts/usercreate.html", {"form": form})
 
 
 def muuserupdate_view(request, pk):
@@ -143,7 +142,7 @@ def muuserupdate_view(request, pk):
             return redirect("muuserlist_view_name")
     else:
         form = MuUserForm(instance=user)
-    return render(request, "app_base/userupdate.html", {"form": form, "user": user})
+    return render(request, "app_base/accounts/userupdate.html", {"form": form, "user": user})
 
 
 def muuserdelete_view(request, pk):
@@ -151,13 +150,13 @@ def muuserdelete_view(request, pk):
     if request.method == "POST":
         user.delete()
         return redirect("muuserlist_view_name")
-    return render(request, "app_base/userdelete.html", {"user": user})
+    return render(request, "app_base/accounts/userdelete.html", {"user": user})
 
 
 # //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
 @method_decorator(login_required, name="dispatch")
 class TransactionList(View):
-    template_name = "app_base/transaction_list.html"
+    template_name = "app_base/transactions/transaction_list.html"
 
     def get(self, request):
         # transactions = Islemler.objects.order_by('-islem_tarihi')  # Order by date in descending order
@@ -167,7 +166,7 @@ class TransactionList(View):
 
 @method_decorator(login_required, name="dispatch")
 class CreateTransaction(View):
-    template_name = "app_base/create_transaction.html"
+    template_name = "app_base/transactions/create_transaction.html"
 
     def get(self, request):
         form = TransactionForm()
@@ -189,7 +188,7 @@ class CreateTransaction(View):
 
 @method_decorator(login_required, name="dispatch")
 class TransactionDetail(View):
-    template_name = "app_base/transaction_detail.html"
+    template_name = "app_base/transactions/transaction_detail.html"
 
     def get(self, request, pk):
         transaction = Islemler.objects.get(pk=pk, islemsahibi=request.user)
@@ -198,7 +197,7 @@ class TransactionDetail(View):
 
 @method_decorator(login_required, name="dispatch")
 class UpdateTransaction(View):
-    template_name = "app_base/update_transaction.html"
+    template_name = "app_base/transactions/update_transaction.html"
 
     def get(self, request, pk):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
@@ -219,7 +218,7 @@ class UpdateTransaction(View):
 class DeleteTransaction(View):
     def get(self, request, pk):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-        return render(request, "app_base/delete_transaction.html", {"transaction": transaction})
+        return render(request, "app_base/transactions/delete_transaction.html", {"transaction": transaction})
 
     def post(self, request, pk):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
@@ -228,15 +227,15 @@ class DeleteTransaction(View):
         return redirect("transaction_list_name")
 
 
-# //------------------------~ TAGGING ~--------------------------------------------------------------------------
+# //------------------------~ TAGS ~--------------------------------------------------------------------------
 def tag_list(request):
     tags = Tag.objects.all()
-    return render(request, "app_base/tag_list.html", {"tags": tags})
+    return render(request, "app_base/tags/tag_list.html", {"tags": tags})
 
 
 def tag_detail(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
-    return render(request, "app_base/tag_detail.html", {"tag": tag})
+    return render(request, "app_base/tags/tag_detail.html", {"tag": tag})
 
 
 def tag_create(request):
@@ -247,7 +246,7 @@ def tag_create(request):
             return redirect("tag_list_name")
     else:
         form = TagForm()
-    return render(request, "app_base/tag_form.html", {"form": form})
+    return render(request, "app_base/tags/tag_form.html", {"form": form})
 
 
 def tag_update(request, slug):
@@ -259,7 +258,7 @@ def tag_update(request, slug):
             return redirect("tag_detail_name", slug=tag.slug)
     else:
         form = TagForm(instance=tag)
-    return render(request, "app_base/tag_form.html", {"form": form, "tag": tag})
+    return render(request, "app_base/tags/tag_form.html", {"form": form, "tag": tag})
 
 
 def tag_delete(request, slug):
@@ -267,13 +266,13 @@ def tag_delete(request, slug):
     if request.method == "POST":
         tag.delete()
         return redirect("tag_list_name")
-    return render(request, "app_base/tag_confirm_delete.html", {"tag": tag})
+    return render(request, "app_base/tags/tag_confirm_delete.html", {"tag": tag})
 
 
 # //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
 @method_decorator(login_required, name="dispatch")
 class TransactionTable(View):
-    template_name = "app_base/transaction_table.html"
+    template_name = "app_base/transactions/transaction_table.html"
 
     def get(self, request):
         # transactions = Islemler.objects.order_by("-islem_tarihi")  # Order by date in descending order
@@ -334,13 +333,6 @@ class TransactionTable(View):
 
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
-
-from django.shortcuts import render
-from .models import Islemler
-
-from django.shortcuts import render
-from django.utils.translation import gettext as _
-from .models import Islemler, Tag
 
 
 def monthly_spendings(request):
