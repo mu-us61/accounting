@@ -20,3 +20,5 @@
 - [ ] 404 page customized
 - [ ] on delete CASCADE mi olsun hepsi sonra sorun olmasin
 - [ ] djangoda geri alma varmi bak bu islemleri
+- [ ] admin sayfasindan olustururken islem tag secmek zorunlu dedi
+- [ ] kimden geldi kimden gitti nasil olcak bak

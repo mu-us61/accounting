@@ -26,10 +26,89 @@ def home_view(request):
 
 
 # //------------------------~ BAKIYE ~--------------------------------------------------------------------------
+
+
 def bakiye_view(request):
-    users = models.MuUser.objects.all()  # Retrieve all MuUser objects from the database
-    context = {"users": users}
+    # Fetch all users
+    users = MuUser.objects.all()
+
+    # Fetch all unique currencies
+    currencies = Currency.objects.all()
+
+    # Create a dictionary to store user balances for each currency
+    user_balances = {}
+
+    for user in users:
+        user_balance = {}
+        for currency in currencies:
+            user_balance[currency.name] = user.calculate_currency_balance(currency)
+        user_balances[user] = user_balance
+
+    context = {
+        "user_balances": user_balances,
+        "currencies": currencies,
+    }
     return render(request, "app_base/bakiye.html", context)
+
+
+# def bakiye_view(request):
+#     # Fetch all users
+#     users = MuUser.objects.all()
+
+#     # Fetch all unique currency abbreviations
+#     currencies = Currency.objects.values_list("id", flat=True).distinct()
+
+#     # Create a dictionary to store user balances for each currency
+#     user_balances = {}
+
+#     for user in users:
+#         user_balance = {}
+#         for currency in currencies:
+#             user_balance[currency] = user.calculate_currency_balance(currency)
+#         user_balances[user] = user_balance
+
+#     context = {
+#         "user_balances": user_balances,
+#         "currencies": currencies,
+#     }
+#     print(context)
+#     return render(request, "app_base/bakiye.html", context)
+
+
+# def bakiye_view(request):
+#     # Fetch all currencies
+#     currencies = Currency.objects.all()
+
+#     # Fetch all users and their currency balances
+#     users = MuUser.objects.all()
+
+#     # Create a list of dictionaries to store user balances for each currency
+#     user_balances = []
+
+#     for user in users:
+#         user_balance = {
+#             "username": user.username,
+#         }
+
+#         # Calculate and add the balance for each currency
+#         for currency in currencies:
+#             balance_field = f"bakiye_{currency.abbreviation}"
+#             user_balance[currency.abbreviation] = getattr(user, balance_field, 0)
+
+#         user_balances.append(user_balance)
+
+#     context = {
+#         "user_balances": user_balances,
+#         "currencies": currencies,
+#     }
+
+#     return render(request, "app_base/bakiye.html", context)
+
+
+# def bakiye_view(request):
+#     users = models.MuUser.objects.all()  # Retrieve all MuUser objects from the database
+#     context = {"users": users}
+#     return render(request, "app_base/bakiye.html", context)
 
 
 # //------------------------~ AUTHENTICATIONS ~--------------------------------------------------------------------------
@@ -367,37 +446,102 @@ def monthly_spendings(request):
     # Get the list of available tags for filtering
     tags = Tag.objects.all()
 
+    # Get the list of currencies for the currency select field
+    currencies = Currency.objects.all()
+
     selected_year = int(request.POST.get("year", current_year)) if request.method == "POST" else current_year
     selected_month = int(request.POST.get("month", current_month)) if request.method == "POST" else current_month
-    selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
+    selected_currency = request.POST.get("currency", "TL") if request.method == "POST" else "TL"
     selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
 
-    # Filter Islemler based on selected year, month, ciktilar field, and tag
+    # Filter Islemler based on selected year, month, currency, and tag
     islemler = Islemler.objects.filter(
         islem_tarihi__year=selected_year,
         islem_tarihi__month=selected_month,
-        **{selected_ciktilar_field + "__gt": 0},  # Filter based on the selected ciktilar field
+        currency__abbreviation=selected_currency,
     )
 
     # Apply tag filter if a tag is selected
     if selected_tag:
         islemler = islemler.filter(tags__name=selected_tag)
 
-    # Calculate the sum of the selected ciktilar field
-    ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
+    # Calculate the sum of the selected currency field
+    currency_sum = islemler.aggregate(Sum("miktar"))["miktar__sum"] or 0
 
     context = {
         "years": years,
         "months": months,
         "tags": tags,
+        "currencies": currencies,
         "selected_year": selected_year,
         "selected_month": selected_month,
-        "selected_ciktilar_field": selected_ciktilar_field,
+        "selected_currency": selected_currency,
         "selected_tag": selected_tag,
-        "ciktilar_sum": ciktilar_sum,
+        "currency_sum": currency_sum,
     }
 
     return render(request, "app_base/monthly_spendings.html", context)
+
+
+# def monthly_spendings(request):
+#     # Generate a list of years up to 2035
+#     years = list(range(2023, 2036))
+
+#     # Create a dictionary to map month numbers to Turkish month names
+#     months = {
+#         1: _("Ocak"),
+#         2: _("Şubat"),
+#         3: _("Mart"),
+#         4: _("Nisan"),
+#         5: _("Mayıs"),
+#         6: _("Haziran"),
+#         7: _("Temmuz"),
+#         8: _("Ağustos"),
+#         9: _("Eylül"),
+#         10: _("Ekim"),
+#         11: _("Kasım"),
+#         12: _("Aralık"),
+#     }
+
+#     # Get the current year and month for default values
+#     current_date = datetime.date.today()
+#     current_year = current_date.year
+#     current_month = current_date.month
+
+#     # Get the list of available tags for filtering
+#     tags = Tag.objects.all()
+
+#     selected_year = int(request.POST.get("year", current_year)) if request.method == "POST" else current_year
+#     selected_month = int(request.POST.get("month", current_month)) if request.method == "POST" else current_month
+#     selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
+#     selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
+
+#     # Filter Islemler based on selected year, month, ciktilar field, and tag
+#     islemler = Islemler.objects.filter(
+#         islem_tarihi__year=selected_year,
+#         islem_tarihi__month=selected_month,
+#         **{selected_ciktilar_field + "__gt": 0},  # Filter based on the selected ciktilar field
+#     )
+
+#     # Apply tag filter if a tag is selected
+#     if selected_tag:
+#         islemler = islemler.filter(tags__name=selected_tag)
+
+#     # Calculate the sum of the selected ciktilar field
+#     ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
+
+#     context = {
+#         "years": years,
+#         "months": months,
+#         "tags": tags,
+#         "selected_year": selected_year,
+#         "selected_month": selected_month,
+#         "selected_ciktilar_field": selected_ciktilar_field,
+#         "selected_tag": selected_tag,
+#         "ciktilar_sum": ciktilar_sum,
+#     }
+
+#     return render(request, "app_base/monthly_spendings.html", context)
 
 
 # def monthly_spendings(request):

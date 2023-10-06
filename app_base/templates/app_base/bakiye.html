@@ -1,4 +1,76 @@
 {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="table-container">
+            <table class="table is-bordered is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                        {% for currency in currencies %}<th>{{ currency.name }}</th>{% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user, balances in user_balances.items %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            {% for currency in currencies %}<td>{{ balances|default_if_none:0|get_key:currency.name }}</td>{% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="table-container">
+            <table class="table is-bordered is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                        {% for currency in currencies %}<th>{{ currency }}</th>{% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user, balances in user_balances.items %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            {% for currency in currencies %}<td>{{ balances|default_if_none:0 }}</td>{% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %} {% endcomment %}
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="table-container">
+            <table class="table is-bordered is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                        {% for currency in currencies %}<th>{{ currency.abbreviation }}</th>{% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_balance in user_balances %}
+                        <tr>
+                            <td>{{ user_balance.username }}</td>
+                            {% for currency in currencies %}<td>{{ user_balance|default_if_none:0|get_key:currency.abbreviation }}</td>{% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %} {% endcomment %}
+{% comment %} {% extends "base.html" %}
 {% block content %}
     <div class="container mt-4">
         <div class="table-container">
@@ -22,37 +94,6 @@
                             <td>{{ user.bakiye_Euro }}</td>
                             <td>{{ user.bakiye_GBP }}</td>
                             <td>{{ user.bakiye_Sek }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-{% endblock content %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="border">Users</th>
-                        <th class="border">TL</th>
-                        <th class="border">Dolar</th>
-                        <th class="border">Euro</th>
-                        <th class="border">GBP</th>
-                        <th class="border">Sek</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td class="border">{{ user.username }}</td>
-                            <td class="border">{{ user.bakiye_TL }}</td>
-                            <td class="border">{{ user.bakiye_Dolar }}</td>
-                            <td class="border">{{ user.bakiye_Euro }}</td>
-                            <td class="border">{{ user.bakiye_GBP }}</td>
-                            <td class="border">{{ user.bakiye_Sek }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

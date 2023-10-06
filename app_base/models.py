@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Sum
 
 
 class Currency(models.Model):
@@ -26,6 +27,17 @@ class MuUser(AbstractUser):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
 
+    def calculate_currency_balance(self, currency):
+        # Calculate the balance for the specified currency
+        received = Islemler.objects.filter(kime_gitti=self, currency=currency).aggregate(sum=Sum("miktar"))["sum"] or 0
+        sent = Islemler.objects.filter(kimden_geldi=self, currency=currency).aggregate(sum=Sum("miktar"))["sum"] or 0
+
+        return received - sent
+
+    # user = MuUser.objects.get(id=user_id)
+    # currency = Currency.objects.get(id=currency_id)
+    # balance = user.calculate_currency_balance(currency)  how to use
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -46,17 +58,11 @@ class Islemler(models.Model):
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
     kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
-
-    tags = models.ManyToManyField(Tag)
-
+    tags = models.ManyToManyField(Tag, blank=True)
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
-
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
-
-    # Add fields for girdiler and ciktilar
-    girdiler = models.IntegerField(default=0)
-    ciktilar = models.IntegerField(default=0)
+    miktar = models.IntegerField(default=0)
 
     def __str__(self):
         return self.islem_ismi

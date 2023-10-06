@@ -33,6 +33,92 @@
                     <label class="label">Para Birimi:</label>
                     <div class="control">
                         <div class="select">
+                            <select name="currency">
+                                {% for currency in currencies %}
+                                    <option value="{{ currency.abbreviation }}" {% if currency.abbreviation == selected_currency %}selected{% endif %}>{{ currency.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Tag:</label>
+                    <div class="control">
+                        <div class="select">
+                            <select name="tag">
+                                <option value="" {% if selected_tag == "" %}selected{% endif %}>All Tags</option>
+                                {% for tag in tags %}
+                                    <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>{{ tag.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Generate Pie Chart</button>
+                </div>
+            </div>
+        </form>
+        <div class="chart-container">
+            <canvas id="pie-chart"></canvas>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pieChartCanvas = document.getElementById("pie-chart");
+            const currencySum = {{ currency_sum|default:0 }};
+
+            const pieChart = new Chart(pieChartCanvas, {
+                type: "pie",
+                data: {
+                    labels: ["{{ selected_currency }}", "Remaining"],
+                    datasets: [{
+                        data: [currencySum, 100 - currencySum],
+                        backgroundColor: ["#36A2EB", "#FFCE56"],
+                    }],
+                },
+            });
+        });
+    </script>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="title">Pie Chart</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="field is-grouped">
+                <div class="field">
+                    <label class="label">Yil:</label>
+                    <div class="control">
+                        <div class="select">
+                            <select name="year">
+                                {% for year in years %}
+                                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Ay:</label>
+                    <div class="control">
+                        <div class="select">
+                            <select name="month">
+                                {% for month_num, month_name in months.items %}
+                                    <option value="{{ month_num }}" {% if month_num == selected_month %}selected{% endif %}>{{ month_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Para Birimi:</label>
+                    <div class="control">
+                        <div class="select">
                             <select name="ciktilar_field">
                                 <option value="ciktilar_TL" {% if selected_ciktilar_field == "ciktilar_TL" %}selected{% endif %}>ciktilar_TL</option>
                                 <option value="ciktilar_Euro" {% if selected_ciktilar_field == "ciktilar_Euro" %}selected{% endif %}>ciktilar_Euro</option>
@@ -84,8 +170,8 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     });
 });
-    </script>
-{% endblock content %}
+</script>
+{% endblock content %} {% endcomment %}
 {% comment %} {% extends "app_base/base.html" %}
 {% block content %}
     <div class="container">
