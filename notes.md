@@ -18,3 +18,5 @@
 - [ ] islemlerde id belki iyi olurdu her islemin kendi istmi
 - [ ] margin top consistency
 - [ ] 404 page customized
+- [ ] on delete CASCADE mi olsun hepsi sonra sorun olmasin
+- [ ] djangoda geri alma varmi bak bu islemleri

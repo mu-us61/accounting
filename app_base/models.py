@@ -6,6 +6,14 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
+class Currency(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    abbreviation = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class MuUser(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
@@ -16,12 +24,7 @@ class MuUser(AbstractUser):
     is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
     is_active = models.BooleanField(_("active"), default=True, help_text=_("Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."))
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-
-    bakiye_TL = models.IntegerField(default=0)
-    bakiye_Dolar = models.IntegerField(default=0)
-    bakiye_Euro = models.IntegerField(default=0)
-    bakiye_GBP = models.IntegerField(default=0)
-    bakiye_Sek = models.IntegerField(default=0)
+    currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
 
 
 class Tag(models.Model):
@@ -48,26 +51,15 @@ class Islemler(models.Model):
 
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
-    # bakiye turu
-    bakiye_ilk_TL = models.IntegerField(default=0)  # islem olmadan onceki userin bakiye
-    girdiler_TL = models.IntegerField(default=0)
-    ciktilar_TL = models.IntegerField(default=0)
 
-    bakiye_ilk_Euro = models.IntegerField(default=0)
-    girdiler_Euro = models.IntegerField(default=0)
-    ciktilar_Euro = models.IntegerField(default=0)
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
 
-    bakiye_ilk_Dolar = models.IntegerField(default=0)
-    girdiler_Dolar = models.IntegerField(default=0)
-    ciktilar_Dolar = models.IntegerField(default=0)
+    # Add fields for girdiler and ciktilar
+    girdiler = models.IntegerField(default=0)
+    ciktilar = models.IntegerField(default=0)
 
-    bakiye_ilk_GBP = models.IntegerField(default=0)
-    girdiler_GBP = models.IntegerField(default=0)
-    ciktilar_GBP = models.IntegerField(default=0)
-
-    bakiye_ilk_Sek = models.IntegerField(default=0)
-    girdiler_Sek = models.IntegerField(default=0)
-    ciktilar_Sek = models.IntegerField(default=0)
+    def __str__(self):
+        return self.islem_ismi
 
 
 class MuGroup(Group):

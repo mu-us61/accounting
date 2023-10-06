@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+  <div class="container">
+    <section class="section">
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <h1 class="title">Confirm Deletion</h1>
+          <p>Are you sure you want to delete "{{ object }}"?</p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="field is-grouped">
+              <div class="control">
+                <button type="submit" class="button is-danger">Confirm</button>
+              </div>
+              <div class="control">
+                <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+  <h1 class="title">Confirm Deletion</h1>
+  <p>Are you sure you want to delete "{{ object }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="button is-danger">Confirm</button>
+    <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
+  </form>
+{% endblock %} {% endcomment %}

@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import CurrencyListView, CurrencyCreateView, CurrencyUpdateView, CurrencyDeleteView
+
 
 urlpatterns = [
     path("", views.home_view, name="home_view_name"),
@@ -31,4 +33,9 @@ urlpatterns = [
     # //-------------------------------------------------~~-------------------------------------------------
     path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
     path("monthlyspendings", views.monthly_spendings, name="monthly_spendings_name"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("currency", CurrencyListView.as_view(), name="currency_list"),
+    path("currency/create/", CurrencyCreateView.as_view(), name="currency_create"),
+    path("currency/update/<int:pk>/", CurrencyUpdateView.as_view(), name="currency_update"),
+    path("currency/delete/<int:pk>/", CurrencyDeleteView.as_view(), name="currency_delete"),
 ]

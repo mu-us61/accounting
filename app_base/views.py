@@ -10,6 +10,10 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import View
+from .models import Currency
+from .forms import CurrencyForm
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 from . import models
 from .forms import MuUserForm, TagForm, TransactionForm
@@ -497,3 +501,31 @@ def monthly_spendings(request):
 #     }
 
 #     return render(request, "app_base/monthly_spendings.html", context)
+
+# //------------------------~~--------------------------------------------------------------------------
+
+
+class CurrencyListView(ListView):
+    model = Currency
+    template_name = "app_base/currency_list.html"
+    context_object_name = "currencies"
+
+
+class CurrencyCreateView(CreateView):
+    model = Currency
+    form_class = CurrencyForm
+    template_name = "app_base/currency_form.html"
+    success_url = reverse_lazy("currency_list")
+
+
+class CurrencyUpdateView(UpdateView):
+    model = Currency
+    form_class = CurrencyForm
+    template_name = "app_base/currency_form.html"
+    success_url = reverse_lazy("currency_list")
+
+
+class CurrencyDeleteView(DeleteView):
+    model = Currency
+    template_name = "app_base/currency_confirm_delete.html"
+    success_url = reverse_lazy("currency_list")
