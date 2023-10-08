@@ -1,7 +1,7 @@
 - [X] html de sidebar ve main content height goreceli , icerige gore degisiyor
 - [ ] kullanici listesi pagination olmalimi
-- [ ] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
-- [ ] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
+- [X] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
+- [X] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
 - [ ] sayfada yetkiliyse goster,  misafirler edit yapamasin
 - [X] admin sayfasi tammi olmasi lazim
 - [ ] para birimleri interger double mi olmali
@@ -22,3 +22,5 @@
 - [ ] djangoda geri alma varmi bak bu islemleri
 - [ ] admin sayfasindan olustururken islem tag secmek zorunlu dedi
 - [ ] kimden geldi kimden gitti nasil olcak bak
+- [ ] bakiye de belki select2 kullanilabilir kullanici secimi icin
+- [ ] islemlerde tarih filtrelenmesi yapilcak

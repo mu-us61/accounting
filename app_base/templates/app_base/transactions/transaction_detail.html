@@ -1,26 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="columns is-centered">
-        <div class="column is-half">
-            <div class="box mt-4">
-                <h2 class="title has-text-centered">Islem Detayi</h2>
-                <div class="content">
-                    <p>
-                        <strong>Islem Ismi:</strong> {{ transaction.islem_ismi }}
-                    </p>
-                    <p>
-                        <strong>Islem Aciklamasi:</strong> {{ transaction.islem_aciklamasi }}
-                    </p>
-                    <!-- Add more details here as needed -->
-                    <p>
-                        <strong>Tarih:</strong> {{ transaction.islem_tarihi }}
-                    </p>
-                    <!-- Date added here -->
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <a href="{% url 'transaction_list_name' %}" class="button is-link">Back to List</a>
-                    </div>
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h2 class="title has-text-centered">İşlem Detayı</h2>
+            <div class="content">
+                <p>
+                    <strong>İşlem İsmi:</strong> {{ transaction.islem_ismi }}
+                </p>
+                <p>
+                    <strong>İşlem Açıklaması:</strong> {{ transaction.islem_aciklamasi }}
+                </p>
+                <!-- Add more details here as needed -->
+                <p>
+                    <strong>Tarih:</strong> {{ transaction.islem_tarihi }}
+                </p>
+                <!-- Date added here -->
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <a href="{% url 'transaction_list_name' %}" class="button is-link">Listeye Geri Dön</a>
                 </div>
             </div>
         </div>

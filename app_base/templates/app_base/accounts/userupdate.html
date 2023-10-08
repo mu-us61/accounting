@@ -4,6 +4,36 @@
 {% block content %}
     <div class="column is-half m-auto">
         <div class="box">
+            <h1 class="title has-text-centered">Kullanıcı Düzenle</h1>
+            <form method="post">
+                {% csrf_token %}
+                <!-- Display form field errors -->
+                {% for field in form %}
+                    <div class="field">
+                        {% if field.label == "Password" %}
+                            <label class="label">Şifre</label>
+                        {% else %}
+                            <label class="label">{{ field.label_tag }}</label>
+                        {% endif %}
+                        <div class="control">{{ field|add_class:"input" }}</div>
+                        {% if field.errors %}<p class="help is-danger">{{ field.errors }}</p>{% endif %}
+                    </div>
+                {% endfor %}
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary" type="submit">Onay</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% load widget_tweaks %}
+{# Load widget_tweaks library #}
+{% block content %}
+    <div class="column is-half m-auto">
+        <div class="box">
             <h1 class="title has-text-centered">Kullanıcı Duzenle</h1>
             <form method="post">
                 {% csrf_token %}
@@ -23,7 +53,7 @@
             </form>
         </div>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
 {% comment %} {% extends "app_base/base.html" %}
 {% block content %}
     <div>

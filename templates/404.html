@@ -1,1 +1,27 @@
-Boyle bir sayfa yok
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    </head>
+    <body>
+        <div class="is-flex is-justify-content-center is-align-items-center" style=" height: 100vh;">
+            <div class="columns">
+                {% comment %} <div class="is-half mr-5 mb-5">
+                    <img src="404.svg" alt="404 svg image">
+                </div> {% endcomment %}
+                <div class="has-text-centered is-half ml-4 mt-5">
+                    <h1 class="is-size-1 has-text-weight-bold has-text-primary">404</h1>
+                    <p class="is-size-5 has-text-weight-medium">
+                        <span class="has-text-danger">Opps!</span> Sayfa bulunamadı
+                    </p>
+                    <p class="is-size-6 mb-2">Ulaşmaya çalıştığınız sayfa yok</p>
+                    <a href="{% url "home_view_name" %}" class="button is-primary">Anasayfa</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

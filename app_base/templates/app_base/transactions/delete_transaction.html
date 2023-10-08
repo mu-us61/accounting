@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Delete Transaction</h2>
-    <p>Are you sure you want to delete the transaction "{{ transaction.islem_ismi }}"?</p>
+    <h2>İşlem Silme</h2>
+    <p>"{{ transaction.islem_ismi }}" İşlemini silmek istediğinizden eminmisiniz ?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Delete</button>
+        <button type="submit">Sil</button>
     </form>
-    <a href="{% url 'transaction_list_name' %}">Cancel</a>
+    <a href="{% url 'transaction_list_name' %}">İptal</a>
 {% endblock content %}

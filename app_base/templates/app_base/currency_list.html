@@ -4,14 +4,14 @@
         <section class="section">
             <div class="columns is-centered">
                 <div class="column is-three-quarters">
-                    <a href="{% url 'currency_create' %}" class="button is-success">Add Currency</a>
-                    <h1 class="title has-text-centered">Currency List</h1>
+                    <a href="{% url 'currency_create' %}" class="button is-success">Para Birimi Ekle</a>
+                    <h1 class="title has-text-centered">Para Birimi Listesi</h1>
                     <table class="table is-fullwidth">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Abbreviation</th>
-                                <th>Action</th>
+                                <th>İsmi</th>
+                                <th>Kısaltması</th>
+                                <th>Eylem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -20,13 +20,13 @@
                                     <td>{{ currency.name }}</td>
                                     <td>{{ currency.abbreviation }}</td>
                                     <td>
-                                        <a href="{% url 'currency_update' currency.pk %}" class="button is-primary">Edit</a>
-                                        <a href="{% url 'currency_delete' currency.pk %}" class="button is-danger">Delete</a>
+                                        <a href="{% url 'currency_update' currency.pk %}" class="button is-primary">Düzenle</a>
+                                        <a href="{% url 'currency_delete' currency.pk %}" class="button is-danger">Sil</a>
                                     </td>
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="3">No currencies found.</td>
+                                    <td colspan="3">Para Birimi Bulunmadı</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

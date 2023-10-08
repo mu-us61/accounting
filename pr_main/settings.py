@@ -26,6 +26,7 @@ SECRET_KEY = "django-insecure-$8i@mczml+&np=@oq#gf*c#ci_&nhc=3*61u77kkrme_$+wy@y
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# "127.0.0.1"
 
 
 # Application definition
@@ -130,3 +131,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "app_base.MuUser"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+LANGUAGE_CODE = "tr"
+USE_L10N = True

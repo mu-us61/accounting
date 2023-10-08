@@ -3,21 +3,21 @@
     <div class="columns is-centered">
         <div class="column is-half">
             <div class="box mt-4">
-                <h2 class="title has-text-centered">Tag Detayi</h2>
+                <h2 class="title has-text-centered">Etiket Detayı</h2>
                 <div class="content">
                     <p>
-                        <strong>Tag Ismi :</strong> {{ tag.name }}
+                        <strong>Etiket İsmi :</strong> {{ tag.name }}
                     </p>
                 </div>
                 <div class="field is-grouped">
                     <div class="control">
-                        <a href="{% url 'tag_update_name' tag.slug %}" class="button is-primary">Duzenle</a>
+                        <a href="{% url 'tag_update_name' tag.slug %}" class="button is-primary">Düzenle</a>
                     </div>
                     <div class="control">
                         <a href="{% url 'tag_delete_name' tag.slug %}" class="button is-danger">Sil</a>
                     </div>
                     <div class="control">
-                        <a href="{% url 'tag_list_name' %}" class="button is-link">Tag Listesine Don</a>
+                        <a href="{% url 'tag_list_name' %}" class="button is-link">Etiket Listesine Dön</a>
                     </div>
                 </div>
             </div>

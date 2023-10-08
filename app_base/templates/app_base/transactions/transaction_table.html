@@ -1,62 +1,121 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block content %}
-    <div class="container">
-        <h1 class="title has-text-centered">Transaction Table</h1>
+    <div class="container mt-3">
+        <div class="columns">
+            <div class="column is-three-fifths m-auto">
+                <div class="box">
+                    <!-- Filtering Form -->
+                    <form method="get">
+                        {% csrf_token %}
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Kullanıcı</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.user|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Kimden Geldi</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.kimden_geldi|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Kime Gitti</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.kime_gitti|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Para Birimi</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.currency|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Etiketler</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.tags|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <button type="submit" class="button is-primary">Filtrele</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <h1 class="title has-text-centered">İşlem Tablosu</h1>
         <div class="table-container">
-            <table class="table is-bordered is-striped is-narrow is-hoverable">
+            <table class="table is-bordered is-striped is-fullwidth is-hoverable">
                 <thead>
                     <tr>
+                        <th>İslem Tarihi</th>
+                        <th>İslem Sahibi</th>
                         <th>Kimden Geldi</th>
                         <th>Kime Gitti</th>
-                        <th>Tags</th>
+                        <th>Etiketler</th>
                         <th>İşlem İsmi</th>
                         <th>İşlem Açıklaması</th>
-                        <th>Bakiye İlk TL</th>
-                        <th>Girdiler TL</th>
-                        <th>Çıktılar TL</th>
-                        <th>Bakiye İlk Euro</th>
-                        <th>Girdiler Euro</th>
-                        <th>Çıktılar Euro</th>
-                        <th>Bakiye İlk Dolar</th>
-                        <th>Girdiler Dolar</th>
-                        <th>Çıktılar Dolar</th>
-                        <th>Bakiye İlk GBP</th>
-                        <th>Girdiler GBP</th>
-                        <th>Çıktılar GBP</th>
-                        <th>Bakiye İlk Sek</th>
-                        <th>Girdiler Sek</th>
-                        <th>Çıktılar Sek</th>
+                        <th>Para Birimi</th>
+                        <th>Miktar</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for transaction in transactions %}
                         <tr>
+                            <td>{{ transaction.islem_tarihi|date:"j F Y" }}</td>
+                            <td>{{ transaction.islemsahibi }}</td>
                             <td>{{ transaction.kimden_geldi }}</td>
                             <td>{{ transaction.kime_gitti }}</td>
                             <td>
-                                {% for tag in transaction.tags.all %}{{ tag.name }}{% endfor %}
+                                {% for tag in transaction.tags.all %}
+                                    {{ tag.name }}
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
                             </td>
                             <td>{{ transaction.islem_ismi }}</td>
                             <td>{{ transaction.islem_aciklamasi }}</td>
-                            <td>{{ transaction.bakiye_ilk_TL }}</td>
-                            <td>{{ transaction.girdiler_TL }}</td>
-                            <td>{{ transaction.ciktilar_TL }}</td>
-                            <td>{{ transaction.bakiye_ilk_Euro }}</td>
-                            <td>{{ transaction.girdiler_Euro }}</td>
-                            <td>{{ transaction.ciktilar_Euro }}</td>
-                            <td>{{ transaction.bakiye_ilk_Dolar }}</td>
-                            <td>{{ transaction.girdiler_Dolar }}</td>
-                            <td>{{ transaction.ciktilar_Dolar }}</td>
-                            <td>{{ transaction.bakiye_ilk_GBP }}</td>
-                            <td>{{ transaction.girdiler_GBP }}</td>
-                            <td>{{ transaction.ciktilar_GBP }}</td>
-                            <td>{{ transaction.bakiye_ilk_Sek }}</td>
-                            <td>{{ transaction.girdiler_Sek }}</td>
-                            <td>{{ transaction.ciktilar_Sek }}</td>
+                            <td>{{ transaction.currency.name }}</td>
+                            <td>{{ transaction.miktar }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+    <!-- Initialize Select2 -->
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2({
+            });
+        });
+    </script>
 {% endblock %}

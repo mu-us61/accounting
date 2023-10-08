@@ -10,7 +10,11 @@
                 <!-- Display form field errors -->
                 {% for field in form %}
                     <div class="field">
-                        <label class="label">{{ field.label_tag }}</label>
+                        {% if field.label == "Password" %}
+                            <label class="label">Şifre</label>
+                        {% else %}
+                            <label class="label">{{ field.label_tag }}</label>
+                        {% endif %}
                         <div class="control">{{ field|add_class:"input" }}</div>
                         {% if field.errors %}<p class="help is-danger">{{ field.errors }}</p>{% endif %}
                     </div>
@@ -24,107 +28,23 @@
         </div>
     </div>
 {% endblock content %}
-{% comment %} {% extends "app_base/base.html" %}
+{% comment %} {% extends "base.html" %}
 {% load widget_tweaks %}
 {# Load widget_tweaks library #}
 {% block content %}
-    <div class="section">
-        <h1 class="title">Yeni Kullanıcı Oluştur</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="field">
-                <label class="label">Kullanıcı Adı</label>
-                <div class="control">{{ form.username|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Şifre</label>
-                <div class="control">{{ form.password|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Ad</label>
-                <div class="control">{{ form.first_name|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Soyad</label>
-                <div class="control">{{ form.last_name|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Bakiye TL</label>
-                <div class="control">{{ form.bakiye_TL|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Bakiye Dolar</label>
-                <div class="control">{{ form.bakiye_Dolar|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Bakiye Euro</label>
-                <div class="control">{{ form.bakiye_Euro|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Bakiye GBP</label>
-                <div class="control">{{ form.bakiye_GBP|add_class:"input" }}</div>
-            </div>
-            <div class="field">
-                <label class="label">Bakiye SEK</label>
-                <div class="control">{{ form.bakiye_Sek|add_class:"input" }}</div>
-            </div>
-            
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">Onay</button>
-                </div>
-            </div>
-        </form>
-    </div>
-{% endblock content %} {% endcomment %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
     <div class="column is-half m-auto">
         <div class="box">
-            <h1 class="title has-text-centered">Yeni Kullanıcı Olustur</h1>
-            {% if messages %}
-                {% for message in messages %}<div class="notification is-danger">{{ message }}</div>{% endfor %}
-            {% endif %}
+            <h1 class="title has-text-centered">Yeni Kullanıcı Oluştur</h1>
             <form method="post">
                 {% csrf_token %}
-                <div class="field">
-                    <label class="label" for="{{ form.username.id_for_label }}">Kullanıcı Adı</label>
-                    <div class="control">{{ form.username }}</div>
-                </div>
-                <!-- Customize the label for the password field here -->
-                <div class="field">
-                    <label class="label" for="{{ form.password1.id_for_label }}">Şifre</label>
-                    <div class="control">{{ form.password }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.first_name.id_for_label }}">İsim</label>
-                    <div class="control">{{ form.first_name }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.last_name.id_for_label }}">Soyisim</label>
-                    <div class="control">{{ form.last_name }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.bakiye_TL.id_for_label }}">Bakiye TL</label>
-                    <div class="control">{{ form.bakiye_TL }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.bakiye_Dolar.id_for_label }}">Bakiye Dolar</label>
-                    <div class="control">{{ form.bakiye_Dolar }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.bakiye_Euro.id_for_label }}">Bakiye Euro</label>
-                    <div class="control">{{ form.bakiye_Euro }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.bakiye_GBP.id_for_label }}">Bakiye GBP</label>
-                    <div class="control">{{ form.bakiye_GBP }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ form.bakiye_Sek.id_for_label }}">Bakiye SEK</label>
-                    <div class="control">{{ form.bakiye_Sek }}</div>
-                </div>
-                <!-- Include other fields as needed -->
+                <!-- Display form field errors -->
+                {% for field in form %}
+                    <div class="field">
+                        <label class="label">{{ field.label_tag }}</label>
+                        <div class="control">{{ field|add_class:"input" }}</div>
+                        {% if field.errors %}<p class="help is-danger">{{ field.errors }}</p>{% endif %}
+                    </div>
+                {% endfor %}
                 <div class="field">
                     <div class="control">
                         <button class="button is-primary" type="submit">Onay</button>
@@ -132,16 +52,5 @@
                 </div>
             </form>
         </div>
-    </div>
-{% endblock content %} {% endcomment %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <div>
-        <h1>Yeni Kullanici Olustur</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Onay</button>
-        </form>
     </div>
 {% endblock content %} {% endcomment %}

@@ -6,18 +6,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import View
-from .models import Currency
-from .forms import CurrencyForm
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+import json
 from . import models
-from .forms import MuUserForm, TagForm, TransactionForm
-from .models import Islemler, MuGroup, MuUser, Tag
+from .forms import CurrencyForm, MuUserForm, TagForm, TransactionForm
+from .models import Currency, Islemler, MuGroup, MuUser, Tag
+from django.db.models import Sum, F, Value, IntegerField
+from django.db.models.functions import Coalesce
+from .forms import TransactionFilterForm
+from django.contrib.auth.decorators import user_passes_test
+
+
+def is_staff(user):
+    return user.is_staff
 
 
 # //------------------------~ ANASAYFA ~--------------------------------------------------------------------------
@@ -151,11 +156,11 @@ def logout_view(request):
     return redirect("home_view_name")
 
 
-@login_required
-def profile_view(request):
-    # user_profile = UserProfile.objects.get(user=request.user)
-    user_profile = "deneme"
-    return render(request, "app_base/authentications/profile.html", {"user_profile": user_profile})
+# @login_required
+# def profile_view(request):
+#     # user_profile = UserProfile.objects.get(user=request.user)
+#     user_profile = "deneme"
+#     return render(request, "app_base/authentications/profile.html", {"user_profile": user_profile})
 
 
 # //------------------------~ USER GROUPS ~--------------------------------------------------------------------------
@@ -185,6 +190,7 @@ def groupdetail_view(request, group_id):
     return render(request, "app_base/groups/groupdetail.html", context)
 
 
+@user_passes_test(is_staff)
 def groupcreate_view(request):
     if request.method == "POST":
         group_name = request.POST.get("group_name")
@@ -199,11 +205,26 @@ def groupcreate_view(request):
 
 
 # //------------------------~ ACCOUNTS ~--------------------------------------------------------------------------
+# def muuserlist_view(request):
+#     users = models.MuUser.objects.all()
+#     return render(request, "app_base/accounts/userlist.html", {"users": users})
+
+
 def muuserlist_view(request):
-    users = models.MuUser.objects.all()
-    return render(request, "app_base/accounts/userlist.html", {"users": users})
+    users = MuUser.objects.all()
+    currencies = Currency.objects.all()
+
+    # Create a dictionary to store currency balances for each user
+    user_balances = {}
+    for user in users:
+        user_balances[user] = {}
+        for currency in currencies:
+            user_balances[user][currency] = user.calculate_currency_balance(currency)
+
+    return render(request, "app_base/accounts/userlist.html", {"users": users, "currencies": currencies, "user_balances": user_balances})
 
 
+@user_passes_test(is_staff)
 def muusercreate_view(request):
     if request.method == "POST":
         form = MuUserForm(request.POST)
@@ -216,6 +237,7 @@ def muusercreate_view(request):
     return render(request, "app_base/accounts/usercreate.html", {"form": form})
 
 
+@user_passes_test(is_staff)
 def muuserupdate_view(request, pk):
     user = get_object_or_404(models.MuUser, pk=pk)
     if request.method == "POST":
@@ -228,6 +250,7 @@ def muuserupdate_view(request, pk):
     return render(request, "app_base/accounts/userupdate.html", {"form": form, "user": user})
 
 
+@user_passes_test(is_staff)
 def muuserdelete_view(request, pk):
     user = get_object_or_404(models.MuUser, pk=pk)
     if request.method == "POST":
@@ -237,7 +260,7 @@ def muuserdelete_view(request, pk):
 
 
 # //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class TransactionList(View):
     template_name = "app_base/transactions/transaction_list.html"
 
@@ -247,7 +270,10 @@ class TransactionList(View):
         return render(request, self.template_name, {"transactions": transactions})
 
 
-@method_decorator(login_required, name="dispatch")
+#! TODO burda bir sorun var
+
+
+# @method_decorator(login_required, name="dispatch")
 class CreateTransaction(View):
     template_name = "app_base/transactions/create_transaction.html"
 
@@ -269,7 +295,7 @@ class CreateTransaction(View):
         return render(request, self.template_name, {"form": form})
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class TransactionDetail(View):
     template_name = "app_base/transactions/transaction_detail.html"
 
@@ -278,7 +304,7 @@ class TransactionDetail(View):
         return render(request, self.template_name, {"transaction": transaction})
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class UpdateTransaction(View):
     template_name = "app_base/transactions/update_transaction.html"
 
@@ -297,7 +323,7 @@ class UpdateTransaction(View):
         return render(request, self.template_name, {"form": form, "transaction": transaction})
 
 
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 class DeleteTransaction(View):
     def get(self, request, pk):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
@@ -353,65 +379,47 @@ def tag_delete(request, slug):
 
 
 # //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
-@method_decorator(login_required, name="dispatch")
+
+
+# @method_decorator(login_required, name="dispatch")
 class TransactionTable(View):
     template_name = "app_base/transactions/transaction_table.html"
 
     def get(self, request):
-        # transactions = Islemler.objects.order_by("-islem_tarihi")  # Order by date in descending order
-        transactions = Islemler.objects.prefetch_related("tags").all()
+        # Create an instance of the filter form
+        filter_form = TransactionFilterForm(request.GET)
 
-        # transactions = Islemler.objects.prefetch_related("tags").order_by("-islem_tarihi")
-        # Debug: Print transactions and their tags to the console
+        # Filter transactions based on form input
+        transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
 
-        # for transaction in transactions:
-        #     print(f"Transaction: {transaction.islem_ismi}")
-        #     for tag in transaction.tags.all():
-        #         print(f"  Tag: {tag.name}")
-        for obj in Islemler.objects.all():
-            print(obj.tags)
-        # for transaction in transactions:
-        #     print(f"Transaction: {transaction.islem_ismi}")
-        #     print(f"Tags: {transaction.tags.all()}")
+        if filter_form.is_valid():
+            user = filter_form.cleaned_data.get("user")
+            currency = filter_form.cleaned_data.get("currency")
+            tags = filter_form.cleaned_data.get("tags")
 
-        return render(request, self.template_name, {"transactions": transactions})
+            if user:
+                transactions = transactions.filter(islemsahibi=user)
+            if currency:
+                transactions = transactions.filter(currency=currency)
+            if tags:
+                transactions = transactions.filter(tags__in=tags)
+
+        all_tags = Tag.objects.all()  # Fetch all tags
+
+        return render(
+            request,
+            self.template_name,
+            {"transactions": transactions, "all_tags": all_tags, "filter_form": filter_form},
+        )
 
 
 # @method_decorator(login_required, name="dispatch")
 # class TransactionTable(View):
-#     template_name = "app_base/transaction_table.html"
+#     template_name = "app_base/transactions/transaction_table.html"
 
 #     def get(self, request):
-#         # Get all transactions
-#         transactions = Islemler.objects.all()
-
-#         # Filter by income or expense
-#         param_filter = request.GET.get("filter", None)
-#         if param_filter == "income":
-#             transactions = transactions.filter(kime_gitti__isnull=False)
-#         elif param_filter == "expense":
-#             transactions = transactions.filter(kimden_geldi__isnull=False)
-
-#         # Filter by tags
-#         tag_filter = request.GET.getlist("tags")
-#         if tag_filter:
-#             # Create a Q object to filter transactions by tags
-#             tag_query = Q()
-#             for tag_id in tag_filter:
-#                 tag_query |= Q(tags__id=tag_id)
-#             transactions = transactions.filter(tag_query)
-
-#         # Order by date or amount
-#         param_order = request.GET.get("order", None)
-#         if param_order == "date":
-#             transactions = transactions.order_by("islem_tarihi")
-#         elif param_order == "amount":
-#             transactions = transactions.order_by("girdiler_TL", "ciktilar_TL")
-
-#         # Get all tags
-#         all_tags = Tag.objects.all()  # Replace 'Tag' with your actual tag model name
-
-#         # Pass filtered transactions and all tags to the template
+#         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
+#         all_tags = Tag.objects.all()  # Fetch all tags
 #         return render(request, self.template_name, {"transactions": transactions, "all_tags": all_tags})
 
 
@@ -443,16 +451,12 @@ def monthly_spendings(request):
     current_year = current_date.year
     current_month = current_date.month
 
-    # Get the list of available tags for filtering
-    tags = Tag.objects.all()
-
     # Get the list of currencies for the currency select field
     currencies = Currency.objects.all()
 
     selected_year = int(request.POST.get("year", current_year)) if request.method == "POST" else current_year
     selected_month = int(request.POST.get("month", current_month)) if request.method == "POST" else current_month
     selected_currency = request.POST.get("currency", "TL") if request.method == "POST" else "TL"
-    selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
 
     # Filter Islemler based on selected year, month, currency, and tag
     islemler = Islemler.objects.filter(
@@ -461,190 +465,27 @@ def monthly_spendings(request):
         currency__abbreviation=selected_currency,
     )
 
-    # Apply tag filter if a tag is selected
-    if selected_tag:
-        islemler = islemler.filter(tags__name=selected_tag)
-
     # Calculate the sum of the selected currency field
     currency_sum = islemler.aggregate(Sum("miktar"))["miktar__sum"] or 0
+
+    # Get tag data for the selected month and currency
+    tag_data = islemler.values("tags__name").annotate(miktar=Coalesce(Sum("miktar"), Value(0), output_field=IntegerField())).order_by("-miktar")
+
+    # Serialize tag_data to JSON
+    tag_data_json = json.dumps(list(tag_data))
 
     context = {
         "years": years,
         "months": months,
-        "tags": tags,
         "currencies": currencies,
         "selected_year": selected_year,
         "selected_month": selected_month,
         "selected_currency": selected_currency,
-        "selected_tag": selected_tag,
         "currency_sum": currency_sum,
+        "tag_data_json": tag_data_json,
     }
-
     return render(request, "app_base/monthly_spendings.html", context)
 
-
-# def monthly_spendings(request):
-#     # Generate a list of years up to 2035
-#     years = list(range(2023, 2036))
-
-#     # Create a dictionary to map month numbers to Turkish month names
-#     months = {
-#         1: _("Ocak"),
-#         2: _("Şubat"),
-#         3: _("Mart"),
-#         4: _("Nisan"),
-#         5: _("Mayıs"),
-#         6: _("Haziran"),
-#         7: _("Temmuz"),
-#         8: _("Ağustos"),
-#         9: _("Eylül"),
-#         10: _("Ekim"),
-#         11: _("Kasım"),
-#         12: _("Aralık"),
-#     }
-
-#     # Get the current year and month for default values
-#     current_date = datetime.date.today()
-#     current_year = current_date.year
-#     current_month = current_date.month
-
-#     # Get the list of available tags for filtering
-#     tags = Tag.objects.all()
-
-#     selected_year = int(request.POST.get("year", current_year)) if request.method == "POST" else current_year
-#     selected_month = int(request.POST.get("month", current_month)) if request.method == "POST" else current_month
-#     selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
-#     selected_tag = request.POST.get("tag", "") if request.method == "POST" else ""
-
-#     # Filter Islemler based on selected year, month, ciktilar field, and tag
-#     islemler = Islemler.objects.filter(
-#         islem_tarihi__year=selected_year,
-#         islem_tarihi__month=selected_month,
-#         **{selected_ciktilar_field + "__gt": 0},  # Filter based on the selected ciktilar field
-#     )
-
-#     # Apply tag filter if a tag is selected
-#     if selected_tag:
-#         islemler = islemler.filter(tags__name=selected_tag)
-
-#     # Calculate the sum of the selected ciktilar field
-#     ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
-
-#     context = {
-#         "years": years,
-#         "months": months,
-#         "tags": tags,
-#         "selected_year": selected_year,
-#         "selected_month": selected_month,
-#         "selected_ciktilar_field": selected_ciktilar_field,
-#         "selected_tag": selected_tag,
-#         "ciktilar_sum": ciktilar_sum,
-#     }
-
-#     return render(request, "app_base/monthly_spendings.html", context)
-
-
-# def monthly_spendings(request):
-#     # Generate a list of years up to 2035
-#     years = list(range(2023, 2036))
-
-#     # Create a dictionary to map month numbers to Turkish month names
-#     months = {
-#         1: _('Ocak'),
-#         2: _('Şubat'),
-#         3: _('Mart'),
-#         4: _('Nisan'),
-#         5: _('Mayıs'),
-#         6: _('Haziran'),
-#         7: _('Temmuz'),
-#         8: _('Ağustos'),
-#         9: _('Eylül'),
-#         10: _('Ekim'),
-#         11: _('Kasım'),
-#         12: _('Aralık'),
-#     }
-
-#     selected_year = int(request.POST.get("year", years[0])) if request.method == "POST" else years[0]
-#     selected_month = int(request.POST.get("month", 1)) if request.method == "POST" else 1
-#     selected_ciktilar_field = request.POST.get("ciktilar_field", "ciktilar_TL") if request.method == "POST" else "ciktilar_TL"
-
-#     # Rest of the view code remains the same
-
-#     if request.method == "POST":
-#         selected_year = int(request.POST.get("year"))
-#         selected_month = int(request.POST.get("month"))
-#         selected_ciktilar_field = request.POST.get("ciktilar_field")
-
-#     # Filter Islemler based on selected year and month
-#     islemler = Islemler.objects.filter(
-#         islem_tarihi__year=selected_year,
-#         islem_tarihi__month=selected_month,
-#     )
-
-#     # Calculate the sum of the selected ciktilar field
-#     ciktilar_sum = islemler.aggregate(Sum(selected_ciktilar_field))[selected_ciktilar_field + "__sum"] or 0
-
-#     context = {
-#         "years": years,
-#         "months": months,
-#         "selected_year": selected_year,
-#         "selected_month": selected_month,
-#         "selected_ciktilar_field": selected_ciktilar_field,
-#         "ciktilar_sum": ciktilar_sum,
-#     }
-
-#     return render(request, "app_base/monthly_spendings.html", context)
-
-
-# def monthly_spendings(request):
-#     # Get the selected year and month from the request
-#     selected_year = int(request.GET.get("year", datetime.date.today().year))
-#     selected_month = int(request.GET.get("month", datetime.date.today().month))
-
-#     # Create a list of month names in Turkish
-#     month_names_tr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
-
-#     # Generate the range of years from 2023 to 2035
-#     year_range = list(range(2023, 2036))
-
-#     # Create a list of tuples for months with their numbers and names
-#     months_with_numbers = [(i + 1, month_names_tr[i]) for i in range(len(month_names_tr))]
-
-#     # Calculate the first day of the selected month
-#     first_day_of_month = datetime.date(selected_year, selected_month, 1)
-
-#     # Calculate the last day of the selected month
-#     if selected_month == 12:
-#         last_day_of_month = datetime.date(selected_year + 1, 1, 1) - datetime.timedelta(days=1)
-#     else:
-#         last_day_of_month = datetime.date(selected_year, selected_month + 1, 1) - datetime.timedelta(days=1)
-
-#     # Retrieve the monthly spendings grouped by tags for the selected month and year
-#     monthly_spendings = Islemler.objects.filter(islem_tarihi__range=(first_day_of_month, last_day_of_month)).values("tags__name").annotate(total_ciktilar_TL=Sum("ciktilar_TL"), total_ciktilar_Euro=Sum("ciktilar_Euro"), total_ciktilar_Dolar=Sum("ciktilar_Dolar"), total_ciktilar_GBP=Sum("ciktilar_GBP"), total_ciktilar_Sek=Sum("ciktilar_Sek"))
-
-#     # Prepare the data for Chart.js
-#     labels = [entry["tags__name"] for entry in monthly_spendings]
-#     ciktilar_TL = [entry["total_ciktilar_TL"] for entry in monthly_spendings]
-#     ciktilar_Euro = [entry["total_ciktilar_Euro"] for entry in monthly_spendings]
-#     ciktilar_Dolar = [entry["total_ciktilar_Dolar"] for entry in monthly_spendings]
-#     ciktilar_GBP = [entry["total_ciktilar_GBP"] for entry in monthly_spendings]
-#     ciktilar_Sek = [entry["total_ciktilar_Sek"] for entry in monthly_spendings]
-
-#     context = {
-#         "labels": labels,
-#         "ciktilar_TL": ciktilar_TL,
-#         "ciktilar_Euro": ciktilar_Euro,
-#         "ciktilar_Dolar": ciktilar_Dolar,
-#         "ciktilar_GBP": ciktilar_GBP,
-#         "ciktilar_Sek": ciktilar_Sek,
-#         "selected_year": selected_year,
-#         "selected_month": selected_month,
-#         "month_names_tr": month_names_tr,
-#         "year_range": year_range,  # Pass the year range to the template
-#         "months_with_numbers": months_with_numbers,  # Pass the list of months with numbers and names
-#     }
-
-#     return render(request, "app_base/monthly_spendings.html", context)
 
 # //------------------------~~--------------------------------------------------------------------------
 

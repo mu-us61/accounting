@@ -1,268 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="container">
-        <h1 class="title">Pie Chart</h1>
-        <form method="post" action="">
-            {% csrf_token %}
-            <div class="field is-grouped">
-                <div class="field">
-                    <label class="label">Yil:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="year">
-                                {% for year in years %}
-                                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
-                                {% endfor %}
-                            </select>
+    <div class="column m-auto is-half">
+        <div class="container">
+            <h1 class="title has-text-centered">Etikete Göre Harcama Grafiği</h1>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="field is-grouped">
+                    <div class="field mr-2">
+                        <label class="label">Yıl:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="year">
+                                    {% for year in years %}
+                                        <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field mr-2">
+                        <label class="label">Ay:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="month">
+                                    {% for month_num, month_name in months.items %}
+                                        <option value="{{ month_num }}" {% if month_num == selected_month %}selected{% endif %}>{{ month_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field mr-2">
+                        <label class="label">Para Birimi:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="currency">
+                                    {% for currency in currencies %}
+                                        <option value="{{ currency.abbreviation }}" {% if currency.abbreviation == selected_currency %}selected{% endif %}>{{ currency.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field mr-2">
+                        <label class="label">&nbsp;</label>
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Onay</button>
                         </div>
                     </div>
                 </div>
-                <div class="field">
-                    <label class="label">Ay:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="month">
-                                {% for month_num, month_name in months.items %}
-                                    <option value="{{ month_num }}" {% if month_num == selected_month %}selected{% endif %}>{{ month_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Para Birimi:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="currency">
-                                {% for currency in currencies %}
-                                    <option value="{{ currency.abbreviation }}" {% if currency.abbreviation == selected_currency %}selected{% endif %}>{{ currency.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Tag:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="tag">
-                                <option value="" {% if selected_tag == "" %}selected{% endif %}>All Tags</option>
-                                {% for tag in tags %}
-                                    <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>{{ tag.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
+            </form>
+            <div class="chart-container">
+                <canvas id="pie-chart"></canvas>
             </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">Generate Pie Chart</button>
-                </div>
-            </div>
-        </form>
-        <div class="chart-container">
-            <canvas id="pie-chart"></canvas>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const pieChartCanvas = document.getElementById("pie-chart");
-            const currencySum = {{ currency_sum|default:0 }};
+            const tagData = JSON.parse('{{ tag_data_json|escapejs }}');
+    
+            // const labels = tagData.map(entry => entry.tags__name);
+            const labels = tagData.map(entry => entry.tags__name || 'etiketsizler');
 
+            const data = tagData.map(entry => entry.miktar);
+    
             const pieChart = new Chart(pieChartCanvas, {
                 type: "pie",
                 data: {
-                    labels: ["{{ selected_currency }}", "Remaining"],
+                    labels: labels,
                     datasets: [{
-                        data: [currencySum, 100 - currencySum],
-                        backgroundColor: ["#36A2EB", "#FFCE56"],
+                        data: data,
+                        backgroundColor: ["#36A2EB", "#FFCE56", "#FF5733", "#C70039", "#900C3F"],
                     }],
                 },
             });
         });
     </script>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="container">
-        <h1 class="title">Pie Chart</h1>
-        <form method="post" action="">
-            {% csrf_token %}
-            <div class="field is-grouped">
-                <div class="field">
-                    <label class="label">Yil:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="year">
-                                {% for year in years %}
-                                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Ay:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="month">
-                                {% for month_num, month_name in months.items %}
-                                    <option value="{{ month_num }}" {% if month_num == selected_month %}selected{% endif %}>{{ month_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Para Birimi:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="ciktilar_field">
-                                <option value="ciktilar_TL" {% if selected_ciktilar_field == "ciktilar_TL" %}selected{% endif %}>ciktilar_TL</option>
-                                <option value="ciktilar_Euro" {% if selected_ciktilar_field == "ciktilar_Euro" %}selected{% endif %}>ciktilar_Euro</option>
-                                <option value="ciktilar_Dolar" {% if selected_ciktilar_field == "ciktilar_Dolar" %}selected{% endif %}>ciktilar_Dolar</option>
-                                <option value="ciktilar_GBP" {% if selected_ciktilar_field == "ciktilar_GBP" %}selected{% endif %}>ciktilar_GBP</option>
-                                <option value="ciktilar_Sek" {% if selected_ciktilar_field == "ciktilar_Sek" %}selected{% endif %}>ciktilar_Sek</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Tag:</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="tag">
-                                <option value="" {% if selected_tag == "" %}selected{% endif %}>All Tags</option>
-                                {% for tag in tags %}
-                                    <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>{{ tag.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">Generate Pie Chart</button>
-                </div>
-            </div>
-        </form>
-        <div class="chart-container">
-            <canvas id="pie-chart"></canvas>
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const pieChartCanvas = document.getElementById("pie-chart");
-    const ciktilarSum = {{ ciktilar_sum|default:0 }};
-
-    const pieChart = new Chart(pieChartCanvas, {
-        type: "pie",
-        data: {
-            labels: ["{{ selected_ciktilar_field }}", "Remaining"],
-            datasets: [{
-                data: [ciktilarSum, 100 - ciktilarSum],
-                backgroundColor: ["#36A2EB", "#FFCE56"],
-            }],
-        },
-    });
-});
-</script>
-{% endblock content %} {% endcomment %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <div class="container">
-        <h1 class="title">Monthly Spendings</h1>
-        <form method="get" action="{% url 'monthly_spendings_name' %}">
-            <div class="field">
-                <label class="label">Select Year:</label>
-                <div class="control">
-                    <div class="select">
-                        <select name="year">
-                            {% for year in year_range %}
-                                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">Select Month:</label>
-                <div class="control">
-                    <div class="select">
-                        <select name="month">
-                            {% for month_num, month_name in months_with_numbers %}
-                                <option value="{{ month_num }}" {% if month_num == selected_month %}selected{% endif %}>{{ month_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">Show Monthly Spendings</button>
-                </div>
-            </div>
-        </form>
-        <div class="columns">
-            <div class="column">
-                <canvas id="spendingsChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    var ctx = document.getElementById('spendingsChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ labels|safe }},
-            datasets: [{
-                label: 'Total Spendings (TL)',
-                data: {{ ciktilar_TL|safe }},
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Total Spendings (Euro)',
-                data: {{ ciktilar_Euro|safe }},
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Total Spendings (Dolar)',
-                data: {{ ciktilar_Dolar|safe }},
-                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Total Spendings (GBP)',
-                data: {{ ciktilar_GBP|safe }},
-                backgroundColor: 'rgba(255, 205, 86, 0.2)',
-                borderColor: 'rgba(255, 205, 86, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Total Spendings (SEK)',
-                data: {{ ciktilar_Sek|safe }},
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
-{% endblock content %} {% endcomment %}

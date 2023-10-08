@@ -2,32 +2,31 @@
 {% load widget_tweaks %}
 {% block content %}
     <div class="container">
-        <section class="section">
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    <h1 class="title">{{ form.instance.pk|default:"Add" }} Currency</h1>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="field">
-                            <label class="label">Name</label>
-                            <div class="control">{% render_field form.name class="input" %}</div>
+        <div class="column is-half m-auto">
+            <div class="box">
+                <h1 class="title has-text-centered">Para Birimi</h1>
+                {% comment %} <h1 class="title">{{ form.instance.pk|default:"Add" }} Para Birimi</h1> {% endcomment %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label class="label">İsmi</label>
+                        <div class="control">{% render_field form.name class="input" %}</div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Kısaltması</label>
+                        <div class="control">{% render_field form.abbreviation class="input" %}</div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Kaydet</button>
                         </div>
-                        <div class="field">
-                            <label class="label">Abbreviation</label>
-                            <div class="control">{% render_field form.abbreviation class="input" %}</div>
+                        <div class="control">
+                            <a href="{% url 'currency_list' %}" class="button is-link">İptal</a>
                         </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button type="submit" class="button is-primary">Save</button>
-                            </div>
-                            <div class="control">
-                                <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-        </section>
+        </div>
     </div>
 {% endblock content %}
 {% comment %} {% extends "base.html" %}

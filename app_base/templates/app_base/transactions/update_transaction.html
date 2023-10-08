@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Edit Transaction</h2>
+    <h2>İşlem Düzenleme</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Changes</button>
+        <button type="submit">Değişiklikleri Kaydet</button>
     </form>
-    <a href="{% url 'transaction_list_name' %}">Back to List</a>
+    <a href="{% url 'transaction_list_name' %}">Listeye geri dön</a>
 {% endblock content %}

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Currency, Islemler, Tag, MuUser
+
+from .models import Currency, Islemler, MuUser, Tag
 
 
 class CurrencyForm(forms.ModelForm):
@@ -33,6 +34,39 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Islemler
         fields = ["kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar"]
+
+
+class TransactionFilterForm(forms.Form):
+    user = forms.ModelChoiceField(
+        queryset=MuUser.objects.all(),
+        label="User",
+        required=False,
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+    kimden_geldi = forms.ModelChoiceField(
+        queryset=MuUser.objects.all(),
+        label="Kimden Geldi",
+        required=False,
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+    kime_gitti = forms.ModelChoiceField(
+        queryset=MuUser.objects.all(),
+        label="Kime Gitti",
+        required=False,
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+    currency = forms.ModelChoiceField(
+        queryset=Currency.objects.all(),
+        label="Currency",
+        required=False,
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        label="Tags",
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "select2"}),
+    )
 
 
 # //-------------------------------------------------~~-------------------------------------------------
