@@ -1,29 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="columns is-centered">
-        <div class="column is-three-quarters">
-            <div class="box">
-                <h2 class="title has-text-centered">Kişisel İşlemler Listesi</h2>
-                <table class="table is-fullwidth">
-                    <thead>
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h2 class="title has-text-centered">Kişisel İşlemler Listesi</h2>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>İşlem İsmi</th>
+                        <th>İşlem Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
                         <tr>
-                            <th>İşlem İsmi</th>
-                            <th>İşlem Tarihi</th>
+                            <td>
+                                <a href="{% url 'transaction_detail_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
+                            </td>
+                            <td>{{ transaction.islem_tarihi }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transactions %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'transaction_detail_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
-                                </td>
-                                <td>{{ transaction.islem_tarihi }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% comment %} <a href="{% url 'transaction_create_name' %}" class="button is-primary">Create Transaction</a> {% endcomment %}
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% comment %} <a href="{% url 'transaction_create_name' %}" class="button is-primary">Create Transaction</a> {% endcomment %}
         </div>
     </div>
 {% endblock content %}

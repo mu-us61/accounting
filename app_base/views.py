@@ -205,23 +205,23 @@ def groupcreate_view(request):
 
 
 # //------------------------~ ACCOUNTS ~--------------------------------------------------------------------------
-# def muuserlist_view(request):
-#     users = models.MuUser.objects.all()
-#     return render(request, "app_base/accounts/userlist.html", {"users": users})
-
-
 def muuserlist_view(request):
-    users = MuUser.objects.all()
-    currencies = Currency.objects.all()
+    users = models.MuUser.objects.all()
+    return render(request, "app_base/accounts/userlist.html", {"users": users})
 
-    # Create a dictionary to store currency balances for each user
-    user_balances = {}
-    for user in users:
-        user_balances[user] = {}
-        for currency in currencies:
-            user_balances[user][currency] = user.calculate_currency_balance(currency)
 
-    return render(request, "app_base/accounts/userlist.html", {"users": users, "currencies": currencies, "user_balances": user_balances})
+# def muuserlist_view(request):
+#     users = MuUser.objects.all()
+#     currencies = Currency.objects.all()
+
+#     # Create a dictionary to store currency balances for each user
+#     user_balances = {}
+#     for user in users:
+#         user_balances[user] = {}
+#         for currency in currencies:
+#             user_balances[user][currency] = user.calculate_currency_balance(currency)
+
+#     return render(request, "app_base/accounts/userlist.html", {"users": users, "currencies": currencies, "user_balances": user_balances})
 
 
 @user_passes_test(is_staff)
@@ -305,6 +305,28 @@ class TransactionDetail(View):
 
 
 # @method_decorator(login_required, name="dispatch")
+# class UpdateTransaction(View):
+#     template_name = "app_base/transactions/update_transaction.html"
+
+#     def get(self, request, pk):
+#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+#         form = TransactionForm(instance=transaction)
+#         return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+#     def post(self, request, pk):
+#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+#         form = TransactionForm(request.POST, instance=transaction)
+#         if form.is_valid():
+#             form.save()
+#             # Update balances here if needed
+#             return redirect("transaction_list_name")
+#         return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
+@method_decorator(login_required, name="dispatch")
 class UpdateTransaction(View):
     template_name = "app_base/transactions/update_transaction.html"
 
@@ -321,6 +343,8 @@ class UpdateTransaction(View):
             # Update balances here if needed
             return redirect("transaction_list_name")
         return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+    # !TODO burasi onemli burda sadece owner update yapabiliyor
 
 
 # @method_decorator(login_required, name="dispatch")

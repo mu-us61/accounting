@@ -25,7 +25,7 @@ class MuUser(AbstractUser):
     is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
     is_active = models.BooleanField(_("active"), default=True, help_text=_("Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."))
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
 
     def calculate_currency_balance(self, currency):
         # Calculate the balance for the specified currency
@@ -61,7 +61,7 @@ class Islemler(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
-    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     miktar = models.IntegerField(default=0)
 
     def __str__(self):

@@ -9,18 +9,21 @@
 - [ ] pdf yukleme
 - [X] how to fine grain form.as_p customization
 - [ ] kullanicilarda duzenle deyince ustteki admin degisiyor,
-- [ ] kullanicilarda duzenlemeyi sadece yetkililere ac
+- [X] kullanicilarda duzenlemeyi sadece yetkililere ac
 - [ ] islemler silinebilir mi olucak , editlenebilirmi
-- [ ] transaction list 2 tanemi olucak bi tanesi her user kendininkine bakcak digeri admin hepsine
-- [ ] islem tarihi dendiginde tarih aylar ingilizce
+- [X] transaction list 2 tanemi olucak bi tanesi her user kendininkine bakcak digeri admin hepsine
+- [X] islem tarihi dendiginde tarih aylar ingilizce
 - [X] admin disi loginde problem var passwordlarda haslenmiyor
 - [ ] her login sayfasinda o kisim bos degil admin yaziyor duzelt
 - [ ] islemlerde id belki iyi olurdu her islemin kendi istmi
-- [ ] margin top consistency
-- [ ] 404 page customized
+- [X] margin top consistency
+- [X] 404 page customized
 - [ ] on delete CASCADE mi olsun hepsi sonra sorun olmasin
 - [ ] djangoda geri alma varmi bak bu islemleri
 - [ ] admin sayfasindan olustururken islem tag secmek zorunlu dedi
-- [ ] kimden geldi kimden gitti nasil olcak bak
+- [X] kimden geldi kimden gitti nasil olcak bak
 - [ ] bakiye de belki select2 kullanilabilir kullanici secimi icin
 - [ ] islemlerde tarih filtrelenmesi yapilcak
+- [ ] islem silme yok eklensin mi, adminler bile islemi degistiremiyor nasil olsun
+- [ ] cok onemli silinen gruplar taglar silinmesin mi
+- [ ] olusturulan grubu sil yok
