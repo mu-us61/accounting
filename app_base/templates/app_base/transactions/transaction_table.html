@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block content %}
-
     <div class="container mt-3">
         <div class="columns">
             <div class="column is-three-fifths m-auto">
@@ -67,7 +66,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input type="date" class="input" name="start_date" id="start_date">
+                                        <input type="text" class="input date-picker" name="start_date" id="start_date">
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +79,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input type="date" class="input" name="end_date" id="end_date">
+                                        <input type="text" class="input date-picker" name="end_date" id="end_date">
                                     </div>
                                 </div>
                             </div>
@@ -145,8 +144,7 @@
             });
         });
     </script>
-    
-    <script>
+    {% comment %} <script>
     // Calculate the date 30 days ago
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 30);
@@ -156,8 +154,57 @@
 
     // Set end_date input value to today's date
     document.getElementById('end_date').valueAsDate = new Date();
+    </script> {% endcomment %}
+    <script>
+        // Initialize flatpickr with Turkish locale and date format
+        flatpickr(".date-picker", {
+            locale: {
+                firstDayOfWeek: 0, // Start with Monday
+                weekdays: {
+                    shorthand: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
+                    longhand: [
+                        "Pazartesi",
+                        "Salı",
+                        "Çarşamba",
+                        "Perşembe",
+                        "Cuma",
+                        "Cumartesi",
+                        "Pazar"
+                    ]
+                },
+                months: {
+                    shorthand: [
+                        "Oca",
+                        "Şub",
+                        "Mar",
+                        "Nis",
+                        "May",
+                        "Haz",
+                        "Tem",
+                        "Ağu",
+                        "Eyl",
+                        "Eki",
+                        "Kas",
+                        "Ara"
+                    ],
+                    longhand: [
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık"
+                    ]
+                }
+            },
+            dateFormat: "d/m/Y", // Turkish date format (day/month/year)
+            defaultDate: "today", // Set the default date to today
+        });
     </script>
-
-
-
 {% endblock %}
