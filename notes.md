@@ -27,3 +27,6 @@
 - [ ] islem silme yok eklensin mi, adminler bile islemi degistiremiyor nasil olsun
 - [ ] cok onemli silinen gruplar taglar silinmesin mi
 - [ ] olusturulan grubu sil yok
+- [ ] web sayfasinin iconu yok 
+- [ ] sayfalarda titller bos
+- [ ] linkler consistent degil users vs sayfa linkleri

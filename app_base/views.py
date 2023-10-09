@@ -19,6 +19,7 @@ from django.db.models import Sum, F, Value, IntegerField
 from django.db.models.functions import Coalesce
 from .forms import TransactionFilterForm
 from django.contrib.auth.decorators import user_passes_test
+from datetime import datetime
 
 
 def is_staff(user):
@@ -202,6 +203,40 @@ def groupcreate_view(request):
                 return redirect("usergroups_view_name")  # Redirect to a group list view
 
     return render(request, "app_base/groups/groupcreate.html")
+
+
+def groupupdate_view(request, group_id):
+    group = get_object_or_404(MuGroup, pk=group_id)
+
+    if request.method == "POST":
+        group_name = request.POST.get("group_name")
+        if group_name:
+            group.name = group_name
+            group.save()
+            # Group updated successfully
+            # You can perform any additional actions here
+            return redirect("usergroups_view_name")  # Redirect to a group list view
+
+    context = {
+        "group": group,
+    }
+    return render(request, "app_base/groups/groupupdate.html", context)
+
+
+def groupdelete_view(request, group_id):
+    group = get_object_or_404(MuGroup, pk=group_id)
+
+    if request.method == "POST":
+        # Confirm deletion
+        group.delete()
+        # Group deleted successfully
+        # You can perform any additional actions here
+        return redirect("usergroups_view_name")  # Redirect to a group list view
+
+    context = {
+        "group": group,
+    }
+    return render(request, "app_base/groups/groupdelete.html", context)
 
 
 # //------------------------~ ACCOUNTS ~--------------------------------------------------------------------------
@@ -405,7 +440,9 @@ def tag_delete(request, slug):
 # //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
 
 
-# @method_decorator(login_required, name="dispatch")
+from datetime import datetime
+
+
 class TransactionTable(View):
     template_name = "app_base/transactions/transaction_table.html"
 
@@ -420,6 +457,9 @@ class TransactionTable(View):
             user = filter_form.cleaned_data.get("user")
             currency = filter_form.cleaned_data.get("currency")
             tags = filter_form.cleaned_data.get("tags")
+            year = filter_form.cleaned_data.get("date_filter_year")
+            month = filter_form.cleaned_data.get("date_filter_month")
+            day = filter_form.cleaned_data.get("date_filter_day")
 
             if user:
                 transactions = transactions.filter(islemsahibi=user)
@@ -427,14 +467,78 @@ class TransactionTable(View):
                 transactions = transactions.filter(currency=currency)
             if tags:
                 transactions = transactions.filter(tags__in=tags)
+            if year and month and day:
+                selected_date = datetime(int(year), int(month), int(day))
+                # Filter transactions by the date part (ignore time)
+                transactions = transactions.filter(islem_tarihi__date=selected_date.date())
 
         all_tags = Tag.objects.all()  # Fetch all tags
+
+        years = range(datetime.now().year, 2000, -1)
+        months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+        days = [str(day).zfill(2) for day in range(1, 32)]
 
         return render(
             request,
             self.template_name,
-            {"transactions": transactions, "all_tags": all_tags, "filter_form": filter_form},
+            {
+                "transactions": transactions,
+                "all_tags": all_tags,
+                "filter_form": filter_form,
+                "years": years,
+                "months": months,
+                "days": days,
+            },
         )
+
+
+# # @method_decorator(login_required, name="dispatch")
+# class TransactionTable(View):
+#     template_name = "app_base/transactions/transaction_table.html"
+
+#     def get(self, request):
+#         # Create an instance of the filter form
+#         filter_form = TransactionFilterForm(request.GET)
+
+#         # Filter transactions based on form input
+#         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
+
+#         if filter_form.is_valid():
+#             user = filter_form.cleaned_data.get("user")
+#             currency = filter_form.cleaned_data.get("currency")
+#             tags = filter_form.cleaned_data.get("tags")
+
+#             if user:
+#                 transactions = transactions.filter(islemsahibi=user)
+#             if currency:
+#                 transactions = transactions.filter(currency=currency)
+#             if tags:
+#                 transactions = transactions.filter(tags__in=tags)
+
+#         all_tags = Tag.objects.all()  # Fetch all tags
+
+#         # Generate lists of years, months, and days
+#         years = range(datetime.now().year, 2000, -1)  # Change the range as needed
+#         months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+#         days = range(1, 32)  # For days of the month
+
+#         # return render(
+#         #     request,
+#         #     self.template_name,
+#         #     {"transactions": transactions, "all_tags": all_tags, "filter_form": filter_form},
+#         # )
+#         return render(
+#             request,
+#             self.template_name,
+#             {
+#                 "transactions": transactions,
+#                 "all_tags": all_tags,
+#                 "filter_form": filter_form,
+#                 "years": years,
+#                 "months": months,
+#                 "days": days,
+#             },
+#         )
 
 
 # @method_decorator(login_required, name="dispatch")

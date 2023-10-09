@@ -10,9 +10,13 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout_view_name"),
     # path("profile/", views.profile_view, name="profile_view_name"),
     path("bakiye", views.bakiye_view, name="bakiye_view_name"),
+    # //------------------------~~--------------------------------------------------------------------------
     path("usergroups", views.usergroups_view, name="usergroups_view_name"),
     path("groupdetail/<int:group_id>", views.groupdetail_view, name="groupdetail_view_name"),
     path("groupcreate", views.groupcreate_view, name="groupcreate_view_name"),
+    path("groups/<int:group_id>/update/", views.groupupdate_view, name="groupupdate_view_name"),
+    path("groups/<int:group_id>/delete/", views.groupdelete_view, name="groupdelete_view_name"),
+    # //------------------------~~--------------------------------------------------------------------------
     path("users/", views.muuserlist_view, name="muuserlist_view_name"),
     path("users/create/", views.muusercreate_view, name="muusercreate_view_name"),
     path("users/<int:pk>/update/", views.muuserupdate_view, name="muuserupdate_view_name"),

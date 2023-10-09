@@ -1,6 +1,7 @@
 from django import forms
 
 from .models import Currency, Islemler, MuUser, Tag
+from datetime import datetime
 
 
 class CurrencyForm(forms.ModelForm):
@@ -66,6 +67,47 @@ class TransactionFilterForm(forms.Form):
         label="Tags",
         required=False,
         widget=forms.SelectMultiple(attrs={"class": "select2"}),
+    )
+    # date_filter_year = forms.IntegerField(
+    #     label="Year",
+    #     required=False,
+    #     widget=forms.Select(attrs={"class": "select2"}),
+    # )
+    # date_filter_month = forms.IntegerField(
+    #     label="Month",
+    #     required=False,
+    #     widget=forms.Select(attrs={"class": "select2"}),
+    # )
+    # date_filter_day = forms.IntegerField(
+    #     label="Day",
+    #     required=False,
+    #     widget=forms.Select(attrs={"class": "select2"}),
+    # )
+    # Year choices (Modify the range as needed)
+    year_choices = [(str(year), str(year)) for year in range(datetime.now().year, 2000, -1)]
+    date_filter_year = forms.ChoiceField(
+        label="Year",
+        required=False,
+        choices=[("", "Any")] + year_choices,  # Include an "Any" option
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+
+    # Month choices
+    month_choices = [("01", "January"), ("02", "February"), ("03", "March"), ("04", "April"), ("05", "May"), ("06", "June"), ("07", "July"), ("08", "August"), ("09", "September"), ("10", "October"), ("11", "November"), ("12", "December")]
+    date_filter_month = forms.ChoiceField(
+        label="Month",
+        required=False,
+        choices=[("", "Any")] + month_choices,  # Include an "Any" option
+        widget=forms.Select(attrs={"class": "select2"}),
+    )
+
+    # Day choices (Assuming 1-31 for all days of the month)
+    day_choices = [(str(day).zfill(2), str(day).zfill(2)) for day in range(1, 32)]
+    date_filter_day = forms.ChoiceField(
+        label="Day",
+        required=False,
+        choices=[("", "Any")] + day_choices,  # Include an "Any" option
+        widget=forms.Select(attrs={"class": "select2"}),
     )
 
 

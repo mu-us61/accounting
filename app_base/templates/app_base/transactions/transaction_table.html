@@ -58,6 +58,39 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Year Filter -->
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Year</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.date_filter_year|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Month Filter -->
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Month</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.date_filter_month|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Day Filter -->
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Day</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">{% render_field filter_form.date_filter_day|add_class:"select is-fullwidth is-info select2" %}</div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="field is-horizontal">
                             <div class="field-label"></div>
                             <div class="field-body">
@@ -93,8 +126,8 @@
                         <tr>
                             <td>{{ transaction.islem_tarihi|date:"j F Y" }}</td>
                             <td>{{ transaction.islemsahibi }}</td>
-                            <td>{{ transaction.kimden_geldi }}</td>
-                            <td>{{ transaction.kime_gitti }}</td>
+                            <td>{{ transaction.kimden_geldi|default:"" }}</td>
+                            <td>{{ transaction.kime_gitti|default:"" }}</td>
                             <td>
                                 {% for tag in transaction.tags.all %}
                                     {{ tag.name }}

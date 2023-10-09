@@ -3,6 +3,10 @@
     <div class="column m-auto">
         <div class="block">
             <h1 class="title has-text-centered">{{ group.name }}</h1>
+            <div class="box">
+                <a href="{% url 'groupupdate_view_name' group.id %}" class="button is-link">Grubu Düzenle</a>
+                <a href="{% url 'groupdelete_view_name' group.id %}" class="button is-danger">Grubu Sil</a>
+            </div>
         </div>
         <div class="columns m-auto">
             <div class="column">
