@@ -1,5 +1,3 @@
-import datetime
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -19,7 +17,9 @@ from django.db.models import Sum, F, Value, IntegerField
 from django.db.models.functions import Coalesce
 from .forms import TransactionFilterForm
 from django.contrib.auth.decorators import user_passes_test
+
 from datetime import datetime
+from datetime import date
 
 
 def is_staff(user):
@@ -440,26 +440,26 @@ def tag_delete(request, slug):
 # //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
 
 
-from datetime import datetime
+from django.db.models import Q
+from django.views import View
+from django.shortcuts import render
+from datetime import timedelta, datetime
 
 
 class TransactionTable(View):
     template_name = "app_base/transactions/transaction_table.html"
 
     def get(self, request):
-        # Create an instance of the filter form
         filter_form = TransactionFilterForm(request.GET)
-
-        # Filter transactions based on form input
         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
 
         if filter_form.is_valid():
             user = filter_form.cleaned_data.get("user")
             currency = filter_form.cleaned_data.get("currency")
             tags = filter_form.cleaned_data.get("tags")
-            year = filter_form.cleaned_data.get("date_filter_year")
-            month = filter_form.cleaned_data.get("date_filter_month")
-            day = filter_form.cleaned_data.get("date_filter_day")
+            start_date = filter_form.cleaned_data.get("start_date")
+            end_date = filter_form.cleaned_data.get("end_date")
+            today = filter_form.cleaned_data.get("today")
 
             if user:
                 transactions = transactions.filter(islemsahibi=user)
@@ -467,16 +467,26 @@ class TransactionTable(View):
                 transactions = transactions.filter(currency=currency)
             if tags:
                 transactions = transactions.filter(tags__in=tags)
-            if year and month and day:
-                selected_date = datetime(int(year), int(month), int(day))
-                # Filter transactions by the date part (ignore time)
-                transactions = transactions.filter(islem_tarihi__date=selected_date.date())
 
-        all_tags = Tag.objects.all()  # Fetch all tags
+            if start_date and end_date:
+                # Adjust the end date by one day to include transactions on the end date
+                end_date += timedelta(days=1)
+                query = Q(islem_tarihi__range=(start_date, end_date))
+                if today:
+                    now = datetime.now()
+                    today_query = Q(islem_tarihi__date=now.date())
+                    transactions = transactions.filter(query | today_query)
+                else:
+                    transactions = transactions.filter(query)
+            elif today:
+                now = datetime.now()
+                transactions = transactions.filter(islem_tarihi__date=now.date())
 
+        all_tags = Tag.objects.all()
         years = range(datetime.now().year, 2000, -1)
         months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
         days = [str(day).zfill(2) for day in range(1, 32)]
+        # today = date.today()  "today": today,
 
         return render(
             request,
@@ -575,7 +585,9 @@ def monthly_spendings(request):
     }
 
     # Get the current year and month for default values
-    current_date = datetime.date.today()
+    # current_date = datetime.date.today()
+    current_date = datetime.today().date()
+
     current_year = current_date.year
     current_month = current_date.month
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block content %}
+
     <div class="container mt-3">
         <div class="columns">
             <div class="column is-three-fifths m-auto">
@@ -58,36 +59,29 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Year Filter -->
+                        <!-- Start Date Filter -->
                         <div class="field is-horizontal">
                             <div class="field-label is-normal">
-                                <label class="label">Year</label>
+                                <label class="label">Başlangıç Tarihi</label>
                             </div>
                             <div class="field-body">
                                 <div class="field">
-                                    <div class="control">{% render_field filter_form.date_filter_year|add_class:"select is-fullwidth is-info select2" %}</div>
+                                    <div class="control">
+                                        <input type="date" class="input" name="start_date" id="start_date">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Month Filter -->
+                        <!-- End Date Filter -->
                         <div class="field is-horizontal">
                             <div class="field-label is-normal">
-                                <label class="label">Month</label>
+                                <label class="label">Bitiş Tarihi</label>
                             </div>
                             <div class="field-body">
                                 <div class="field">
-                                    <div class="control">{% render_field filter_form.date_filter_month|add_class:"select is-fullwidth is-info select2" %}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Day Filter -->
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Day</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    <div class="control">{% render_field filter_form.date_filter_day|add_class:"select is-fullwidth is-info select2" %}</div>
+                                    <div class="control">
+                                        <input type="date" class="input" name="end_date" id="end_date">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -151,4 +145,19 @@
             });
         });
     </script>
+    
+    <script>
+    // Calculate the date 30 days ago
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+
+    // Set start_date input value to 30 days ago
+    document.getElementById('start_date').valueAsDate = startDate;
+
+    // Set end_date input value to today's date
+    document.getElementById('end_date').valueAsDate = new Date();
+    </script>
+
+
+
 {% endblock %}
