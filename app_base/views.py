@@ -450,6 +450,14 @@ class TransactionTable(View):
     template_name = "app_base/transactions/transaction_table.html"
 
     def get(self, request):
+        # Initialize default values
+        default_start_date = datetime.now() - timedelta(days=30)
+        default_end_date = datetime.now()
+
+        # Format default values in Turkish date format
+        default_start_date_str = default_start_date.strftime("%d/%m/%Y")
+        default_end_date_str = default_end_date.strftime("%d/%m/%Y")
+
         filter_form = TransactionFilterForm(request.GET)
         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
 
@@ -487,11 +495,14 @@ class TransactionTable(View):
         months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
         days = [str(day).zfill(2) for day in range(1, 32)]
         # today = date.today()  "today": today,
-
+        start_date = request.GET.get("start_date")
+        end_date = request.GET.get("end_date")
         return render(
             request,
             self.template_name,
             {
+                "start_date": request.GET.get("start_date", default_start_date_str),
+                "end_date": request.GET.get("end_date", default_end_date_str),
                 "transactions": transactions,
                 "all_tags": all_tags,
                 "filter_form": filter_form,

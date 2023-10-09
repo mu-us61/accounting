@@ -66,7 +66,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input type="text" class="input date-picker" name="start_date" id="start_date">
+                                        <input type="text" class="input date-picker" name="start_date" id="start_date" value="{{ start_date }}">
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="control">
-                                        <input type="text" class="input date-picker" name="end_date" id="end_date">
+                                        <input type="text" class="input date-picker" name="end_date" id="end_date" value="{{ end_date }}">
                                     </div>
                                 </div>
                             </div>
@@ -144,17 +144,6 @@
             });
         });
     </script>
-    {% comment %} <script>
-    // Calculate the date 30 days ago
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
-
-    // Set start_date input value to 30 days ago
-    document.getElementById('start_date').valueAsDate = startDate;
-
-    // Set end_date input value to today's date
-    document.getElementById('end_date').valueAsDate = new Date();
-    </script> {% endcomment %}
     <script>
         // Initialize flatpickr with Turkish locale and date format
         flatpickr(".date-picker", {
@@ -204,7 +193,7 @@
                 }
             },
             dateFormat: "d/m/Y", // Turkish date format (day/month/year)
-            defaultDate: "today", // Set the default date to today
+            // defaultDate: "today", // Set the default date to today
         });
     </script>
 {% endblock %}
