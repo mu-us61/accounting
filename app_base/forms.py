@@ -17,7 +17,7 @@ class MuUserForm(forms.ModelForm):
         model = MuUser
         # fields = "__all__"
         # exclude = ["pk"]
-        fields = ["username", "password", "first_name", "last_name"]  # Adjust fields as needed # TODO gerekli alanlar eklencek
+        fields = ["username", "password", "first_name", "last_name"]  # Adjust fields as needed
 
     def save(self, commit=True):
         user = super().save(commit=False)
