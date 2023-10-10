@@ -16,6 +16,75 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for muser in page %}
+                        <tr>
+                            <td>{{ muser.username }}</td>
+                            <td>{{ muser.first_name }}</td>
+                            <td>{{ muser.last_name }}</td>
+                            <td>
+                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-link" href="{% url 'muuserupdate_view_name' muser.pk %}">Düzenle</a>
+                            </td>
+                            <td>
+                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-danger" href="{% url 'muuserdelete_view_name' muser.pk %}">Sil</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">Kayıtlı kullanıcı yok.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination is-centered" role="navigation">
+            <ul class="pagination-list">
+                {% if page.has_previous %}
+                    <li>
+                        <a class="pagination-link" href="?page=1">«</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                <li>
+                    <span class="pagination-link is-current">{{ page.number }}</span>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                {% if page.has_next %}
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.next_page_number }}">next</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.paginator.num_pages }}">»</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% block content %}
+    <div class="column m-auto">
+        <div class="block">
+            <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-primary" href="{% url 'muusercreate_view_name' %}">Yeni kullanıcı oluştur</a>
+        </div>
+        <div class="table-container">
+            <table class="table is-fullwidth is-striped is-hoverable is-bordered">
+                <thead>
+                    <tr>
+                        <th>Kullanıcı Adı</th>
+                        <th>İsim</th>
+                        <th>Soyisim</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for muser in users %}
                         <tr>
                             <td>{{ muser.username }}</td>
@@ -37,4 +106,4 @@
             </table>
         </div>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

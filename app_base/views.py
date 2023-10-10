@@ -1,25 +1,31 @@
+import json
+from datetime import date, datetime, timedelta
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import check_password
-from django.db.models import Q, Sum
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F, IntegerField, Q, Sum, Value
+from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
-import json
-from . import models
-from .forms import CurrencyForm, MuUserForm, TagForm, TransactionForm
-from .models import Currency, Islemler, MuGroup, MuUser, Tag
-from django.db.models import Sum, F, Value, IntegerField
-from django.db.models.functions import Coalesce
-from .forms import TransactionFilterForm
-from django.contrib.auth.decorators import user_passes_test
 
-from datetime import datetime
-from datetime import date
+from . import models
+from .forms import CurrencyForm, MuUserForm, TagForm, TransactionFilterForm, TransactionForm
+from .models import Currency, Islemler, MuGroup, MuUser, Tag
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from .forms import TransactionForm
+from .models import Islemler
+from django.core.paginator import Paginator
 
 
 def is_staff(user):
@@ -34,6 +40,7 @@ def home_view(request):
 # //------------------------~ BAKIYE ~--------------------------------------------------------------------------
 
 
+@login_required
 def bakiye_view(request):
     # Fetch all users
     users = MuUser.objects.all()
@@ -41,28 +48,36 @@ def bakiye_view(request):
     # Fetch all unique currencies
     currencies = Currency.objects.all()
 
-    # Create a dictionary to store user balances for each currency
-    user_balances = {}
+    # Create a list to store user balances for each currency
+    user_balances = []
 
     for user in users:
         user_balance = {}
         for currency in currencies:
             user_balance[currency.name] = user.calculate_currency_balance(currency)
-        user_balances[user] = user_balance
+        user_balances.append((user, user_balance))
+
+    # Number of users to display per page
+    per_page = 1  # You can adjust this as needed
+
+    paginator = Paginator(user_balances, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
 
     context = {
-        "user_balances": user_balances,
+        "page": page,
         "currencies": currencies,
     }
     return render(request, "app_base/bakiye.html", context)
 
 
+# @login_required
 # def bakiye_view(request):
 #     # Fetch all users
 #     users = MuUser.objects.all()
 
-#     # Fetch all unique currency abbreviations
-#     currencies = Currency.objects.values_list("id", flat=True).distinct()
+#     # Fetch all unique currencies
+#     currencies = Currency.objects.all()
 
 #     # Create a dictionary to store user balances for each currency
 #     user_balances = {}
@@ -70,54 +85,18 @@ def bakiye_view(request):
 #     for user in users:
 #         user_balance = {}
 #         for currency in currencies:
-#             user_balance[currency] = user.calculate_currency_balance(currency)
+#             user_balance[currency.name] = user.calculate_currency_balance(currency)
 #         user_balances[user] = user_balance
 
 #     context = {
 #         "user_balances": user_balances,
 #         "currencies": currencies,
 #     }
-#     print(context)
-#     return render(request, "app_base/bakiye.html", context)
-
-
-# def bakiye_view(request):
-#     # Fetch all currencies
-#     currencies = Currency.objects.all()
-
-#     # Fetch all users and their currency balances
-#     users = MuUser.objects.all()
-
-#     # Create a list of dictionaries to store user balances for each currency
-#     user_balances = []
-
-#     for user in users:
-#         user_balance = {
-#             "username": user.username,
-#         }
-
-#         # Calculate and add the balance for each currency
-#         for currency in currencies:
-#             balance_field = f"bakiye_{currency.abbreviation}"
-#             user_balance[currency.abbreviation] = getattr(user, balance_field, 0)
-
-#         user_balances.append(user_balance)
-
-#     context = {
-#         "user_balances": user_balances,
-#         "currencies": currencies,
-#     }
-
-#     return render(request, "app_base/bakiye.html", context)
-
-
-# def bakiye_view(request):
-#     users = models.MuUser.objects.all()  # Retrieve all MuUser objects from the database
-#     context = {"users": users}
 #     return render(request, "app_base/bakiye.html", context)
 
 
 # //------------------------~ AUTHENTICATIONS ~--------------------------------------------------------------------------
+@login_required
 def passchange_view(request):
     if request.method == "POST":
         hashed_pass = request.user.password
@@ -151,25 +130,33 @@ def login_view(request):
         return render(request, template_name="app_base/authentications/login.html")
 
 
+@login_required
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
     return redirect("home_view_name")
 
 
-# @login_required
-# def profile_view(request):
-#     # user_profile = UserProfile.objects.get(user=request.user)
-#     user_profile = "deneme"
-#     return render(request, "app_base/authentications/profile.html", {"user_profile": user_profile})
-
-
 # //------------------------~ USER GROUPS ~--------------------------------------------------------------------------
+# @login_required
+# def usergroups_view(request):
+#     groups = models.MuGroup.objects.all()
+#     return render(request, "app_base/groups/grouppage.html", {"groups": groups})
+@login_required
 def usergroups_view(request):
     groups = models.MuGroup.objects.all()
-    return render(request, "app_base/groups/grouppage.html", {"groups": groups})
+
+    # Number of groups to display per page
+    per_page = 10  # You can adjust this as needed
+
+    paginator = Paginator(groups, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    return render(request, "app_base/groups/grouppage.html", {"page": page})
 
 
+@login_required
 def groupdetail_view(request, group_id):
     group = get_object_or_404(MuGroup, pk=group_id)
     all_users = MuUser.objects.all()
@@ -191,6 +178,7 @@ def groupdetail_view(request, group_id):
     return render(request, "app_base/groups/groupdetail.html", context)
 
 
+@login_required
 @user_passes_test(is_staff)
 def groupcreate_view(request):
     if request.method == "POST":
@@ -205,6 +193,7 @@ def groupcreate_view(request):
     return render(request, "app_base/groups/groupcreate.html")
 
 
+@login_required
 def groupupdate_view(request, group_id):
     group = get_object_or_404(MuGroup, pk=group_id)
 
@@ -223,6 +212,7 @@ def groupupdate_view(request, group_id):
     return render(request, "app_base/groups/groupupdate.html", context)
 
 
+@login_required
 def groupdelete_view(request, group_id):
     group = get_object_or_404(MuGroup, pk=group_id)
 
@@ -240,25 +230,27 @@ def groupdelete_view(request, group_id):
 
 
 # //------------------------~ ACCOUNTS ~--------------------------------------------------------------------------
+# @login_required
+# def muuserlist_view(request):
+#     users = models.MuUser.objects.all()
+#     return render(request, "app_base/accounts/userlist.html", {"users": users})
+
+
+@login_required
 def muuserlist_view(request):
     users = models.MuUser.objects.all()
-    return render(request, "app_base/accounts/userlist.html", {"users": users})
+
+    # Number of users to display per page
+    per_page = 10  # You can adjust this as needed
+
+    paginator = Paginator(users, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    return render(request, "app_base/accounts/userlist.html", {"page": page})
 
 
-# def muuserlist_view(request):
-#     users = MuUser.objects.all()
-#     currencies = Currency.objects.all()
-
-#     # Create a dictionary to store currency balances for each user
-#     user_balances = {}
-#     for user in users:
-#         user_balances[user] = {}
-#         for currency in currencies:
-#             user_balances[user][currency] = user.calculate_currency_balance(currency)
-
-#     return render(request, "app_base/accounts/userlist.html", {"users": users, "currencies": currencies, "user_balances": user_balances})
-
-
+@login_required
 @user_passes_test(is_staff)
 def muusercreate_view(request):
     if request.method == "POST":
@@ -272,6 +264,7 @@ def muusercreate_view(request):
     return render(request, "app_base/accounts/usercreate.html", {"form": form})
 
 
+@login_required
 @user_passes_test(is_staff)
 def muuserupdate_view(request, pk):
     user = get_object_or_404(models.MuUser, pk=pk)
@@ -285,6 +278,7 @@ def muuserupdate_view(request, pk):
     return render(request, "app_base/accounts/userupdate.html", {"form": form, "user": user})
 
 
+@login_required
 @user_passes_test(is_staff)
 def muuserdelete_view(request, pk):
     user = get_object_or_404(models.MuUser, pk=pk)
@@ -296,7 +290,7 @@ def muuserdelete_view(request, pk):
 
 # //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
 # @method_decorator(login_required, name="dispatch")
-class TransactionList(View):
+class TransactionList(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_list.html"
 
     def get(self, request):
@@ -309,7 +303,7 @@ class TransactionList(View):
 
 
 # @method_decorator(login_required, name="dispatch")
-class CreateTransaction(View):
+class CreateTransaction(LoginRequiredMixin, View):
     template_name = "app_base/transactions/create_transaction.html"
 
     def get(self, request):
@@ -331,7 +325,7 @@ class CreateTransaction(View):
 
 
 # @method_decorator(login_required, name="dispatch")
-class TransactionDetail(View):
+class TransactionDetail(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_detail.html"
 
     def get(self, request, pk):
@@ -339,62 +333,11 @@ class TransactionDetail(View):
         return render(request, self.template_name, {"transaction": transaction})
 
 
-# @method_decorator(login_required, name="dispatch")
-# class UpdateTransaction(View):
-#     template_name = "app_base/transactions/update_transaction.html"
-
-#     def get(self, request, pk):
-#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-#         form = TransactionForm(instance=transaction)
-#         return render(request, self.template_name, {"form": form, "transaction": transaction})
-
-#     def post(self, request, pk):
-#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-#         form = TransactionForm(request.POST, instance=transaction)
-#         if form.is_valid():
-#             form.save()
-#             # Update balances here if needed
-#             return redirect("transaction_list_name")
-#         return render(request, self.template_name, {"form": form, "transaction": transaction})
-
-# from django.contrib.auth.decorators import login_required
-# from django.utils.decorators import method_decorator
-
-
-# @method_decorator(login_required, name="dispatch")
-# class UpdateTransaction(View):
-#     template_name = "app_base/transactions/update_transaction.html"
-
-#     def get(self, request, pk):
-#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-#         form = TransactionForm(instance=transaction)
-#         return render(request, self.template_name, {"form": form, "transaction": transaction})
-
-#     def post(self, request, pk):
-#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-#         form = TransactionForm(request.POST, instance=transaction)
-#         if form.is_valid():
-#             form.save()
-#             # Update balances here if needed
-#             return redirect("transaction_list_name")
-#         return render(request, self.template_name, {"form": form, "transaction": transaction})
-
-#     # !TODO burasi onemli burda sadece owner update yapabiliyor
-
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.utils.decorators import method_decorator
-from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Islemler
-from .forms import TransactionForm
-
-
 def is_owner_or_admin(user, transaction):
     return user == transaction.islemsahibi or user.is_staff
 
 
-# burda sadece admin ve islem sahibi degisim yapabilir
-class UpdateTransaction(View):
+class UpdateTransaction(LoginRequiredMixin, View):
     template_name = "app_base/transactions/update_transaction.html"
 
     @method_decorator(login_required)
@@ -419,7 +362,7 @@ class UpdateTransaction(View):
 
 
 # @method_decorator(login_required, name="dispatch")
-class DeleteTransaction(View):
+class DeleteTransaction(LoginRequiredMixin, View):
     def get(self, request, pk):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
         return render(request, "app_base/transactions/delete_transaction.html", {"transaction": transaction})
@@ -432,16 +375,36 @@ class DeleteTransaction(View):
 
 
 # //------------------------~ TAGS ~--------------------------------------------------------------------------
+# @login_required
+# def tag_list(request):
+#     tags = Tag.objects.all()
+#     return render(request, "app_base/tags/tag_list.html", {"tags": tags})
+
+
+@login_required
 def tag_list(request):
     tags = Tag.objects.all()
-    return render(request, "app_base/tags/tag_list.html", {"tags": tags})
+
+    # Number of tags to display per page
+    per_page = 10  # You can adjust this as needed
+
+    paginator = Paginator(tags, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    context = {
+        "page": page,
+    }
+    return render(request, "app_base/tags/tag_list.html", context)
 
 
+@login_required
 def tag_detail(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     return render(request, "app_base/tags/tag_detail.html", {"tag": tag})
 
 
+@login_required
 def tag_create(request):
     if request.method == "POST":
         form = TagForm(request.POST)
@@ -453,6 +416,7 @@ def tag_create(request):
     return render(request, "app_base/tags/tag_form.html", {"form": form})
 
 
+@login_required
 def tag_update(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     if request.method == "POST":
@@ -465,6 +429,7 @@ def tag_update(request, slug):
     return render(request, "app_base/tags/tag_form.html", {"form": form, "tag": tag})
 
 
+@login_required
 def tag_delete(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     if request.method == "POST":
@@ -476,13 +441,7 @@ def tag_delete(request, slug):
 # //------------------------~ TRANSACTION TABLE ~--------------------------------------------------------------------------
 
 
-from django.db.models import Q
-from django.views import View
-from django.shortcuts import render
-from datetime import timedelta, datetime
-
-
-class TransactionTable(View):
+class TransactionTable(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_table.html"
 
     def get(self, request):
@@ -555,68 +514,10 @@ class TransactionTable(View):
         )
 
 
-# # @method_decorator(login_required, name="dispatch")
-# class TransactionTable(View):
-#     template_name = "app_base/transactions/transaction_table.html"
-
-#     def get(self, request):
-#         # Create an instance of the filter form
-#         filter_form = TransactionFilterForm(request.GET)
-
-#         # Filter transactions based on form input
-#         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
-
-#         if filter_form.is_valid():
-#             user = filter_form.cleaned_data.get("user")
-#             currency = filter_form.cleaned_data.get("currency")
-#             tags = filter_form.cleaned_data.get("tags")
-
-#             if user:
-#                 transactions = transactions.filter(islemsahibi=user)
-#             if currency:
-#                 transactions = transactions.filter(currency=currency)
-#             if tags:
-#                 transactions = transactions.filter(tags__in=tags)
-
-#         all_tags = Tag.objects.all()  # Fetch all tags
-
-#         # Generate lists of years, months, and days
-#         years = range(datetime.now().year, 2000, -1)  # Change the range as needed
-#         months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-#         days = range(1, 32)  # For days of the month
-
-#         # return render(
-#         #     request,
-#         #     self.template_name,
-#         #     {"transactions": transactions, "all_tags": all_tags, "filter_form": filter_form},
-#         # )
-#         return render(
-#             request,
-#             self.template_name,
-#             {
-#                 "transactions": transactions,
-#                 "all_tags": all_tags,
-#                 "filter_form": filter_form,
-#                 "years": years,
-#                 "months": months,
-#                 "days": days,
-#             },
-#         )
-
-
-# @method_decorator(login_required, name="dispatch")
-# class TransactionTable(View):
-#     template_name = "app_base/transactions/transaction_table.html"
-
-#     def get(self, request):
-#         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
-#         all_tags = Tag.objects.all()  # Fetch all tags
-#         return render(request, self.template_name, {"transactions": transactions, "all_tags": all_tags})
-
-
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
 
 
+@login_required
 def monthly_spendings(request):
     # Generate a list of years up to 2035
     years = list(range(2023, 2036))
@@ -683,27 +584,27 @@ def monthly_spendings(request):
 # //------------------------~~--------------------------------------------------------------------------
 
 
-class CurrencyListView(ListView):
+class CurrencyListView(LoginRequiredMixin, ListView):
     model = Currency
     template_name = "app_base/currency_list.html"
     context_object_name = "currencies"
 
 
-class CurrencyCreateView(CreateView):
+class CurrencyCreateView(LoginRequiredMixin, CreateView):
     model = Currency
     form_class = CurrencyForm
     template_name = "app_base/currency_form.html"
     success_url = reverse_lazy("currency_list")
 
 
-class CurrencyUpdateView(UpdateView):
+class CurrencyUpdateView(LoginRequiredMixin, UpdateView):
     model = Currency
     form_class = CurrencyForm
     template_name = "app_base/currency_form.html"
     success_url = reverse_lazy("currency_list")
 
 
-class CurrencyDeleteView(DeleteView):
+class CurrencyDeleteView(LoginRequiredMixin, DeleteView):
     model = Currency
     template_name = "app_base/currency_confirm_delete.html"
     success_url = reverse_lazy("currency_list")

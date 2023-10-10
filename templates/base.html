@@ -29,7 +29,12 @@
         {% include "navbar.html" %}
         <div class="columns mx-0">
             <!-- Sidebar -->
-            <div class="column is-2 has-background-grey-darker" x-bind:class="{ 'is-hidden': muside }">{% include "sidebar.html" %}</div>
+            <div {% if user.is_authenticated %}  {% else %}  class="is-hidden"  {% endif %} class="column is-2 has-background-grey-darker" x-bind:class="{ 'is-hidden': muside }">
+                {% if user.is_authenticated %}
+                    {% include "sidebar.html" %}
+                {% else %}
+                {% endif %}
+            </div>
             <!-- Content -->
             <div class="column has-background-link-light main-content">
                 {% block content %}

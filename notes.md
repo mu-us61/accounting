@@ -31,9 +31,9 @@
 - [ ] sayfalarda titller bos
 - [ ] linkler consistent degil users vs sayfa linkleri
 - [ ] islemler duzenlenince , son duzenlenme tarihi yok
-- [ ] transactions daki filtreler tam degil
-- [ ] butun viewlere login required yapilcak
-- [ ] sayfada login olmadan yan bar olmicak
+- [X] transactions daki filtreler tam degil
+- [X] butun viewlere login required yapilcak
+- [X] sayfada login olmadan yan bar olmicak
 - [ ] kullanici duzenle kisminda sifre kismi olmicak
 - [ ] tablolarda dinamiklik olucak , sort yani
 - [ ] islem olusturmada miktar 0 , bunu place holder yapilabilir

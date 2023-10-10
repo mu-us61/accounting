@@ -128,7 +128,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ## MuCustom ############################
-
+LOGIN_URL = "login_view_name"
 AUTH_USER_MODEL = "app_base.MuUser"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 LANGUAGE_CODE = "tr"
