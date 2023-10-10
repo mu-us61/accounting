@@ -290,16 +290,39 @@ def muuserdelete_view(request, pk):
 
 # //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
 # @method_decorator(login_required, name="dispatch")
+# class TransactionList(LoginRequiredMixin, View):
+#     template_name = "app_base/transactions/transaction_list.html"
+
+#     def get(self, request):
+#         # transactions = Islemler.objects.order_by('-islem_tarihi')  # Order by date in descending order
+#         transactions = Islemler.objects.filter(islemsahibi=request.user).order_by("-islem_tarihi")
+#         return render(request, self.template_name, {"transactions": transactions})
+
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Islemler
+
+
 class TransactionList(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_list.html"
+    items_per_page = 10  # You can change the number of items per page as needed
 
     def get(self, request):
-        # transactions = Islemler.objects.order_by('-islem_tarihi')  # Order by date in descending order
         transactions = Islemler.objects.filter(islemsahibi=request.user).order_by("-islem_tarihi")
+
+        # Create a Paginator instance
+        paginator = Paginator(transactions, self.items_per_page)
+
+        # Get the current page number from the request's GET parameters
+        page = request.GET.get("page")
+
+        # Get the transactions for the current page
+        transactions = paginator.get_page(page)
+
         return render(request, self.template_name, {"transactions": transactions})
-
-
-#! TODO burda bir sorun var
 
 
 # @method_decorator(login_required, name="dispatch")
@@ -495,23 +518,98 @@ class TransactionTable(LoginRequiredMixin, View):
         years = range(datetime.now().year, 2000, -1)
         months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
         days = [str(day).zfill(2) for day in range(1, 32)]
-        # today = date.today()  "today": today,
-        start_date = request.GET.get("start_date")
-        end_date = request.GET.get("end_date")
-        return render(
-            request,
-            self.template_name,
-            {
-                "start_date": request.GET.get("start_date", default_start_date_str),
-                "end_date": request.GET.get("end_date", default_end_date_str),
-                "transactions": transactions,
-                "all_tags": all_tags,
-                "filter_form": filter_form,
-                "years": years,
-                "months": months,
-                "days": days,
-            },
-        )
+
+        # Apply pagination to your transactions
+        page_number = request.GET.get("page")
+        per_page = 10  # You can adjust this as needed
+        paginator = Paginator(transactions, per_page)
+        page = paginator.get_page(page_number)
+
+        context = {
+            "start_date": request.GET.get("start_date", default_start_date_str),
+            "end_date": request.GET.get("end_date", default_end_date_str),
+            "transactions": page,
+            "all_tags": all_tags,
+            "filter_form": filter_form,
+            "years": years,
+            "months": months,
+            "days": days,
+        }
+
+        return render(request, self.template_name, context)
+
+
+# class TransactionTable(LoginRequiredMixin, View):
+#     template_name = "app_base/transactions/transaction_table.html"
+
+#     def get(self, request):
+#         # Initialize default values
+#         default_start_date = datetime.now() - timedelta(days=30)
+#         default_end_date = datetime.now()
+
+#         # Format default values in Turkish date format
+#         default_start_date_str = default_start_date.strftime("%d/%m/%Y")
+#         default_end_date_str = default_end_date.strftime("%d/%m/%Y")
+
+#         filter_form = TransactionFilterForm(request.GET)
+#         transactions = Islemler.objects.all().order_by("-islem_tarihi").prefetch_related("tags")
+
+#         if filter_form.is_valid():
+#             user = filter_form.cleaned_data.get("user")
+#             currency = filter_form.cleaned_data.get("currency")
+#             tags = filter_form.cleaned_data.get("tags")
+#             kimden_geldi = filter_form.cleaned_data.get("kimden_geldi")
+#             kime_gitti = filter_form.cleaned_data.get("kime_gitti")
+#             start_date = filter_form.cleaned_data.get("start_date")
+#             end_date = filter_form.cleaned_data.get("end_date")
+#             today = filter_form.cleaned_data.get("today")
+
+#             if user:
+#                 transactions = transactions.filter(islemsahibi=user)
+#             if currency:
+#                 transactions = transactions.filter(currency=currency)
+#             if tags:
+#                 transactions = transactions.filter(tags__in=tags)
+#             if kimden_geldi:
+#                 transactions = transactions.filter(kimden_geldi=kimden_geldi)
+#             if kime_gitti:
+#                 transactions = transactions.filter(kime_gitti=kime_gitti)
+
+#             if start_date and end_date:
+#                 # Adjust the end date by one day to include transactions on the end date
+#                 end_date += timedelta(days=1)
+#                 query = Q(islem_tarihi__range=(start_date, end_date))
+#                 if today:
+#                     now = datetime.now()
+#                     today_query = Q(islem_tarihi__date=now.date())
+#                     transactions = transactions.filter(query | today_query)
+#                 else:
+#                     transactions = transactions.filter(query)
+#             elif today:
+#                 now = datetime.now()
+#                 transactions = transactions.filter(islem_tarihi__date=now.date())
+
+#         all_tags = Tag.objects.all()
+#         years = range(datetime.now().year, 2000, -1)
+#         months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+#         days = [str(day).zfill(2) for day in range(1, 32)]
+#         # today = date.today()  "today": today,
+#         start_date = request.GET.get("start_date")
+#         end_date = request.GET.get("end_date")
+#         return render(
+#             request,
+#             self.template_name,
+#             {
+#                 "start_date": request.GET.get("start_date", default_start_date_str),
+#                 "end_date": request.GET.get("end_date", default_end_date_str),
+#                 "transactions": transactions,
+#                 "all_tags": all_tags,
+#                 "filter_form": filter_form,
+#                 "years": years,
+#                 "months": months,
+#                 "days": days,
+#             },
+#         )
 
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------

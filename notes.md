@@ -1,5 +1,5 @@
 - [X] html de sidebar ve main content height goreceli , icerige gore degisiyor
-- [ ] kullanici listesi pagination olmalimi
+- [ ] kullanici listesi pagination olmalimi (transatiton table kaldi , filtre ile cakisiyor)
 - [X] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
 - [X] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
 - [ ] sayfada yetkiliyse goster,  misafirler edit yapamasin

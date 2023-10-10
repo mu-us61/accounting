@@ -142,6 +142,36 @@
                 </tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <div class="pagination is-centered" role="navigation">
+            <ul class="pagination-list">
+                {% if transactions.has_previous %}
+                    <li>
+                        <a class="pagination-link" href="?page=1{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}">«</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ transactions.previous_page_number }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}">previous</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                <li>
+                    <span class="pagination-link is-current">{{ transactions.number }}</span>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                {% if transactions.has_next %}
+                    <li>
+                        <a class="pagination-link" href="?page={{ transactions.next_page_number }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}">next</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ transactions.paginator.num_pages }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}">»</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
     <!-- Initialize Select2 -->
     <script>

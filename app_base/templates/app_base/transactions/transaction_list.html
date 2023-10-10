@@ -21,7 +21,62 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% comment %} <a href="{% url 'transaction_create_name' %}" class="button is-primary">Create Transaction</a> {% endcomment %}
+            <!-- Pagination -->
+            <div class="pagination is-centered" role="navigation">
+                <ul class="pagination-list">
+                    {% if transactions.has_previous %}
+                        <li>
+                            <a class="pagination-link" href="?page=1">«</a>
+                        </li>
+                        <li>
+                            <a class="pagination-link" href="?page={{ transactions.previous_page_number }}">previous</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <span class="pagination-ellipsis">…</span>
+                    </li>
+                    <li>
+                        <span class="pagination-link is-current">{{ transactions.number }}</span>
+                    </li>
+                    <li>
+                        <span class="pagination-ellipsis">…</span>
+                    </li>
+                    {% if transactions.has_next %}
+                        <li>
+                            <a class="pagination-link" href="?page={{ transactions.next_page_number }}">next</a>
+                        </li>
+                        <li>
+                            <a class="pagination-link" href="?page={{ transactions.paginator.num_pages }}">»</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% block content %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h2 class="title has-text-centered">Kişisel İşlemler Listesi</h2>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>İşlem İsmi</th>
+                        <th>İşlem Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'transaction_detail_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
+                            </td>
+                            <td>{{ transaction.islem_tarihi }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %} {% endcomment %}
