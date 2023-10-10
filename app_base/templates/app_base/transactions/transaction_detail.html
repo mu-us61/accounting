@@ -27,11 +27,3 @@
         </div>
     </div>
 {% endblock content %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <h2>Transaction Detail</h2>
-    <p>Name: {{ transaction.islem_ismi }}</p>
-    <p>Description: {{ transaction.islem_aciklamasi }}</p>
-    <!-- Add more details here as needed -->
-    <a href="{% url 'transaction_list_name' %}">Back to List</a>
-{% endblock content %} {% endcomment %}

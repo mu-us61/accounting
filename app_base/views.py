@@ -357,29 +357,65 @@ class TransactionDetail(View):
 #             return redirect("transaction_list_name")
 #         return render(request, self.template_name, {"form": form, "transaction": transaction})
 
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
+# from django.utils.decorators import method_decorator
+
+
+# @method_decorator(login_required, name="dispatch")
+# class UpdateTransaction(View):
+#     template_name = "app_base/transactions/update_transaction.html"
+
+#     def get(self, request, pk):
+#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+#         form = TransactionForm(instance=transaction)
+#         return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+#     def post(self, request, pk):
+#         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+#         form = TransactionForm(request.POST, instance=transaction)
+#         if form.is_valid():
+#             form.save()
+#             # Update balances here if needed
+#             return redirect("transaction_list_name")
+#         return render(request, self.template_name, {"form": form, "transaction": transaction})
+
+#     # !TODO burasi onemli burda sadece owner update yapabiliyor
+
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
+from django.views import View
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Islemler
+from .forms import TransactionForm
 
 
-@method_decorator(login_required, name="dispatch")
+def is_owner_or_admin(user, transaction):
+    return user == transaction.islemsahibi or user.is_staff
+
+
+# burda sadece admin ve islem sahibi degisim yapabilir
 class UpdateTransaction(View):
     template_name = "app_base/transactions/update_transaction.html"
 
-    def get(self, request, pk):
-        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-        form = TransactionForm(instance=transaction)
-        return render(request, self.template_name, {"form": form, "transaction": transaction})
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.transaction = get_object_or_404(Islemler, pk=kwargs["pk"])
+        # Apply the user_passes_test decorator here
+        if not is_owner_or_admin(request.user, self.transaction):
+            return redirect("permission_denied_page_name")
+        return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, pk):
-        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
-        form = TransactionForm(request.POST, instance=transaction)
+    def get(self, request, *args, **kwargs):
+        form = TransactionForm(instance=self.transaction)
+        return render(request, self.template_name, {"form": form, "transaction": self.transaction})
+
+    def post(self, request, *args, **kwargs):
+        form = TransactionForm(request.POST, instance=self.transaction)
         if form.is_valid():
             form.save()
             # Update balances here if needed
             return redirect("transaction_list_name")
-        return render(request, self.template_name, {"form": form, "transaction": transaction})
-
-    # !TODO burasi onemli burda sadece owner update yapabiliyor
+        return render(request, self.template_name, {"form": form, "transaction": self.transaction})
 
 
 # @method_decorator(login_required, name="dispatch")

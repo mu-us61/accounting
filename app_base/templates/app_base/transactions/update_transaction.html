@@ -65,7 +65,10 @@
                     <div class="control">
                         <button type="submit" class="button is-primary">Güncelle</button>
                     </div>
-                    <a href="{% url 'transaction_list_name' %}" class="button is-link">Listeye Geri Dön</a>
+                    <div class="control">
+                        <a href="{% url 'transaction_list_name' %}" class="button is-link">Listeye Geri Dön</a>
+                    </div>
+                    <a href="{% url 'transaction_delete_name' transaction.pk %}" class="button is-danger">Sil</a>
                 </div>
             </form>
         </div>
@@ -81,13 +84,3 @@
         });
     </script>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <h2>İşlem Düzenleme</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Değişiklikleri Kaydet</button>
-    </form>
-    <a href="{% url 'transaction_list_name' %}">Listeye geri dön</a>
-{% endblock content %} {% endcomment %}

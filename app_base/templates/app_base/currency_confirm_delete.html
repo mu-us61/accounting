@@ -19,14 +19,4 @@
     </div>
   </div>
 {% endblock content %}
-{% comment %} {% extends 'base.html' %}
 
-{% block content %}
-  <h1 class="title">Confirm Deletion</h1>
-  <p>Are you sure you want to delete "{{ object }}"?</p>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit" class="button is-danger">Confirm</button>
-    <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
-  </form>
-{% endblock %} {% endcomment %}

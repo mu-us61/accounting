@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>İşlem Silme</h2>
-    <p>"{{ transaction.islem_ismi }}" İşlemini silmek istediğinizden eminmisiniz ?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Sil</button>
-    </form>
-    <a href="{% url 'transaction_list_name' %}">İptal</a>
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h2 class="title has-text-centered">İşlem Silme</h2>
+            <p>"{{ transaction.islem_ismi }}" İşlemini silmek istediğinizden eminmisiniz ?</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-danger">Sil</button>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'transaction_list_name' %}" class="button is-link">İptal</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock content %}
