@@ -501,6 +501,8 @@ class TransactionTable(View):
             user = filter_form.cleaned_data.get("user")
             currency = filter_form.cleaned_data.get("currency")
             tags = filter_form.cleaned_data.get("tags")
+            kimden_geldi = filter_form.cleaned_data.get("kimden_geldi")
+            kime_gitti = filter_form.cleaned_data.get("kime_gitti")
             start_date = filter_form.cleaned_data.get("start_date")
             end_date = filter_form.cleaned_data.get("end_date")
             today = filter_form.cleaned_data.get("today")
@@ -511,6 +513,10 @@ class TransactionTable(View):
                 transactions = transactions.filter(currency=currency)
             if tags:
                 transactions = transactions.filter(tags__in=tags)
+            if kimden_geldi:
+                transactions = transactions.filter(kimden_geldi=kimden_geldi)
+            if kime_gitti:
+                transactions = transactions.filter(kime_gitti=kime_gitti)
 
             if start_date and end_date:
                 # Adjust the end date by one day to include transactions on the end date
