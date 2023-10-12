@@ -1,3 +1,7 @@
+I have a django project and this is my models.py
+
+#//------------------------~~--------------------------------------------------------------------------
+
 from django.contrib.auth.models import AbstractUser, Group
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
@@ -71,3 +75,7 @@ class Islemler(models.Model):
 
     def __str__(self):
         return self.islem_ismi
+
+
+#//------------------------~~--------------------------------------------------------------------------
+
