@@ -610,6 +610,18 @@ class TransactionTable(LoginRequiredMixin, View):
 #                 "days": days,
 #             },
 #         )
+# //------------------------~TRANSACTION BIG TABLE~--------------------------------------------------------------------------
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
+from .tables import IslemlerTable
+from .filters import IslemlerFilter
+
+
+class FilteredTableListView(SingleTableMixin, FilterView):
+    table_class = IslemlerTable
+    model = Islemler
+    template_name = "app_base/transactions/transaction_big_table.html"
+    filterset_class = IslemlerFilter
 
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------

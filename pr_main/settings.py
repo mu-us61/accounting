@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # extensions
+    "django_filters",
     "widget_tweaks",
+    "django_tables2",
     # apps
     "app_base",
 ]
