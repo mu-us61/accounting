@@ -55,27 +55,3 @@
         </div>
     </div>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% load custom_filters %}
-{% block content %}
-    <div class="container mt-4">
-        <div class="table-container">
-            <table class="table is-bordered is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Kullanıcılar</th>
-                        {% for currency in currencies %}<th>{{ currency.name }}</th>{% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user, balances in user_balances.items %}
-                        <tr>
-                            <td>{{ user.username }}</td>
-                            {% for currency in currencies %}<td>{{ balances|default_if_none:0|get_key:currency.name }}</td>{% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-{% endblock content %} {% endcomment %}

@@ -1,8 +1,8 @@
 - [X] html de sidebar ve main content height goreceli , icerige gore degisiyor
-- [ ] kullanici listesi pagination olmalimi (transatiton table kaldi , filtre ile cakisiyor)
+- [X] kullanici listesi pagination olmalimi (transatiton table kaldi , filtre ile cakisiyor)
 - [X] modelde ayri bir model olusturulcak dovizler icin birde kullanci baglantisi yapilcak
 - [X] doviz modeli olusturulduktan sonra kullanici duzenleme bolumune eklenecek
-- [ ] sayfada yetkiliyse goster,  misafirler edit yapamasin
+- [X] sayfada yetkiliyse goster,  misafirler edit yapamasin
 - [X] admin sayfasi tammi olmasi lazim
 - [ ] para birimleri interger double mi olmali
 - [X] sifre degisiminde yanlis sifrede uyari vermedi
@@ -10,7 +10,7 @@
 - [X] how to fine grain form.as_p customization
 - [ ] kullanicilarda duzenle deyince ustteki admin degisiyor,
 - [X] kullanicilarda duzenlemeyi sadece yetkililere ac
-- [ ] islemler silinebilir mi olucak , editlenebilirmi
+- [X] islemler silinebilir mi olucak , editlenebilirmi
 - [X] transaction list 2 tanemi olucak bi tanesi her user kendininkine bakcak digeri admin hepsine
 - [X] islem tarihi dendiginde tarih aylar ingilizce
 - [X] admin disi loginde problem var passwordlarda haslenmiyor
@@ -18,18 +18,18 @@
 - [ ] islemlerde id belki iyi olurdu her islemin kendi istmi
 - [X] margin top consistency
 - [X] 404 page customized
-- [ ] on delete CASCADE mi olsun hepsi sonra sorun olmasin
+- [X] on delete CASCADE mi olsun hepsi sonra sorun olmasin
 - [ ] djangoda geri alma varmi bak bu islemleri
-- [ ] admin sayfasindan olustururken islem tag secmek zorunlu dedi
+- [X] admin sayfasindan olustururken islem tag secmek zorunlu dedi
 - [X] kimden geldi kimden gitti nasil olcak bak
 - [ ] bakiye de belki select2 kullanilabilir kullanici secimi icin
-- [ ] islemlerde tarih filtrelenmesi yapilcak
-- [ ] islem silme yok eklensin mi, adminler bile islemi degistiremiyor nasil olsun
-- [ ] cok onemli silinen gruplar taglar silinmesin mi
-- [ ] olusturulan grubu sil yok
+- [X] islemlerde tarih filtrelenmesi yapilcak
+- [X] islem silme yok eklensin mi, adminler bile islemi degistiremiyor nasil olsun
+- [X] cok onemli silinen gruplar taglar silinmesin mi
+- [X] olusturulan grubu sil yok
 - [ ] web sayfasinin iconu yok 
 - [ ] sayfalarda titller bos
-- [ ] linkler consistent degil users vs sayfa linkleri
+- [X] linkler consistent degil users vs sayfa linkleri
 - [ ] islemler duzenlenince , son duzenlenme tarihi yok
 - [X] transactions daki filtreler tam degil
 - [X] butun viewlere login required yapilcak
@@ -38,3 +38,5 @@
 - [ ] tablolarda dinamiklik olucak , sort yani
 - [ ] islem olusturmada miktar 0 , bunu place holder yapilabilir
 - [X] gruplar mesela MuUSer a entegre edilmedi foreign key ile ona bak
+- [ ] islemler active passive yapilsa daha iyi silinmeyi kalksa , recovery icin
+- [ ] resim yukleme
