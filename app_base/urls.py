@@ -35,8 +35,9 @@ urlpatterns = [
     path("tag/<slug:slug>/update/", views.tag_update, name="tag_update_name"),
     path("tag/<slug:slug>/delete/", views.tag_delete, name="tag_delete_name"),
     # //-------------------------------------------------~~-------------------------------------------------
-    path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
-    path("transactions/bigtable/", views.FilteredTableListView.as_view(), name="transaction_bigtable_name"),
+    # path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
+    # path("transactions/bigtable/", views.FilteredTableListView.as_view(), name="transaction_bigtable_name"),
+    path("transactions/bigtable/", views.FilteredTableListView.as_view(), name="transaction_table_name"),
     path("monthlyspendings", views.monthly_spendings, name="monthly_spendings_name"),
     # //------------------------~~--------------------------------------------------------------------------
     path("currency", CurrencyListView.as_view(), name="currency_list"),
