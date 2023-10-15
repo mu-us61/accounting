@@ -18,6 +18,7 @@ class IslemlerTable(tables.Table):
         model = Islemler
         attrs = {"class": "table table-striped table-bordered"}
         per_page = 2  # Number of items to display per page
+        template_name = "app_base/transactions/transaction_big_table_pagination.html"
 
     def render_tags(self, value):
         # Define how you want to display the ManyToMany field 'tags'

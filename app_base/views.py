@@ -334,7 +334,7 @@ class CreateTransaction(LoginRequiredMixin, View):
         return render(request, self.template_name, {"form": form})
 
     def post(self, request):
-        print(request.POST)
+        # print(request.POST)
         form = TransactionForm(request.POST)
         if form.is_valid():
             # print(form)
@@ -622,6 +622,14 @@ class FilteredTableListView(SingleTableMixin, FilterView):
     model = Islemler
     template_name = "app_base/transactions/transaction_big_table.html"
     filterset_class = IslemlerFilter
+
+    # def get(self, request, *args, **kwargs):
+    #     # Log information to the console using print()
+    #     print("Request:", dir(request.GET))
+    #     # You can print other information as needed
+
+    #     # Call the super class's get method to continue the view execution
+    #     return super().get(request, *args, **kwargs)
 
 
 # //------------------------~ SPENDINGS CHART ~--------------------------------------------------------------------------
