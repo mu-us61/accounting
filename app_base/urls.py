@@ -1,47 +1,49 @@
 from django.urls import path
 from . import views
-from .views import CurrencyListView, CurrencyCreateView, CurrencyUpdateView, CurrencyDeleteView
+from .views import CurrencyListView, CurrencyCreateView, CurrencyUpdateView, CurrencyDeleteView, TransactionUpdateView
 
 
 urlpatterns = [
+    # //------------------------~~--------------------------------------------------------------------------
     path("", views.home_view, name="home_view_name"),
-    path("passchange", views.passchange_view, name="passchange_view_name"),
-    path("login", views.login_view, name="login_view_name"),
-    path("logout", views.logout_view, name="logout_view_name"),
-    # path("profile/", views.profile_view, name="profile_view_name"),
-    path("bakiye", views.bakiye_view, name="bakiye_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
-    path("usergroups", views.usergroups_view, name="usergroups_view_name"),
-    path("groupdetail/<int:group_id>", views.groupdetail_view, name="groupdetail_view_name"),
-    path("groupcreate", views.groupcreate_view, name="groupcreate_view_name"),
-    path("groups/<int:group_id>/update/", views.groupupdate_view, name="groupupdate_view_name"),
-    path("groups/<int:group_id>/delete/", views.groupdelete_view, name="groupdelete_view_name"),
+    path("login/", views.login_view, name="login_view_name"),
+    path("logout/", views.logout_view, name="logout_view_name"),
+    path("passwordchange/", views.passwordchange_view, name="passwordchange_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
-    path("users/", views.muuserlist_view, name="muuserlist_view_name"),
-    path("users/create/", views.muusercreate_view, name="muusercreate_view_name"),
-    path("users/<int:pk>/update/", views.muuserupdate_view, name="muuserupdate_view_name"),
-    path("users/<int:pk>/delete/", views.muuserdelete_view, name="muuserdelete_view_name"),
+    path("balance/", views.balance_view, name="balance_view_name"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("grouplist/", views.grouplist_view, name="grouplist_view_name"),
+    path("groupcreate/", views.groupcreate_view, name="groupcreate_view_name"),
+    path("groupdetail/<int:group_id>/", views.groupdetail_view, name="groupdetail_view_name"),
+    path("group/<int:group_id>/update/", views.groupupdate_view, name="groupupdate_view_name"),
+    path("group/<int:group_id>/delete/", views.groupdelete_view, name="groupdelete_view_name"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("userlist/", views.userlist_view, name="userlist_view_name"),
+    path("user/create/", views.usercreate_view, name="usercreate_view_name"),
+    path("user/<int:pk>/update/", views.userupdate_view, name="userupdate_view_name"),
+    path("user/<int:pk>/delete/", views.userdelete_view, name="userdelete_view_name"),
     # //----------------------------------------------------------------------------------------------------
     # Transaction URLs
-    path("transactions/", views.TransactionList.as_view(), name="transaction_list_name"),
-    path("transactions/create/", views.CreateTransaction.as_view(), name="transaction_create_name"),
-    path("transactions/<int:pk>/", views.TransactionDetail.as_view(), name="transaction_detail_name"),
-    path("transactions/<int:pk>/edit/", views.UpdateTransaction.as_view(), name="transaction_edit_name"),
-    path("transactions/<int:pk>/delete/", views.DeleteTransaction.as_view(), name="transaction_delete_name"),
-    # //-------------------------------------------------~~-------------------------------------------------
-    path("tag/", views.tag_list, name="tag_list_name"),
-    path("tag/create/", views.tag_create, name="tag_create_name"),
-    path("tag/<slug:slug>/", views.tag_detail, name="tag_detail_name"),
-    path("tag/<slug:slug>/update/", views.tag_update, name="tag_update_name"),
-    path("tag/<slug:slug>/delete/", views.tag_delete, name="tag_delete_name"),
-    # //-------------------------------------------------~~-------------------------------------------------
+    path("transactionlist/", views.TransactionListView.as_view(), name="transactionlist_view_name"),
+    path("transaction/create/", views.TransactionCreateView.as_view(), name="transactioncreate_view_name"),
+    path("transaction/<int:pk>/", views.TransactionDetailView.as_view(), name="transactiondetail_view_name"),
+    path("transaction/<int:pk>/update/", views.TransactionUpdateView.as_view(), name="transactionupdate_view_name"),
+    path("transaction/<int:pk>/delete/", views.TransactionDeleteView.as_view(), name="transactiondelete_view_name"),
     # path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
     # path("transactions/bigtable/", views.FilteredTableListView.as_view(), name="transaction_bigtable_name"),
-    path("transactions/bigtable/", views.FilteredTableListView.as_view(), name="transaction_table_name"),
-    path("monthlyspendings", views.monthly_spendings, name="monthly_spendings_name"),
+    path("transactions/bigtable/", views.TransactionTableView.as_view(), name="transactiontable_view_name"),
+    # //-------------------------------------------------~~-------------------------------------------------
+    path("taglist/", views.taglist_view, name="taglist_view_name"),
+    path("tag/create/", views.tagcreate_view, name="tagcreate_view_name"),
+    path("tag/<slug:slug>/", views.tagdetail_view, name="tagdetail_view_name"),
+    path("tag/<slug:slug>/update/", views.tagupdate_view, name="tagupdate_view_name"),
+    path("tag/<slug:slug>/delete/", views.tagdelete_view, name="tagdelete_view_name"),
+    # //-------------------------------------------------~~-------------------------------------------------
+    path("monthlyspendings", views.monthlyspendings_view, name="monthlyspendings_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
-    path("currency", CurrencyListView.as_view(), name="currency_list"),
-    path("currency/create/", CurrencyCreateView.as_view(), name="currency_create"),
-    path("currency/update/<int:pk>/", CurrencyUpdateView.as_view(), name="currency_update"),
-    path("currency/delete/<int:pk>/", CurrencyDeleteView.as_view(), name="currency_delete"),
+    path("currencylist/", CurrencyListView.as_view(), name="currencylist_view_name"),
+    path("currency/create/", CurrencyCreateView.as_view(), name="currencycreate_view_name"),
+    path("currency/update/<int:pk>/", CurrencyUpdateView.as_view(), name="currencyupdate_view_name"),
+    path("currency/delete/<int:pk>/", CurrencyDeleteView.as_view(), name="currencydelete_view_name"),
 ]

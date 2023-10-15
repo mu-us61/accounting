@@ -2,7 +2,7 @@
 {% block content %}
     <div class="column m-auto">
         <div class="block">
-            <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-primary" href="{% url 'muusercreate_view_name' %}">Yeni kullanıcı oluştur</a>
+            <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-primary" href="{% url 'usercreate_view_name' %}">Yeni kullanıcı oluştur</a>
         </div>
         <div class="table-container">
             <table class="table is-fullwidth is-striped is-hoverable is-bordered">
@@ -22,10 +22,10 @@
                             <td>{{ muser.first_name }}</td>
                             <td>{{ muser.last_name }}</td>
                             <td>
-                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-link" href="{% url 'muuserupdate_view_name' muser.pk %}">Düzenle</a>
+                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-link" href="{% url 'userupdate_view_name' muser.pk %}">Düzenle</a>
                             </td>
                             <td>
-                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-danger" href="{% url 'muuserdelete_view_name' muser.pk %}">Sil</a>
+                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-danger" href="{% url 'userdelete_view_name' muser.pk %}">Sil</a>
                             </td>
                         </tr>
                     {% empty %}

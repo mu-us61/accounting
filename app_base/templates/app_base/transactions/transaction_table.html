@@ -134,7 +134,7 @@
                             <td>{{ transaction.miktar }}</td>
                             <td>
                                 <div class="control">
-                                    <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} href="{% url 'transaction_edit_name' transaction.pk %}" class="button is-info">Islemi Duzenle</a>
+                                    <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} href="{% url 'transactionupdate_view_name' transaction.pk %}" class="button is-info">Islemi Duzenle</a>
                                 </div>
                             </td>
                         </tr>

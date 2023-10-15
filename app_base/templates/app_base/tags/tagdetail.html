@@ -11,13 +11,13 @@
                 </div>
                 <div class="field is-grouped">
                     <div class="control">
-                        <a href="{% url 'tag_update_name' tag.slug %}" class="button is-primary">Düzenle</a>
+                        <a href="{% url 'tagupdate_view_name' tag.slug %}" class="button is-primary">Düzenle</a>
                     </div>
                     <div class="control">
-                        <a href="{% url 'tag_delete_name' tag.slug %}" class="button is-danger">Sil</a>
+                        <a href="{% url 'tagdelete_view_name' tag.slug %}" class="button is-danger">Sil</a>
                     </div>
                     <div class="control">
-                        <a href="{% url 'tag_list_name' %}" class="button is-link">Etiket Listesine Dön</a>
+                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Etiket Listesine Dön</a>
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@
         <section class="section">
             <div class="columns is-centered">
                 <div class="column is-three-quarters">
-                    <a href="{% url 'currency_create' %}" class="button is-success">Para Birimi Ekle</a>
+                    <a href="{% url 'currencycreate_view_name' %}" class="button is-success">Para Birimi Ekle</a>
                     <h1 class="title has-text-centered">Para Birimi Listesi</h1>
                     <table class="table is-fullwidth">
                         <thead>
@@ -20,8 +20,8 @@
                                     <td>{{ currency.name }}</td>
                                     <td>{{ currency.abbreviation }}</td>
                                     <td>
-                                        <a href="{% url 'currency_update' currency.pk %}" class="button is-primary">Düzenle</a>
-                                        <a href="{% url 'currency_delete' currency.pk %}" class="button is-danger">Sil</a>
+                                        <a href="{% url 'currencyupdate_view_name' currency.pk %}" class="button is-primary">Düzenle</a>
+                                        <a href="{% url 'currencydelete_view_name' currency.pk %}" class="button is-danger">Sil</a>
                                     </td>
                                 </tr>
                             {% empty %}

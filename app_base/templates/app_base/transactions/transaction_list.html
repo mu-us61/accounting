@@ -14,7 +14,7 @@
                     {% for transaction in transactions %}
                         <tr>
                             <td>
-                                <a href="{% url 'transaction_detail_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
+                                <a href="{% url 'transactiondetail_view_name' transaction.pk %}" class="has-text-link">{{ transaction.islem_ismi }}</a>
                             </td>
                             <td>{{ transaction.islem_tarihi }}</td>
                         </tr>

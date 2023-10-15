@@ -31,7 +31,7 @@
                 <div class="buttons">
                     {% if user.is_authenticated %}
                         <a class="button is-info is-light" href="{% url 'logout_view_name' %}">Çıkış</a>
-                        <a class="button is-light" href="{% url 'passchange_view_name' %}">Şifre Değişimi</a>
+                        <a class="button is-light" href="{% url 'passwordchange_view_name' %}">Şifre Değişimi</a>
                     {% else %}
                         <a class="button is-info is-light" href="{% url 'login_view_name' %}">Giriş</a>
                     {% endif %}
