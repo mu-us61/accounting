@@ -71,3 +71,23 @@ class Islemler(models.Model):
 
     def __str__(self):
         return self.islem_ismi
+
+
+class EvrakModel(models.Model):
+    evrak_date = models.DateTimeField(auto_now_add=True)
+    evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
+    evrak_tags = models.ManyToManyField(Tag, blank=True)
+    evrak_name = models.CharField(max_length=250)
+    evrak_description = models.TextField()
+    # evrak_status= GELEN VEYA GIDEN EVRAK OLCAK
+    # evrak_picture=
+    # evrak_pdf=
+
+
+class EtkinlikModel:
+    etkinlik_date = models.DateTimeField(auto_now_add=True)
+    etkinlik_name = models.CharField(max_length=250)
+    etkinlik_description = models.TextField()
+    etkinlik_tags = models.ManyToManyField(Tag, blank=True)
+    # etkinlik_youtubelink =
+    # etkinlik_picture

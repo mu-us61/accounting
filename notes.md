@@ -37,4 +37,4 @@
 - [ ] kullanici duzenle kisminda sifre kismi olmicak
 - [ ] tablolarda dinamiklik olucak , sort yani
 - [ ] islem olusturmada miktar 0 , bunu place holder yapilabilir
-- [ ] gruplar mesela MuUSer a entegre edilmedi foreign key ile ona bak
+- [X] gruplar mesela MuUSer a entegre edilmedi foreign key ile ona bak
