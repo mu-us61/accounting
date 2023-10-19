@@ -5,8 +5,40 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Sum
+import os
+import random
+import string
+from datetime import datetime
+
+# //------------------------~~--------------------------------------------------------------------------
 
 
+def generate_unique_filename(instance, filename):
+    # Get the file's extension (e.g., '.pdf')
+    ext = filename.split(".")[-1]
+    # Generate a unique filename using a timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    # Generate a random string of characters
+    random_string = "".join(random.choice(string.ascii_letters) for _ in range(6))
+    # Combine the timestamp, random string, and extension to create a unique filename
+    unique_filename = f"{timestamp}_{random_string}.{ext}"
+    # Return the path to save the file (e.g., 'pdfs/20231019123456_ABCDEF.pdf')
+    return os.path.join("pdfs", unique_filename)
+
+
+def generate_unique_imagename(instance, filename):
+    # Get the file's extension (e.g., '.jpg')
+    ext = filename.split(".")[-1]
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    # Generate a random string of characters
+    random_string = "".join(random.choice(string.ascii_letters) for _ in range(6))
+    # Combine the timestamp, random string, and extension to create a unique filename
+    unique_filename = f"{timestamp}_{random_string}.{ext}"
+    # Return the path to save the file (e.g., 'images/unique-filename.jpg')
+    return os.path.join("images", unique_filename)
+
+
+# //------------------------~~--------------------------------------------------------------------------
 class Currency(models.Model):
     name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=10, unique=True)
@@ -15,10 +47,14 @@ class Currency(models.Model):
         return self.name
 
 
+# //------------------------~~--------------------------------------------------------------------------
+
+
 class MuGroup(Group):
     creation_date = models.DateTimeField(auto_now_add=True)
 
 
+# //------------------------~~--------------------------------------------------------------------------
 class MuUser(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
@@ -44,6 +80,7 @@ class MuUser(AbstractUser):
     # balance = user.calculate_currency_balance(currency)  how to use
 
 
+# //------------------------~~--------------------------------------------------------------------------
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -57,6 +94,7 @@ class Tag(models.Model):
         super().save(*args, **kwargs)
 
 
+# //------------------------~~--------------------------------------------------------------------------
 class Islemler(models.Model):
     islem_tarihi = models.DateTimeField(auto_now_add=True)
     # belge =
@@ -74,21 +112,36 @@ class Islemler(models.Model):
         return self.islem_ismi
 
 
+# //------------------------~~--------------------------------------------------------------------------
+
+EVRAK_TYPE_CHOICES = [
+    ("gelen", "Gelen"),
+    ("giden", "Giden"),
+]
+
+
 class EvrakModel(models.Model):
     evrak_date = models.DateTimeField(auto_now_add=True)
     evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     evrak_tags = models.ManyToManyField(Tag, blank=True)
     evrak_name = models.CharField(max_length=250)
     evrak_description = models.TextField()
-    # evrak_status= GELEN VEYA GIDEN EVRAK OLCAK
-    evrak_picture = models.ImageField(upload_to="images/")
-    evrak_pdf = models.FileField(upload_to="pdfs/")
+    evrak_type = models.CharField(max_length=7, choices=EVRAK_TYPE_CHOICES, default="gelen")
+    evrak_picture = models.ImageField(upload_to=generate_unique_imagename)
+    evrak_pdf = models.FileField(upload_to=generate_unique_filename)
+
+    def __str__(self):
+        return self.evrak_name
 
 
-class EtkinlikModel:
+# //------------------------~~--------------------------------------------------------------------------
+class EtkinlikModel(models.Model):
     etkinlik_date = models.DateTimeField(auto_now_add=True)
     etkinlik_name = models.CharField(max_length=250)
     etkinlik_description = models.TextField()
     etkinlik_tags = models.ManyToManyField(Tag, blank=True)
-    # etkinlik_youtubelink =
-    # etkinlik_picture
+    etkinlik_youtubelink = models.CharField(max_length=200)
+    etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename)
+
+    def __str__(self):
+        return self.etkinlik_name
