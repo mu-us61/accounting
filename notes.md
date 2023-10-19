@@ -40,3 +40,5 @@
 - [X] gruplar mesela MuUSer a entegre edilmedi foreign key ile ona bak
 - [ ] islemler active passive yapilsa daha iyi silinmeyi kalksa , recovery icin
 - [ ] resim yukleme
+- [ ] etkinlik taglari vs ayri olcak 3 tane mi ?
+- [ ] banka fisleri ve evraklar ayri olcak

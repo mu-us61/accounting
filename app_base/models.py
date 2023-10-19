@@ -67,7 +67,8 @@ class Islemler(models.Model):
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
-    miktar = models.IntegerField(default=0)
+    # miktar = models.IntegerField(default=0)
+    miktar = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.islem_ismi
@@ -80,8 +81,8 @@ class EvrakModel(models.Model):
     evrak_name = models.CharField(max_length=250)
     evrak_description = models.TextField()
     # evrak_status= GELEN VEYA GIDEN EVRAK OLCAK
-    # evrak_picture=
-    # evrak_pdf=
+    evrak_picture = models.ImageField(upload_to="images/")
+    evrak_pdf = models.FileField(upload_to="pdfs/")
 
 
 class EtkinlikModel:

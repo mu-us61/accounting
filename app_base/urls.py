@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 from .views import CurrencyListView, CurrencyCreateView, CurrencyUpdateView, CurrencyDeleteView, TransactionUpdateView
@@ -47,3 +49,7 @@ urlpatterns = [
     path("currency/update/<int:pk>/", CurrencyUpdateView.as_view(), name="currencyupdate_view_name"),
     path("currency/delete/<int:pk>/", CurrencyDeleteView.as_view(), name="currencydelete_view_name"),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
