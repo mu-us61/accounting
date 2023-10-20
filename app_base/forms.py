@@ -34,7 +34,7 @@ class MuUserForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Islemler
-        fields = ["kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar"]
+        fields = ["kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf"]
 
 
 class TransactionFilterForm(forms.Form):
@@ -118,6 +118,15 @@ class EvrakForm(forms.ModelForm):
         model = EvrakModel
         # fields = "__all__"
         exclude = ["evrak_owner"]
+
+    # widgets = {
+    #     "evrak_name": forms.TextInput(attrs={"class": "input"}),
+    #     "evrak_description": forms.Textarea(attrs={"class": "textarea"}),
+    #     "evrak_type": forms.Select(attrs={"class": "select"}),
+    #     "evrak_picture": forms.ClearableFileInput(attrs={"class": "file-input"}),
+    #     "evrak_pdf": forms.ClearableFileInput(attrs={"class": "file-input"}),
+    #     "evrak_tags": forms.SelectMultiple(attrs={"class": "select is-multiple"}),
+    # }
 
 
 # //------------------------~~--------------------------------------------------------------------------

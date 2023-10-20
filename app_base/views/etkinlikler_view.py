@@ -7,30 +7,30 @@ from ..forms import EtkinlikForm
 class EtkinlikCreateView(CreateView):
     model = EtkinlikModel
     form_class = EtkinlikForm
-    template_name = "etkinlik_create.html"
+    template_name = "app_base/etkinlikler/etkinlik_create.html"
     success_url = reverse_lazy("etkinlik_list")
 
 
 class EtkinlikListView(ListView):
     model = EtkinlikModel
-    template_name = "etkinlik_list.html"
+    template_name = "app_base/etkinlikler/etkinlik_list.html"
     context_object_name = "etkinlik_list"
 
 
 class EtkinlikUpdateView(UpdateView):
     model = EtkinlikModel
     form_class = EtkinlikForm
-    template_name = "etkinlik_update.html"
+    template_name = "app_base/etkinlikler/etkinlik_update.html"
     success_url = reverse_lazy("etkinlik_list")
 
 
 class EtkinlikDeleteView(DeleteView):
     model = EtkinlikModel
-    template_name = "etkinlik_delete.html"
+    template_name = "app_base/etkinlikler/etkinlik_delete.html"
     success_url = reverse_lazy("etkinlik_list")
 
 
 class EtkinlikDetailView(DetailView):
     model = EtkinlikModel
-    template_name = "etkinlik_detail.html"
+    template_name = "app_base/etkinlikler/etkinlik_detail.html"
     context_object_name = "etkinlik"

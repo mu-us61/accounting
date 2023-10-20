@@ -15,10 +15,26 @@ class EvrakCreateView(CreateView):
         return super().form_valid(form)
 
 
-class EvrakListView(ListView):
+# class EvrakListView(ListView):
+#     model = EvrakModel
+#     template_name = "app_base/evraklar/evrak_list.html"
+#     context_object_name = "evrak_list"
+from django_tables2 import SingleTableView
+from ..models import EvrakModel
+from ..tables import EvrakTable
+
+
+class EvrakListView(SingleTableView):
+    table_class = EvrakTable
     model = EvrakModel
     template_name = "app_base/evraklar/evrak_list.html"
-    context_object_name = "evrak_list"
+    context_table_name = "evrak_table"
+    # paginate_by = 2  # Set your desired number of items per page
+
+    def get(self, request, *args, **kwargs):
+        aa = self.get_table()
+        print(dir(aa.page.paginator))  # Print the request object for debugging
+        return super().get(request, *args, **kwargs)
 
 
 class EvrakUpdateView(UpdateView):
