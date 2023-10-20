@@ -5,3 +5,5 @@ from .tags_view import *
 from .transactions_view import *
 from .unsorted_view import *
 from .users_view import *
+from .evraklar_view import *
+from .etkinlikler_view import *

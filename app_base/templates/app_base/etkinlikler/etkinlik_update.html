@@ -1,0 +1,8 @@
+<!-- etkinlik_update.html -->
+<h1>Edit Etkinlik: {{ etkinlik.etkinlik_name }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update</button>
+</form>
+<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a>

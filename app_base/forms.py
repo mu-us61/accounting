@@ -105,3 +105,28 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ["name"]
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+from django import forms
+from .models import EvrakModel
+
+
+class EvrakForm(forms.ModelForm):
+    class Meta:
+        model = EvrakModel
+        # fields = "__all__"
+        exclude = ["evrak_owner"]
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+from django import forms
+from .models import EtkinlikModel
+
+
+class EtkinlikForm(forms.ModelForm):
+    class Meta:
+        model = EtkinlikModel
+        exclude = []  # You can exclude fields if needed

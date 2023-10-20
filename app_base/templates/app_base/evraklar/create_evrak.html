@@ -1,0 +1,8 @@
+<!-- create_evrak.html -->
+<h1>Create Evrak</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+</form>
+<a href="{% url 'evrak_list' %}">Back to Evrak List</a>

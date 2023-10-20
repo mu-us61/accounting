@@ -1,0 +1,11 @@
+<!-- evrak_list.html -->
+<h1>Evrak List</h1>
+<ul>
+    {% for evrak in evrak_list %}
+        <li>
+            <a href="{% url 'evrak_update' evrak.pk %}">{{ evrak.evrak_name }}</a>
+            <a href="{% url 'evrak_delete' evrak.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'evrak_create' %}">Create Evrak</a>

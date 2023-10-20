@@ -1,0 +1,12 @@
+<!-- etkinlik_list.html -->
+<h1>Etkinlik List</h1>
+<ul>
+    {% for etkinlik in etkinlik_list %}
+        <li>
+            <a href="{% url 'etkinlik_detail' etkinlik.pk %}">{{ etkinlik.etkinlik_name }}</a>
+            <a href="{% url 'etkinlik_update' etkinlik.pk %}">Edit</a>
+            <a href="{% url 'etkinlik_delete' etkinlik.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'etkinlik_create' %}">Create Etkinlik</a>

@@ -107,6 +107,8 @@ class Islemler(models.Model):
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     # miktar = models.IntegerField(default=0)
     miktar = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    islemler_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
+    islemler_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True)
 
     def __str__(self):
         return self.islem_ismi
@@ -122,13 +124,14 @@ EVRAK_TYPE_CHOICES = [
 
 class EvrakModel(models.Model):
     evrak_date = models.DateTimeField(auto_now_add=True)
+    evrak_last_updated = models.DateTimeField(auto_now=True)
     evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     evrak_tags = models.ManyToManyField(Tag, blank=True)
     evrak_name = models.CharField(max_length=250)
     evrak_description = models.TextField()
     evrak_type = models.CharField(max_length=7, choices=EVRAK_TYPE_CHOICES, default="gelen")
-    evrak_picture = models.ImageField(upload_to=generate_unique_imagename)
-    evrak_pdf = models.FileField(upload_to=generate_unique_filename)
+    evrak_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
+    evrak_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True)
 
     def __str__(self):
         return self.evrak_name
@@ -137,11 +140,12 @@ class EvrakModel(models.Model):
 # //------------------------~~--------------------------------------------------------------------------
 class EtkinlikModel(models.Model):
     etkinlik_date = models.DateTimeField(auto_now_add=True)
+    etkinlik_last_updated = models.DateTimeField(auto_now=True)  # Auto-updated on every save
     etkinlik_name = models.CharField(max_length=250)
     etkinlik_description = models.TextField()
     etkinlik_tags = models.ManyToManyField(Tag, blank=True)
-    etkinlik_youtubelink = models.CharField(max_length=200)
-    etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename)
+    etkinlik_youtubelink = models.CharField(max_length=200, blank=True, null=True)
+    etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
 
     def __str__(self):
         return self.etkinlik_name

@@ -1,0 +1,8 @@
+<!-- delete_evrak.html -->
+<h1>Delete Evrak: {{ evrak.evrak_name }}</h1>
+<p>Are you sure you want to delete this Evrak?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+<a href="{% url 'evrak_list' %}">Back to Evrak List</a>

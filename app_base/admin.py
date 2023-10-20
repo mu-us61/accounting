@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import MuUser, Islemler, MuGroup, Tag
+from .models import MuUser, Islemler, MuGroup, Tag, EvrakModel, EtkinlikModel
 
 
 class CustomUserAdmin(admin.ModelAdmin):
@@ -25,3 +25,5 @@ admin.site.register(MuUser, CustomUserAdmin)
 admin.site.register(Islemler)
 admin.site.register(MuGroup)
 admin.site.register(Tag)
+admin.site.register(EvrakModel)
+admin.site.register(EtkinlikModel)

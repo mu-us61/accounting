@@ -1,0 +1,13 @@
+<!-- etkinlik_detail.html -->
+<h1>Etkinlik Detail</h1>
+<p>
+    <strong>Name:</strong> {{ etkinlik.etkinlik_name }}
+</p>
+<p>
+    <strong>Description:</strong> {{ etkinlik.etkinlik_description }}
+</p>
+<p>
+    <strong>YouTube Link:</strong> {{ etkinlik.etkinlik_youtubelink }}
+</p>
+<!-- Display other fields as needed -->
+<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a>

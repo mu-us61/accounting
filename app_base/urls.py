@@ -48,6 +48,18 @@ urlpatterns = [
     path("currency/create/", CurrencyCreateView.as_view(), name="currencycreate_view_name"),
     path("currency/update/<int:pk>/", CurrencyUpdateView.as_view(), name="currencyupdate_view_name"),
     path("currency/delete/<int:pk>/", CurrencyDeleteView.as_view(), name="currencydelete_view_name"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("evrak/create/", views.EvrakCreateView.as_view(), name="evrak_create"),
+    path("evrak/list/", views.EvrakListView.as_view(), name="evrak_list"),
+    path("evrak/update/<int:pk>/", views.EvrakUpdateView.as_view(), name="evrak_update"),
+    path("evrak/delete/<int:pk>/", views.EvrakDeleteView.as_view(), name="evrak_delete"),
+    path("evrak/detail/<int:pk>/", views.EvrakDetailView.as_view(), name="evrak_detail"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("etkinlik/create/", views.EtkinlikCreateView.as_view(), name="etkinlik_create"),
+    path("etkinlik/list/", views.EtkinlikListView.as_view(), name="etkinlik_list"),
+    path("etkinlik/update/<int:pk>/", views.EtkinlikUpdateView.as_view(), name="etkinlik_update"),
+    path("etkinlik/delete/<int:pk>/", views.EtkinlikDeleteView.as_view(), name="etkinlik_delete"),
+    path("etkinlik/detail/<int:pk>/", views.EtkinlikDetailView.as_view(), name="etkinlik_detail"),
 ]
 
 

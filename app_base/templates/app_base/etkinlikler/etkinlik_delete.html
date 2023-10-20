@@ -1,0 +1,8 @@
+<!-- etkinlik_delete.html -->
+<h1>Delete Etkinlik: {{ etkinlik.etkinlik_name }}</h1>
+<p>Are you sure you want to delete this Etkinlik?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a>

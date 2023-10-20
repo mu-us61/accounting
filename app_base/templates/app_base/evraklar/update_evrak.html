@@ -1,0 +1,8 @@
+<!-- update_evrak.html -->
+<h1>Update Evrak: {{ evrak.evrak_name }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update</button>
+</form>
+<a href="{% url 'evrak_list' %}">Back to Evrak List</a>

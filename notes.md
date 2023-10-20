@@ -42,3 +42,5 @@
 - [ ] resim yukleme
 - [ ] etkinlik taglari vs ayri olcak 3 tane mi ?
 - [ ] banka fisleri ve evraklar ayri olcak
+- [ ] islemler picture and pdf fieldleri eklendi , tum codda guncellenme lazim , ayri model yerine boyle cunku normal bakkal fisi bile eklenebilir
+- [ ] yeni kullanicilar modeli daha basit olur direk MuUser a eklemektense
