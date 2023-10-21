@@ -39,7 +39,7 @@
 - [ ] islem olusturmada miktar 0 , bunu place holder yapilabilir
 - [X] gruplar mesela MuUSer a entegre edilmedi foreign key ile ona bak
 - [ ] islemler active passive yapilsa daha iyi silinmeyi kalksa , recovery icin
-- [ ] resim yukleme
+- [ ] resim yukleme , PDf yukleme su an sadece 1 er tane yuklenebiliyorlar galiba
 - [ ] etkinlik taglari vs ayri olcak 3 tane mi ?
 - [ ] banka fisleri ve evraklar ayri olcak
 - [ ] islemler picture and pdf fieldleri eklendi , tum codda guncellenme lazim , ayri model yerine boyle cunku normal bakkal fisi bile eklenebilir

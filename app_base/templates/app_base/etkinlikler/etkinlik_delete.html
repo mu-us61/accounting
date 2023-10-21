@@ -1,8 +1,27 @@
-<!-- etkinlik_delete.html -->
+{% extends "base.html" %}
+{% block content %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <!-- delete_evrak.html -->
+            <h1 class="has-text-centered is-size-3 has-text-weight-bold">Etkinlik Silme</h1>
+            <br>
+            <p>
+                <b>{{ object.etkinlik_name }}</b> isimli etkinliği silmek istediğinizden eminmisiniz?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <br>
+                <button class="button is-danger mr-2" type="submit">Sil</button>
+                <a class="button is-link" href="{% url 'etkinlik_list' %}">Etkinlik Listesine Dön</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} <!-- etkinlik_delete.html -->
 <h1>Delete Etkinlik: {{ etkinlik.etkinlik_name }}</h1>
 <p>Are you sure you want to delete this Etkinlik?</p>
 <form method="post">
-    {% csrf_token %}
+                            {% csrf_token %}
     <button type="submit">Delete</button>
 </form>
-<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a>
+<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a> {% endcomment %}

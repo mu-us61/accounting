@@ -1,8 +1,58 @@
-<!-- etkinlik_create.html -->
+{% extends "base.html" %}
+{% block content %}
+    {% load widget_tweaks %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h1 class="has-text-centered has-text-weight-bold is-size-3">Etkinlik Olustur</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="label">Etkinlik İsmi</div>
+                    <div class="control">{{ form.etkinlik_name | add_class:"input" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Etkinlik Aciklamasi</div>
+                    <div class="control">{{ form.etkinlik_description | add_class:"textarea" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Etkinlik Resmi</div>
+                    <div class="control">{{ form.etkinlik_picture | add_class:"" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Etkinlik Youtube'si</div>
+                    <div class="control">{{ form.etkinlik_youtubelink | add_class:"" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">Etkinlik Tagi</div>
+                    <div class="control">{{ form.etkinlik_tags | add_class:"select2" }}</div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Submit</button>
+                    </div>
+                    <div class="control">
+                        <a class="button is-link" href="{% url 'etkinlik_list' %}">Etkinlik Listesine Geri Don</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for kimden_geldi, kime_gitti, tags, currency fields
+            $(".select2").select2({
+                placeholder: "Seçiniz",
+                allowClear: true,
+                width: '100%',
+            });
+        });
+    </script>
+{% endblock content %}
+{% comment %} <!-- etkinlik_create.html -->
 <h1>Create Etkinlik</h1>
 <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+            {% csrf_token %}
+            {{ form.as_p }}
     <button type="submit">Create</button>
 </form>
-<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a>
+<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a> {% endcomment %}

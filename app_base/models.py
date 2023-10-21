@@ -141,6 +141,7 @@ class EvrakModel(models.Model):
 class EtkinlikModel(models.Model):
     etkinlik_date = models.DateTimeField(auto_now_add=True)
     etkinlik_last_updated = models.DateTimeField(auto_now=True)  # Auto-updated on every save
+    etkinlik_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     etkinlik_name = models.CharField(max_length=250)
     etkinlik_description = models.TextField()
     etkinlik_tags = models.ManyToManyField(Tag, blank=True)

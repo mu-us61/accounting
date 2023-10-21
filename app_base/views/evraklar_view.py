@@ -29,12 +29,11 @@ class EvrakListView(SingleTableView):
     model = EvrakModel
     template_name = "app_base/evraklar/evrak_list.html"
     context_table_name = "evrak_table"
-    # paginate_by = 2  # Set your desired number of items per page
 
-    def get(self, request, *args, **kwargs):
-        aa = self.get_table()
-        print(dir(aa.page.paginator))  # Print the request object for debugging
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     aa = self.get_table()
+    #     print(dir(aa.page.paginator))  # Print the request object for debugging
+    #     return super().get(request, *args, **kwargs)
 
 
 class EvrakUpdateView(UpdateView):
@@ -48,6 +47,19 @@ class EvrakDeleteView(DeleteView):
     model = EvrakModel
     template_name = "app_base/evraklar/delete_evrak.html"
     success_url = reverse_lazy("evrak_list")
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context[""] =
+    #     print(context)
+    #     return context
+
+    # print(evrak.evrak_name)
+    # def get(self, request, *args, **kwargs):
+    #     # aa = self.get_table()
+    #     # print(dir(aa.page.paginator))  # Print the request object for debugging
+    #     print(dir(request))
+    #     return super().get(request, *args, **kwargs)
 
 
 class EvrakDetailView(DetailView):

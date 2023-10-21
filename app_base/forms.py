@@ -138,4 +138,4 @@ from .models import EtkinlikModel
 class EtkinlikForm(forms.ModelForm):
     class Meta:
         model = EtkinlikModel
-        exclude = []  # You can exclude fields if needed
+        exclude = ["etkinlik_owner"]  # You can exclude fields if needed

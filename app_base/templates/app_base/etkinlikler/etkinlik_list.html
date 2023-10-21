@@ -1,12 +1,21 @@
-<!-- etkinlik_list.html -->
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <div class="column is-half m-auto">
+        <a class="button is-link" href="{% url "etkinlik_create" %}">Yeni Etkinlik Oluştur</a>
+        <h1 class="has-text-centered has-text-weight-bold is-size-3">Etkinlik Listesi</h1>
+        <div class="table-responsive">{% render_table etkinlik_table %}</div>
+    </div>
+{% endblock content %}
+{% comment %} <!-- etkinlik_list.html -->
 <h1>Etkinlik List</h1>
 <ul>
-    {% for etkinlik in etkinlik_list %}
-        <li>
+            {% for etkinlik in etkinlik_list %}
+                <li>
             <a href="{% url 'etkinlik_detail' etkinlik.pk %}">{{ etkinlik.etkinlik_name }}</a>
             <a href="{% url 'etkinlik_update' etkinlik.pk %}">Edit</a>
             <a href="{% url 'etkinlik_delete' etkinlik.pk %}">Delete</a>
         </li>
     {% endfor %}
 </ul>
-<a href="{% url 'etkinlik_create' %}">Create Etkinlik</a>
+<a href="{% url 'etkinlik_create' %}">Create Etkinlik</a> {% endcomment %}
