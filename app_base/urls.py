@@ -14,6 +14,7 @@ urlpatterns = [
     path("passwordchange/", views.passwordchange_view, name="passwordchange_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
     path("balance/", views.balance_view, name="balance_view_name"),
+    # path("balance/", views.BalanceTableView.as_view(), name="balance_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
     path("grouplist/", views.grouplist_view, name="grouplist_view_name"),
     path("groupcreate/", views.groupcreate_view, name="groupcreate_view_name"),

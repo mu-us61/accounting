@@ -1,4 +1,40 @@
 {% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="table-container">{% render_table table %}</div>
+        <div class="pagination is-centered" role="navigation">
+            <ul class="pagination-list">
+                {% if page.has_previous %}
+                    <li>
+                        <a class="pagination-link" href="?page=1">«</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                <li>
+                    <span class="pagination-link is-current">{{ page.number }}</span>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                {% if page.has_next %}
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.next_page_number }}">next</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.paginator.num_pages }}">»</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
 {% load custom_filters %}
 {% block content %}
     <div class="container mt-4">
@@ -54,4 +90,4 @@
             </ul>
         </div>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

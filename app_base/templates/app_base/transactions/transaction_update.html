@@ -74,9 +74,9 @@
                         <button type="submit" class="button is-primary">Güncelle</button>
                     </div>
                     <div class="control">
-                        <a href="{% url 'transaction_list_name' %}" class="button is-link">Listeye Geri Dön</a>
+                        <a href="{% url 'transactionlist_view_name' %}" class="button is-link">Listeye Geri Dön</a>
                     </div>
-                    <a href="{% url 'transaction_delete_name' transaction.pk %}" class="button is-danger">Sil</a>
+                    <a href="{% url 'transactiondelete_view_name' transaction.pk %}" class="button is-danger">Sil</a>
                 </div>
             </form>
         </div>

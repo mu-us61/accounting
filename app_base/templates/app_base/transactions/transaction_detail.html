@@ -18,10 +18,10 @@
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <a href="{% url 'transaction_list_name' %}" class="button is-link">Listeye Geri Dön</a>
+                    <a href="{% url 'transactionlist_view_name' %}" class="button is-link">Listeye Geri Dön</a>
                 </div>
                 <div class="control">
-                    <a href="{% url 'transaction_edit_name' transaction.pk %}" class="button is-info">Islemi Duzenle</a>
+                    <a href="{% url 'transactionupdate_view_name' transaction.pk %}" class="button is-info">Islemi Duzenle</a>
                 </div>
             </div>
         </div>

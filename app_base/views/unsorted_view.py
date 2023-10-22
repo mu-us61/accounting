@@ -16,33 +16,67 @@ def home_view(request):
 
 
 # //------------------------~ BALANCE ~--------------------------------------------------------------------------
-@login_required
-def balance_view(request):
-    # Fetch all users
-    users = MuUser.objects.all()
+# @login_required
+# def balance_view(request):
+#     # Fetch all users
+#     users = MuUser.objects.all()
 
-    # Fetch all unique currencies
+#     # Fetch all unique currencies
+#     currencies = Currency.objects.all()
+
+#     # Create a list to store user balances for each currency
+#     user_balances = []
+
+#     for user in users:
+#         user_balance = {}
+#         for currency in currencies:
+#             user_balance[currency.name] = user.calculate_currency_balance(currency)
+#         user_balances.append((user, user_balance))
+
+#     # Number of users to display per page
+#     per_page = 10  # You can adjust this as needed
+
+#     paginator = Paginator(user_balances, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
+
+#     context = {
+#         "page": page,
+#         "currencies": currencies,
+#     }
+#     return render(request, "app_base/unsorted/balance.html", context)
+
+from django.shortcuts import render
+from django_tables2 import RequestConfig
+from ..models import MuUser, Currency
+from ..tables import UserBalanceTable
+
+
+def balance_view(request):
+    users = MuUser.objects.all()
     currencies = Currency.objects.all()
 
     # Create a list to store user balances for each currency
     user_balances = []
 
     for user in users:
-        user_balance = {}
+        user_balance = {"username": user.username}
         for currency in currencies:
             user_balance[currency.name] = user.calculate_currency_balance(currency)
-        user_balances.append((user, user_balance))
+        user_balances.append(user_balance)
 
-    # Number of users to display per page
-    per_page = 10  # You can adjust this as needed
-
+    per_page = 10
     paginator = Paginator(user_balances, per_page)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
 
+    # Use the UserBalanceTable to render the table
+    table = UserBalanceTable(user_balances, currencies=currencies)
+    RequestConfig(request, paginate={"per_page": per_page}).configure(table)
+
     context = {
+        "table": table,
         "page": page,
-        "currencies": currencies,
     }
     return render(request, "app_base/unsorted/balance.html", context)
 

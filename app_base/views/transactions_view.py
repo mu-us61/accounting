@@ -55,7 +55,7 @@ class TransactionCreateView(LoginRequiredMixin, View):
             transaction.save()
             form.save_m2m()
             # Update balances here if needed
-            return redirect("transaction_list_name")
+            return redirect("transactionlist_view_name")
         return render(request, self.template_name, {"form": form})
 
 
@@ -92,7 +92,7 @@ class TransactionUpdateView(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
             # Update balances here if needed
-            return redirect("transaction_list_name")
+            return redirect("transactionlist_view_name")
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
 
 
@@ -106,7 +106,7 @@ class TransactionDeleteView(LoginRequiredMixin, View):
         transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
         transaction.delete()
         # Update balances here if needed
-        return redirect("transaction_list_name")
+        return redirect("transactionlist_view_name")
 
 
 # //------------------------~TRANSACTION BIG TABLE~--------------------------------------------------------------------------

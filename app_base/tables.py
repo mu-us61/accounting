@@ -98,3 +98,25 @@ class EtkinlikTable(tables.Table):
 
 #     def __str__(self):
 #         return self.etkinlik_name
+
+# //------------------------~~--------------------------------------------------------------------------
+# tables.py
+
+# tables.py
+
+import django_tables2 as tables
+from .models import MuUser, Currency
+
+
+class UserBalanceTable(tables.Table):
+    username = tables.Column(verbose_name="Kullanıcılar")
+
+    def __init__(self, *args, currencies, **kwargs):
+        super(UserBalanceTable, self).__init__(*args, **kwargs)
+        for currency in currencies:
+            self.base_columns[currency.name] = tables.Column()
+
+    class Meta:
+        model = MuUser
+        attrs = {"class": "table table-striped table-bordered"}
+        fields = ["username"]
