@@ -6,9 +6,17 @@ from django.core.paginator import Paginator
 from django.db.models import F, IntegerField, Q, Sum, Value
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
 
+from ..models import Currency, Islemler, MuUser, Tag
+from django.shortcuts import render
+from django_tables2 import RequestConfig
+from ..models import MuUser, Currency, DummyModel
+from ..tables import UserBalanceTable, TableProvenTags
+from ..filters import FilterProvenTags
 
-from ..models import Currency, Islemler, MuUser
+from django.db.models.functions import ExtractMonth
 
 
 def home_view(request):
@@ -45,11 +53,6 @@ def home_view(request):
 #         "currencies": currencies,
 #     }
 #     return render(request, "app_base/unsorted/balance.html", context)
-
-from django.shortcuts import render
-from django_tables2 import RequestConfig
-from ..models import MuUser, Currency
-from ..tables import UserBalanceTable
 
 
 def balance_view(request):
@@ -146,3 +149,151 @@ def monthlyspendings_view(request):
         "tag_data_json": tag_data_json,
     }
     return render(request, "app_base/unsorted/monthly_spendings.html", context)
+
+
+# //------------------------~ Proven-Tags ~--------------------------------------------------------------------------
+from collections import defaultdict
+
+from decimal import Decimal
+
+
+# def proventags_view(request):
+#     if request.method == "GET":
+#         data_ay = [
+#             {"aylar": "Ocak"},
+#             {"aylar": "Şubat"},
+#             {"aylar": "Mart"},
+#             {"aylar": "Nisan"},
+#             {"aylar": "Mayıs"},
+#             {"aylar": "Haziran"},
+#             {"aylar": "Temmuz"},
+#             {"aylar": "Ağustos"},
+#             {"aylar": "Eylül"},
+#             {"aylar": "Ekim"},
+#             {"aylar": "Kasım"},
+#             {"aylar": "Aralik"},
+#         ]
+#         table = TableProvenTags(data_ay)
+#         all_tags = Islemler.objects.values_list("tags__name", flat=True).distinct()
+#         # all_tags = Islemler.objects.unique_values('tags')
+#         year = request.GET.get("year")
+#         tags = request.GET.getlist("tags")
+#         # filtered_data = Islemler.objects.filter(Q(year=year) & Q(tags__name__in=tags))
+#         filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags))
+
+#         monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0})
+
+#         for data in filtered_data:
+#             month = data.islem_tarihi.month
+#             monthly_data[month]["total"] += 1
+#             if data.islemler_picture or data.islemler_pdf:
+#                 monthly_data[month]["with_documents"] += 1
+
+#         table_data = []
+
+#         for month_num in range(1, 13):
+#             month_name = {
+#                 1: "Ocak",
+#                 2: "Şubat",
+#                 3: "Mart",
+#                 4: "Nisan",
+#                 5: "Mayıs",
+#                 6: "Haziran",
+#                 7: "Temmuz",
+#                 8: "Ağustos",
+#                 9: "Eylül",
+#                 10: "Ekim",
+#                 11: "Kasım",
+#                 12: "Aralık",
+#             }[month_num]
+#             total = monthly_data[month_num]["total"]
+#             with_documents = monthly_data[month_num]["with_documents"]
+#             percentage = (decimal.Decimal(with_documents) / decimal.Decimal(total)) * 100 if total > 0 else 0
+
+#             table_data.append(
+#                 {
+#                     "aylar": month_name,
+#                     "toplam": total,
+#                     "belgeli": with_documents,
+#                     "yuzdesi": percentage,
+#                 }
+#             )
+
+#         # print("year", year, "  " "tags", tags)
+#     else:
+#         pass
+
+#     context = {
+#         "all_tags": all_tags,
+#         "year": year,
+#         "tags": tags,
+#         "filtered_data": filtered_data,
+#         "table": table,
+#     }
+
+#     print(all_tags)
+
+#     return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)
+
+
+def proventags_view(request):
+    table_data = []  # Create an empty list to store table data
+
+    if request.method == "GET":
+        all_tags = Islemler.objects.values_list("tags__name", flat=True).distinct()
+        # all_tags = Islemler.objects.unique_values('tags')
+        year = request.GET.get("year")
+        tags = request.GET.getlist("tags")
+        # filtered_data = Islemler.objects.filter(Q(year=year) & Q(tags__name__in=tags))
+        filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags))
+        # Your existing code to get year and tags...
+        # ... your existing code ...
+
+        # Calculate the data
+        monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0})
+
+        for data in filtered_data:
+            month = data.islem_tarihi.month
+            monthly_data[month]["total"] += 1
+            if data.islemler_picture or data.islemler_pdf:
+                monthly_data[month]["with_documents"] += 1
+
+        for month_num in range(1, 13):
+            month_name = {
+                1: "Ocak",
+                2: "Şubat",
+                3: "Mart",
+                4: "Nisan",
+                5: "Mayıs",
+                6: "Haziran",
+                7: "Temmuz",
+                8: "Ağustos",
+                9: "Eylül",
+                10: "Ekim",
+                11: "Kasım",
+                12: "Aralık",
+            }[month_num]
+            total = monthly_data[month_num]["total"]
+            with_documents = monthly_data[month_num]["with_documents"]
+            percentage = (Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0
+
+            table_data.append(
+                {
+                    "aylar": month_name,
+                    "toplam": total,
+                    "belgeli": with_documents,
+                    "yuzdesi": percentage,
+                }
+            )
+
+    table = TableProvenTags(table_data)  # Create a table instance and pass data
+
+    context = {
+        "all_tags": all_tags,
+        "year": year,
+        "tags": tags,
+        "filtered_data": filtered_data,
+        "table": table,
+    }
+
+    return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)

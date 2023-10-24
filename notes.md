@@ -45,3 +45,11 @@
 - [ ] islemler picture and pdf fieldleri eklendi , tum codda guncellenme lazim , ayri model yerine boyle cunku normal bakkal fisi bile eklenebilir
 - [ ] yeni kullanicilar modeli daha basit olur direk MuUser a eklemektense
 - [ ] yeni viewlere login required koyulcak
+- [ ] transaction olustururken para birimi secmek zorunlu diyor, daha dogrusu demiyor
+- [ ] ispatli tabloda % cok kusuratli 99999 gidiyor
+
+
+
+sorular
+*********
+exel den kullanicilar baska bir modeldemi tutulsun

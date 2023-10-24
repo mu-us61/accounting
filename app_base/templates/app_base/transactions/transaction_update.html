@@ -4,7 +4,7 @@
     <div class="column is-half m-auto">
         <div class="box">
             <h1 class="title has-text-centered">İşlemi Güncelle</h1>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="field">
                     <label class="label">Kimden Geldi</label>

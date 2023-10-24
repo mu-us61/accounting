@@ -120,3 +120,13 @@ class UserBalanceTable(tables.Table):
         model = MuUser
         attrs = {"class": "table table-striped table-bordered"}
         fields = ["username"]
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+
+class TableProvenTags(tables.Table):
+    aylar = tables.Column(verbose_name="Aylar")
+    toplam = tables.Column(verbose_name="Toplam")
+    belgeli = tables.Column(verbose_name="Belgeli Sayısı")
+    yuzdesi = tables.Column(verbose_name="Yüzdesi")

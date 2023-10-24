@@ -150,3 +150,7 @@ class EtkinlikModel(models.Model):
 
     def __str__(self):
         return self.etkinlik_name
+
+
+class DummyModel(models.Model):
+    pass

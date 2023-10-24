@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <h1>Filter Data</h1>
+    <form id="myForm" method="get">
+        <div class="field">
+            <label>Yıl</label>
+            <div class="control">
+                <div class="aaaa">
+                    <select id="choiceSelect" class="select2">
+                        <option>2023</option>
+                        <option>2024</option>
+                        <option>2025</option>
+                        <option>2026</option>
+                        <option>2027</option>
+                        <option>2028</option>
+                        <option>2029</option>
+                        <option>2029</option>
+                        <option>2030</option>
+                        <option>2031</option>
+                        <option>2032</option>
+                        <option>2033</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Etiketler</label>
+            <div class="control">
+                <div class="aaaa">
+                    <select id="select_tags" class="select2" multiple="multiple">
+                        {% for tag in all_tags %}<option>{{ tag }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <input class="button" type="submit" value="Apply Filter">
+    </form>
+    <div class="data-display">
+        <h2>Data for Year {{ year }}</h2>
+        <ul>
+            {% for record in filtered_data %}
+                <li>{{ record.date|date:"F" }}: {{ record }}</li>
+            {% empty %}
+                <li>No data available for the selected filters.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="table-responsive">{% render_table table %}</div>
+    <script>
+        // In your JavaScript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.select2').select2({
+                //placeholder: "Seçiniz",
+                //allowClear: true,
+               width: "200px",
+            });
+            
+        });
+</script>
+<script>
+    const form = document.getElementById('myForm');
+    const select = document.getElementById('choiceSelect');
+    const selectTags = document.getElementById('select_tags');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const selectedValue = select.value;
+        const selectedTags = Array.from(selectTags.selectedOptions).map(option => option.value);
+        
+        // Construct the query string for tags
+        const tagsQueryString = selectedTags.length > 0 ? `&tags=${selectedTags.join(',')}` : '';
+
+        // Redirect with the selected year and tags in the query string
+        window.location.href = `?year=${selectedValue}${tagsQueryString}`;
+    });
+</script>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <div class="container">
+        <h1>Proven Tags Table</h1>
+        <form method="get">
+            {{ filter.form.year.label_tag }} {{ filter.form.year }}
+            {{ filter.form.tags.label_tag }} {{ filter.form.tags }}
+            <button type="submit">Filter</button>
+        </form>
+        <div class="table-responsive">{% render_table table %}</div>
+    </div>
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1>Proven Tags Table</h1>
+        <form method="get">
+            {{ filter.form.year.label_tag }} {{ filter.form.year }}
+            {{ filter.form.tags.label_tag }} {{ filter.form.tags }}
+            <button type="submit">Filter</button>
+        </form>
+        <div class="table-responsive">{% render_table table %}</div>
+    </div>
+{% endblock %} {% endcomment %}

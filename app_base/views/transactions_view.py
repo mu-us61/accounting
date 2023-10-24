@@ -47,7 +47,8 @@ class TransactionCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
         # print(request.POST)
-        form = TransactionForm(request.POST)
+        # form = TransactionForm(request.POST)
+        form = TransactionForm(request.POST, request.FILES)
         if form.is_valid():
             # print(form)
             transaction = form.save(commit=False)
@@ -88,7 +89,8 @@ class TransactionUpdateView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
 
     def post(self, request, *args, **kwargs):
-        form = TransactionForm(request.POST, instance=self.transaction)
+        # form = TransactionForm(request.POST, instance=self.transaction)
+        form = TransactionForm(request.POST, request.FILES, instance=self.transaction)
         if form.is_valid():
             form.save()
             # Update balances here if needed

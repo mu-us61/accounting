@@ -2,7 +2,8 @@
 import django_filters
 from .models import Islemler, MuUser, Tag, Currency
 from django import forms
-from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
+
+# from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django_filters.widgets import DateRangeWidget
 
 
@@ -65,47 +66,52 @@ class IslemlerFilter(django_filters.FilterSet):
         model = Islemler
         fields = ["miktar", "islem_tarihi", "kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islemsahibi", "currency"]
 
-    # # Custom filter method for miktar
-    # def custom_miktar_filter(self, queryset, name, value):
-    #     # Implement your custom filtering logic for the 'miktar' field here
-    #     if value:
-    #         # Process the filter value and update the queryset as needed
-    #         pass
-    #     return queryset
+
+# //------------------------~~--------------------------------------------------------------------------
 
 
-# class IslemlerFilter(django_filters.FilterSet):
-#     miktar = django_filters.NumberFilter()
-#     islem_tarihi = django_filters.DateFromToRangeFilter(field_name="islem_tarihi")
-#     kimden_geldi = django_filters.ModelChoiceFilter(queryset=MuUser.objects.all())
-#     kime_gitti = django_filters.ModelChoiceFilter(queryset=MuUser.objects.all())
-#     tags = django_filters.ModelMultipleChoiceFilter(queryset=Tag.objects.all())
-#     islem_ismi = django_filters.CharFilter(lookup_expr="icontains")
-#     islemsahibi = django_filters.ModelChoiceFilter(queryset=MuUser.objects.all())
-#     currency = django_filters.ModelChoiceFilter(queryset=Currency.objects.all())
+# class FilterProvenTags(django_filters.FilterSet):
+#     year = django_filters.ChoiceFilter(
+#         label="Yıl",
+#         choices=[
+#             (2023, "2023"),
+#             (2024, "2024"),
+#             (2025, "2025"),
+#             (2026, "2026"),
+#             (2027, "2027"),
+#             (2028, "2028"),
+#             (2029, "2029"),
+#             (2030, "2030"),
+#             (2031, "2031"),
+#             (2032, "2032"),
+#             (2033, "2033"),
+#         ],
+#         empty_label="Seçiniz",
+#         widget=forms.Select(attrs={"class": "select22"}),
+#     )
+#     tags = django_filters.ModelMultipleChoiceFilter(
+#         label="Tags",
+#         queryset=Tag.objects.all(),
+#         # widget=django_filters.widgets.FilteredSelectMultiple(attrs={"class": "custom-class"}),
+#         widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+#     )
 
-#     class Meta:
-#         model = Islemler
-#         fields = ["miktar", "islem_tarihi", "kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islemsahibi", "currency"]
+import django_filters
+from django import forms
+from django.db.models import F, DateField
+from django.db.models.functions import ExtractYear
 
 
-# class IslemlerFilter(django_filters.FilterSet):
-#     miktar = django_filters.NumberFilter()
-
-
-#     class Meta:
-#         model = Islemler
-#         fields = ["miktar"]
-
-# islem_tarihi = models.DateTimeField(auto_now_add=True)
-# # belge =
-# islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
-# kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
-# kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
-# tags = models.ManyToManyField(Tag, blank=True)
-# islem_ismi = models.CharField(max_length=250)
-# islem_aciklamasi = models.TextField()
-# currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
-# miktar = models.IntegerField(default=0)
-
-# username = django_filters.CharFilter(lookup_expr="icontains")
+class FilterProvenTags(django_filters.FilterSet):
+    year = django_filters.NumberFilter(
+        label="Yıl",
+        field_name="your_date_field_name",  # Replace with the actual name of your date field
+        lookup_expr="year",  # Use the 'year' lookup to extract the year from the date field
+        empty_label="Seçiniz",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+    tags = django_filters.ModelMultipleChoiceFilter(
+        label="Tags",
+        queryset=Tag.objects.all(),
+        widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+    )

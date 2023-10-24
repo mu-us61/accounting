@@ -9,7 +9,7 @@ from ..models import Tag
 # //------------------------~~--------------------------------------------------------------------------
 @login_required
 def taglist_view(request):
-    tags = Tag.objects.all()
+    tags = Tag.objects.all().order_by("name")
 
     # Number of tags to display per page
     per_page = 10  # You can adjust this as needed
