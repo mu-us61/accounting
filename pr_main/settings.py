@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django_filters",
     "widget_tweaks",
     "django_tables2",
-    "django_flatpickr",
+    # "django_flatpickr",
     # apps
     "app_base",
 ]

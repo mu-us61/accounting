@@ -130,3 +130,7 @@ class TableProvenTags(tables.Table):
     toplam = tables.Column(verbose_name="Toplam")
     belgeli = tables.Column(verbose_name="Belgeli Sayısı")
     yuzdesi = tables.Column(verbose_name="Yüzdesi")
+
+    class Meta:
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"

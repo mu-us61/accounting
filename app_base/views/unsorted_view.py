@@ -275,7 +275,7 @@ def proventags_view(request):
             }[month_num]
             total = monthly_data[month_num]["total"]
             with_documents = monthly_data[month_num]["with_documents"]
-            percentage = (Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0
+            percentage = int((Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0)
 
             table_data.append(
                 {

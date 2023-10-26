@@ -53,3 +53,5 @@
 sorular
 *********
 exel den kullanicilar baska bir modeldemi tutulsun
+
+ii 
