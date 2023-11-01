@@ -139,3 +139,7 @@ class EtkinlikForm(forms.ModelForm):
     class Meta:
         model = EtkinlikModel
         exclude = ["etkinlik_owner"]  # You can exclude fields if needed
+
+
+# class ExcelUploadForm(forms.Form):
+#     excel_file = forms.FileField()

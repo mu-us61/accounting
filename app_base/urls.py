@@ -46,6 +46,7 @@ urlpatterns = [
     path("monthlyspendings", views.monthlyspendings_view, name="monthlyspendings_view_name"),
     # path("proventags", views.ProvenTagsView.as_view(), name="proventags_view_name"),
     path("proventags", views.proventags_view, name="proventags_view_name"),
+    path("uploadexel/", views.upload_excel_view, name="upload_exel_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
     path("currencylist/", CurrencyListView.as_view(), name="currencylist_view_name"),
     path("currency/create/", CurrencyCreateView.as_view(), name="currencycreate_view_name"),

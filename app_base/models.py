@@ -57,12 +57,13 @@ class MuGroup(Group):
 # //------------------------~~--------------------------------------------------------------------------
 class MuUser(AbstractUser):
     username_validator = UnicodeUsernameValidator()
-
     username = models.CharField(_("Kullanıcı Adı"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("Bu isimde bir kullanici zaten var")})
-    first_name = models.CharField(_("İsim"), max_length=150, blank=True)
-    last_name = models.CharField(_("Soyisim"), max_length=150, blank=True)
+    password = models.CharField(_("password"), max_length=128, null=False)
+    first_name = models.CharField(_("İsim"), max_length=150, blank=True)  # AD-SOYAD ORTAK
+    last_name = models.CharField(_("Soyisim"), max_length=150, blank=True)  # first_name ad-soyad icin ortak kullanilcak
     email = models.EmailField(_("email address"), blank=True)
     is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
+    # is_uye = (models.BooleanField(default=False),)
     is_active = models.BooleanField(_("active"), default=True, help_text=_("Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."))
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
@@ -154,3 +155,11 @@ class EtkinlikModel(models.Model):
 
 class DummyModel(models.Model):
     pass
+
+
+class ExelUsers(models.Model):
+    name = models.CharField(max_length=250)
+    surname = models.CharField(max_length=250)
+    phonenumber = models.IntegerField(blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)

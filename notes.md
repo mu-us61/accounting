@@ -47,6 +47,11 @@
 - [ ] yeni viewlere login required koyulcak
 - [ ] transaction olustururken para birimi secmek zorunlu diyor, daha dogrusu demiyor
 - [ ] ispatli tabloda % cok kusuratli 99999 gidiyor
+- [ ] yetkililer sadece login yapabilirler cunku normallerin username ve password olmicak
+- [ ] createuser sayfasinda ayrica yetkili diye tik atmayi unutma front endden ayarlancak
+- [ ] username uniqu false ve null=True yapildi , yani create user derken username varmi kontrol edilsin hata gostersin varsa,yani unique database kurali olmasada backendde kural olsun 
+- [ ] first_name ad-soyad icin ortak kullanilsin, fron endden ayarlansin
+- [ ] isim aramalari nasil fuzzy searcmi arastirilsin
 
 
 

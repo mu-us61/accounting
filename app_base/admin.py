@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import MuUser, Islemler, MuGroup, Tag, EvrakModel, EtkinlikModel
+from .models import MuUser, Islemler, MuGroup, Tag, EvrakModel, EtkinlikModel, ExelUsers
+from import_export.admin import ImportExportModelAdmin
 
 
 class CustomUserAdmin(admin.ModelAdmin):
@@ -27,3 +28,8 @@ admin.site.register(MuGroup)
 admin.site.register(Tag)
 admin.site.register(EvrakModel)
 admin.site.register(EtkinlikModel)
+
+
+@admin.register(ExelUsers)
+class userdat(ImportExportModelAdmin):
+    pass
