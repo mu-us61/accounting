@@ -301,72 +301,67 @@ def proventags_view(request):
 
 # //------------------------~ EXEL USERS ~--------------------------------------------------------------------------
 
-# # views.py
+# # myapp/views.py
 # from django.shortcuts import render
 # from import_export.formats import base_formats
-# from ..models import ExelUsers
-# from ..resources import ExelUsersResource  # Create this resource in the next step
-
-
-# def upload_excel_view(request):
-#     if request.method == "POST":
-#         resource = ExelUsersResource()
-#         dataset = resource.export()
-#         imported_data = dataset.load(request.FILES["myfile"].read())
-#         for data in imported_data:
-#             ExelUsers.objects.create(name=data["name"], surname=data["surname"], phonenumber=data["phonenumber"])
-#     return render(request, "app_base/unsorted/uploadexel.html")
-# views.py
-# from django.shortcuts import render
-# from import_export.formats import base_formats
-# from ..models import ExelUsers
 # from ..resources import ExelUsersResource
-# from import_export.results import RowResult
-# from tablib import import_set
 
 
 # def upload_excel_view(request):
-#     if request.method == "POST":
-#         resource = ExelUsersResource()
-#         dataset = resource.export()
+#     if request.method == "POST" and request.FILES["file"]:
+#         excel_file = request.FILES["file"]
 
-#         # Handle possible errors during import
-#         try:
-#             imported_data = dataset.load(request.FILES["myfile"].read())
-#         except Exception as e:
-#             # Handle the error, e.g., provide a custom error message to the user.
-#             return render(request, "app_base/unsorted/uploadexel.html", {"error_message": str(e)})
+#         # Determine the file format (Excel, CSV, etc.)
+#         file_format = base_formats.XLS()
 
-#         for data in imported_data:
-#             if isinstance(data, RowResult) and data.import_type == RowResult.IMPORT_TYPE_NEW:
-#                 # Check if the data is a dictionary and access fields by keys
-#                 if isinstance(data.diff, dict):
-#                     ExelUsers.objects.create(name=data.diff.get("name", ""), surname=data.diff.get("surname", ""), phonenumber=data.diff.get("phonenumber", None))
-#             else:
-#                 # Handle other import types, e.g., updates or skips
-#                 pass
-#         return render(request, "app_base/unsorted/uploadexel.html", {"success_message": "Data imported successfully"})
+#         dataset = ExelUsersResource().import_data(dataset=excel_file.read(), format=file_format)
+
+#         if dataset.has_errors():
+#             # Handle errors here if needed
+#             pass
+#         else:
+#             dataset.save()
 
 #     return render(request, "app_base/unsorted/uploadexel.html")
-from import_export import resources
-from django.http import HttpResponse
-from django.shortcuts import render
-from ..models import ExelUsers
+
+# from django.shortcuts import render, redirect
+# from import_export.formats import base_formats
+# from ..resources import ExelUsersResource
 
 
-class ExelUsersResource(resources.ModelResource):
-    class Meta:
-        model = ExelUsers
-        fields = ("name", "surname", "phonenumber")
+# def upload_excel_view(request):
+#     if request.method == "POST" and request.FILES.get("file"):
+#         excel_file = request.FILES["file"]
+
+#         # Determine the file format (Excel, CSV, etc.)
+#         file_format = base_formats.XLS()
+
+#         dataset = ExelUsersResource().import_data(excel_file, format=file_format)
+
+#         if dataset.has_errors():
+#             # Handle errors here if needed
+#             pass
+#         else:
+#             dataset.import_data()
+#             return redirect("home_view_name")  # Redirect to a success page or another URL
+
+#     return render(request, "app_base/unsorted/uploadexel.html")
+
+
+from tablib import Dataset
+from ..resources import ExelUsersResource
 
 
 def upload_excel_view(request):
     if request.method == "POST":
-        resource = ExelUsersResource()
-        imported_data = resource.import_data(request.FILES["excel_file"], dry_run=False)
-        if imported_data.has_errors():
-            return render(request, "exel_upload_error.html", {"errors": imported_data.errors})
+        person_resource = ExelUsersResource()
+        dataset = Dataset()
+        new_persons = request.FILES["myfile"]
 
-        return HttpResponse("yes")
-    else:
-        return render(request, "app_base/unsorted/uploadexel.html")
+        imported_data = dataset.load(new_persons.read())
+        result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+        if not result.has_errors():
+            person_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+    return render(request, "app_base/unsorted/uploadexel.html")
