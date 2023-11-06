@@ -29,7 +29,39 @@ admin.site.register(Tag)
 admin.site.register(EvrakModel)
 admin.site.register(EtkinlikModel)
 
+from import_export.results import RowResult
+from import_export.results import RowResult
+from import_export import resources
+
+
+class MyResource(resources.ModelResource):
+    def import_row(self, row, instance_loader, **kwargs):
+        # overriding import_row to ignore errors and skip rows that fail to import
+        # without failing the entire import
+        import_result = super(MyResource, self).import_row(row, instance_loader, **kwargs)
+        if import_result.import_type == RowResult.IMPORT_TYPE_ERROR:
+            # Copy the values to display in the preview report
+            import_result.diff = [row[val] for val in row]
+            # Add a column with the error message
+            import_result.diff.append("Errors: {}".format([err.error for err in import_result.errors]))
+            # clear errors and mark the record to skip
+            import_result.errors = []
+            import_result.import_type = RowResult.IMPORT_TYPE_SKIP
+
+        return import_result
+
+    class Meta:
+        skip_unchanged = True
+        report_skipped = True
+        raise_errors = False
+        model = ExelUsers
+
 
 @admin.register(ExelUsers)
-class userdat(ImportExportModelAdmin):
-    pass
+class MyModelAdmin(ImportExportModelAdmin):
+    resource_class = MyResource
+
+
+# @admin.register(ExelUsers)
+# class userdat(ImportExportModelAdmin):
+#     pass

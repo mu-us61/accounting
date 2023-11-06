@@ -9,6 +9,7 @@ import os
 import random
 import string
 from datetime import datetime
+from phonenumber_field.modelfields import PhoneNumberField
 
 # //------------------------~~--------------------------------------------------------------------------
 
@@ -160,6 +161,6 @@ class DummyModel(models.Model):
 class ExelUsers(models.Model):
     name = models.CharField(max_length=250)
     surname = models.CharField(max_length=250)
-    phonenumber = models.IntegerField(blank=True, null=True)
+    phonenumber = PhoneNumberField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "django_tables2",
     "import_export",
+    "phonenumber_field",
     # "django_flatpickr",
     # apps
     "app_base",
@@ -140,3 +141,4 @@ AUTH_USER_MODEL = "app_base.MuUser"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 LANGUAGE_CODE = "tr"
 USE_L10N = True
+PHONENUMBER_DEFAULT_REGION = "TR"
