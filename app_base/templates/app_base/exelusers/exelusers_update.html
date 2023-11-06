@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- exelusers_update.html -->
+    <h1>Edit Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+    <a href="{% url 'exelusers_list' %}">Back to Exel User List</a>
+{% endblock content %}

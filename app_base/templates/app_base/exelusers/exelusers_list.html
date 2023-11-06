@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- exelusers_list.html -->
+    <h1>Exel User List</h1>
+    <ul>
+        {% for exeluser in exelusers_list %}
+            <li>
+                <a href="{% url 'exelusers_detail' exeluser.pk %}">{{ exeluser.name }} {{ exeluser.surname }}</a>
+                <a href="{% url 'exelusers_update' exeluser.pk %}">Edit</a>
+                <a href="{% url 'exelusers_delete' exeluser.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'exelusers_create' %}">Create Exel User</a>
+{% endblock content %}

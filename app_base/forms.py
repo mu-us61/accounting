@@ -143,3 +143,13 @@ class EtkinlikForm(forms.ModelForm):
 
 # class ExcelUploadForm(forms.Form):
 #     excel_file = forms.FileField()
+
+from django import forms
+from phonenumber_field.formfields import PhoneNumberField
+from .models import ExelUsers
+
+
+class ExelUsersForm(forms.ModelForm):
+    class Meta:
+        model = ExelUsers
+        exclude = []

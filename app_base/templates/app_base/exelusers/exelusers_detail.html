@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- exelusers_detail.html -->
+    <h1>Exel User Detail</h1>
+    <p>
+        <strong>Name:</strong> {{ exelusers.name }}
+    </p>
+    <p>
+        <strong>Surname:</strong> {{ exelusers.surname }}
+    </p>
+    <p>
+        <strong>Phone Number:</strong> {{ exelusers.phonenumber }}
+    </p>
+    <!-- Display other fields as needed -->
+    <a href="{% url 'exelusers_list' %}">Back to Exel User List</a>
+{% endblock content %}

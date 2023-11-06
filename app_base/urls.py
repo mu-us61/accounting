@@ -64,6 +64,12 @@ urlpatterns = [
     path("etkinlik/update/<int:pk>/", views.EtkinlikUpdateView.as_view(), name="etkinlik_update"),
     path("etkinlik/delete/<int:pk>/", views.EtkinlikDeleteView.as_view(), name="etkinlik_delete"),
     path("etkinlik/detail/<int:pk>/", views.EtkinlikDetailView.as_view(), name="etkinlik_detail"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("exelusers/create/", views.ExelUsersCreateView.as_view(), name="exelusers_create"),
+    path("exelusers/list/", views.ExelUsersListView.as_view(), name="exelusers_list"),
+    path("exelusers/update/<int:pk>/", views.ExelUsersUpdateView.as_view(), name="exelusers_update"),
+    path("exelusers/delete/<int:pk>/", views.ExelUsersDeleteView.as_view(), name="exelusers_delete"),
+    path("exelusers/detail/<int:pk>/", views.ExelUsersDetailView.as_view(), name="exelusers_detail"),
 ]
 
 

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- exelusers_delete.html -->
+    <h1>Delete Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
+    <p>Are you sure you want to delete this Exel User?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+    <a href="{% url 'exelusers_list' %}">Back to Exel User List</a>
+{% endblock content %}
