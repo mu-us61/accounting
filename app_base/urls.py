@@ -47,6 +47,7 @@ urlpatterns = [
     # path("proventags", views.ProvenTagsView.as_view(), name="proventags_view_name"),
     path("proventags", views.proventags_view, name="proventags_view_name"),
     path("uploadexel/", views.upload_excel_view, name="upload_exel_view_name"),
+    path("mobile/", views.mobile_view, name="mobile_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
     path("currencylist/", CurrencyListView.as_view(), name="currencylist_view_name"),
     path("currency/create/", CurrencyCreateView.as_view(), name="currencycreate_view_name"),
@@ -66,7 +67,8 @@ urlpatterns = [
     path("etkinlik/detail/<int:pk>/", views.EtkinlikDetailView.as_view(), name="etkinlik_detail"),
     # //------------------------~~--------------------------------------------------------------------------
     path("exelusers/create/", views.ExelUsersCreateView.as_view(), name="exelusers_create"),
-    path("exelusers/list/", views.ExelUsersListView.as_view(), name="exelusers_list"),
+    # path("exelusers/list/", views.ExelUsersListView.as_view(), name="exelusers_list"),
+    path("exelusers/list/", views.exelusers_list, name="exelusers_list"),
     path("exelusers/update/<int:pk>/", views.ExelUsersUpdateView.as_view(), name="exelusers_update"),
     path("exelusers/delete/<int:pk>/", views.ExelUsersDeleteView.as_view(), name="exelusers_delete"),
     path("exelusers/detail/<int:pk>/", views.ExelUsersDetailView.as_view(), name="exelusers_detail"),

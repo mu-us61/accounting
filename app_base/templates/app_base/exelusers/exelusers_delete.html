@@ -1,11 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-    <!-- exelusers_delete.html -->
-    <h1>Delete Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
-    <p>Are you sure you want to delete this Exel User?</p>
-    <form method="post">
-        {% csrf_token %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <!-- delete_evrak.html -->
+            <h1 class="has-text-centered is-size-3 has-text-weight-bold">ExelKullanıcı Silme</h1>
+            <br>
+            <p>
+                <b>{{ exelusers.name }} {{ exelusers.surname }}</b> isimli ExelKullanıcısını silmek istediğinizden eminmisiniz?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <br>
+                <button class="button is-danger mr-2" type="submit">Sil</button>
+                <a class="button is-link" href="{% url 'exelusers_list' %}">ExelKullanıcı Listesine Dön</a>
+            </form>
+        </div>
+    </div>
+    {% comment %} <!-- exelusers_delete.html -->
+        <h1>Delete Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
+        <p>Are you sure you want to delete this Exel User?</p>
+        <form method="post">
+            {% csrf_token %}
         <button type="submit">Delete</button>
     </form>
-    <a href="{% url 'exelusers_list' %}">Back to Exel User List</a>
+<a href="{% url 'exelusers_list' %}">Back to Exel User List</a> {% endcomment %}
 {% endblock content %}

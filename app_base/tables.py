@@ -134,3 +134,21 @@ class TableProvenTags(tables.Table):
     class Meta:
         attrs = {"class": "table table-striped table-bordered"}
         template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+import django_tables2 as tables
+from .models import ExelUsers
+
+
+class ExelUsersTable(tables.Table):
+    name = tables.Column()
+    surname = tables.Column()
+    phonenumber = tables.Column()
+
+    class Meta:
+        model = ExelUsers
+        fields = ["name", "surname", "phonenumber"]
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed

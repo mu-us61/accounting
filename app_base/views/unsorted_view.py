@@ -365,3 +365,10 @@ def upload_excel_view(request):
             person_resource.import_data(dataset, dry_run=False)  # Actually import now
 
     return render(request, "app_base/unsorted/uploadexel.html")
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+
+def mobile_view(request):
+    return render(request, template_name="app_base/unsorted/mobile.html")

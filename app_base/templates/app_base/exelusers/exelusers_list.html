@@ -1,15 +1,21 @@
 {% extends "base.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
-    <!-- exelusers_list.html -->
-    <h1>Exel User List</h1>
-    <ul>
-        {% for exeluser in exelusers_list %}
-            <li>
+    <div class="column is-half m-auto">
+        <a class="button is-link" href="{% url "exelusers_create" %}">Yeni ExelKullanıcı Oluştur</a>
+        <h1 class="has-text-centered has-text-weight-bold is-size-3">ExelKullanıcı Listesi</h1>
+        <div class="table-responsive">{% render_table table %}</div>
+    </div>
+    {% comment %} <!-- exelusers_list.html -->
+                <h1>Exel User List</h1>
+                <ul>
+                    {% for exeluser in exelusers_list %}
+                        <li>
                 <a href="{% url 'exelusers_detail' exeluser.pk %}">{{ exeluser.name }} {{ exeluser.surname }}</a>
                 <a href="{% url 'exelusers_update' exeluser.pk %}">Edit</a>
                 <a href="{% url 'exelusers_delete' exeluser.pk %}">Delete</a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'exelusers_create' %}">Create Exel User</a>
+<a href="{% url 'exelusers_create' %}">Create Exel User</a> {% endcomment %}
 {% endblock content %}

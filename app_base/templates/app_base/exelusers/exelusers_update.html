@@ -1,11 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
-    <!-- exelusers_update.html -->
-    <h1>Edit Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+    {% load widget_tweaks %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h1 class="has-text-centered has-text-weight-bold is-size-3">ExelKullanıcı Düzenle</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="label">ExelKullanıcı Ismi</div>
+                    <div class="control">{{ form.name | add_class:"input" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">ExelKullanıcı Soyismi</div>
+                    <div class="control">{{ form.surname | add_class:"input" }}</div>
+                </div>
+                <div class="field">
+                    <div class="label">ExelKullanıcı Telefonu</div>
+                    <div class="control">{{ form.phonenumber | add_class:"input" }}</div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Onay</button>
+                    </div>
+                    <div class="control">
+                        <a class="button is-danger" href="{% url 'exelusers_delete' object.pk %}">Sil</a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-link" href="{% url 'exelusers_list' %}">ExelKullanıcı Listesine Dön</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% comment %} <!-- exelusers_update.html -->
+            <h1>Edit Exel User: {{ exelusers.name }} {{ exelusers.surname }}</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
         <button type="submit">Update</button>
     </form>
-    <a href="{% url 'exelusers_list' %}">Back to Exel User List</a>
+<a href="{% url 'exelusers_list' %}">Back to Exel User List</a> {% endcomment %}
 {% endblock content %}
