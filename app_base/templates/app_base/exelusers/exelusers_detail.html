@@ -9,11 +9,11 @@
                     <strong>ExelKullanıcı İsmi:</strong> {{ exelusers.name }}
                 </p>
             </div>
-            <div class="block">
+            {% comment %} <div class="block">
                 <p>
                     <strong>ExelKullanıcı Soyismi:</strong> {{ exelusers.surname }}
                 </p>
-            </div>
+            </div> {% endcomment %}
             <div class="block">
                 <p>
                     <strong>ExelKullanıcı Telefonu:</strong> {{ exelusers.phonenumber }}
@@ -30,9 +30,9 @@
         </div>
     </div>
     {% comment %} <!-- exelusers_detail.html -->
-            <h1>Exel User Detail</h1>
-            <p>
-                <strong>Name:</strong> {{ exelusers.name }}
+                    <h1>Exel User Detail</h1>
+                    <p>
+                        <strong>Name:</strong> {{ exelusers.name }}
     </p>
     <p>
         <strong>Surname:</strong> {{ exelusers.surname }}

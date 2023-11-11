@@ -52,6 +52,8 @@
 - [ ] username uniqu false ve null=True yapildi , yani create user derken username varmi kontrol edilsin hata gostersin varsa,yani unique database kurali olmasada backendde kural olsun 
 - [ ] first_name ad-soyad icin ortak kullanilsin, fron endden ayarlansin
 - [ ] isim aramalari nasil fuzzy searcmi arastirilsin
+- [ ] kayit edilirken kullanci adi olsun ad soyad olsun hepsi kucuk harfle kayit olsun
+- [ ] isim ve soysisim yerine sadece isim fieldinde olsun hepsi
 
 
 

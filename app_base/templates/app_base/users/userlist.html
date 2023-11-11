@@ -10,7 +10,6 @@
                     <tr>
                         <th>Kullanıcı Adı</th>
                         <th>İsim</th>
-                        <th>Soyisim</th>
                         <th>Düzenle</th>
                         <th>Sil</th>
                     </tr>
@@ -20,7 +19,6 @@
                         <tr>
                             <td>{{ muser.username }}</td>
                             <td>{{ muser.first_name }}</td>
-                            <td>{{ muser.last_name }}</td>
                             <td>
                                 <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-link" href="{% url 'userupdate_view_name' muser.pk %}">Düzenle</a>
                             </td>

@@ -17,7 +17,7 @@ class MuUserForm(forms.ModelForm):
         model = MuUser
         # fields = "__all__"
         # exclude = ["pk"]
-        fields = ["username", "password", "first_name", "last_name"]  # Adjust fields as needed
+        fields = ["username", "password", "first_name"]  # Adjust fields as needed
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -34,7 +34,7 @@ class MuUserForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Islemler
-        fields = ["kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf"]
+        fields = ["kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf"]
 
 
 class TransactionFilterForm(forms.Form):

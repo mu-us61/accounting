@@ -25,6 +25,14 @@
                     </div>
                 </div>
                 <div class="field">
+                    <label class="label">Exel kullanıcıları</label>
+                    <div class="control">
+                        <select name="{{ form.exelusers.name }}" id="{{ form.exelusers.id_for_label }}" class="select2" multiple>
+                            {% for choice in form.exelusers.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
                     <label class="label">Tags</label>
                     <div class="control">
                         <select name="{{ form.tags.name }}" id="{{ form.tags.id_for_label }}" class="select2" multiple>

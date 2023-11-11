@@ -61,7 +61,7 @@ class MuUser(AbstractUser):
     username = models.CharField(_("Kullanıcı Adı"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("Bu isimde bir kullanici zaten var")})
     password = models.CharField(_("password"), max_length=128, null=False)
     first_name = models.CharField(_("İsim"), max_length=150, blank=True)  # AD-SOYAD ORTAK
-    last_name = models.CharField(_("Soyisim"), max_length=150, blank=True)  # first_name ad-soyad icin ortak kullanilcak
+    # last_name = models.CharField(_("Soyisim"), max_length=150, blank=True)  # first_name ad-soyad icin ortak kullanilcak
     email = models.EmailField(_("email address"), blank=True)
     is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
     # is_uye = (models.BooleanField(default=False),)
@@ -97,12 +97,25 @@ class Tag(models.Model):
 
 
 # //------------------------~~--------------------------------------------------------------------------
+class ExelUsers(models.Model):
+    name = models.CharField(max_length=250)
+    # surname = models.CharField(max_length=250)
+    phonenumber = PhoneNumberField(blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+# //------------------------~~--------------------------------------------------------------------------
 class Islemler(models.Model):
     islem_tarihi = models.DateTimeField(auto_now_add=True)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
     kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
+    exelusers = models.ManyToManyField(ExelUsers, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     islem_ismi = models.CharField(max_length=250)
     islem_aciklamasi = models.TextField()
@@ -156,11 +169,3 @@ class EtkinlikModel(models.Model):
 
 class DummyModel(models.Model):
     pass
-
-
-class ExelUsers(models.Model):
-    name = models.CharField(max_length=250)
-    surname = models.CharField(max_length=250)
-    phonenumber = PhoneNumberField(blank=True, null=True)
-    date = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)

@@ -143,12 +143,19 @@ from .models import ExelUsers
 
 
 class ExelUsersTable(tables.Table):
-    name = tables.Column()
-    surname = tables.Column()
-    phonenumber = tables.Column()
+    # name = tables.Column()
+    # surname = tables.Column()
+    phonenumber = tables.Column(verbose_name="Telefon No")
+    name = tables.LinkColumn(
+        "exelusers_detail",  # Replace with your actual view name for evrak details
+        text=lambda record: record.name,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "name-link"}},  # Add any additional classes or attributes
+        verbose_name="Exel Kullanıcısı",
+    )
 
     class Meta:
         model = ExelUsers
-        fields = ["name", "surname", "phonenumber"]
+        fields = ["name", "phonenumber"]
         attrs = {"class": "table table-striped table-bordered"}
         template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
