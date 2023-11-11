@@ -372,3 +372,19 @@ def upload_excel_view(request):
 
 def mobile_view(request):
     return render(request, template_name="app_base/unsorted/mobile.html")
+
+
+from django.http import HttpResponse
+from django.conf import settings
+import os
+
+
+def downloadmobile(request, file_path):
+    file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as file:
+            response = HttpResponse(file.read(), content_type="application/vnd.android.package-archive")
+            response["Content-Disposition"] = f'attachment; filename="{os.path.basename(file_path)}"'
+            return response
+    else:
+        return HttpResponse("File not found", status=404)

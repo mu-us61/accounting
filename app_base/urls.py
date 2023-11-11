@@ -48,6 +48,7 @@ urlpatterns = [
     path("proventags", views.proventags_view, name="proventags_view_name"),
     path("uploadexel/", views.upload_excel_view, name="upload_exel_view_name"),
     path("mobile/", views.mobile_view, name="mobile_view_name"),
+    path("downloadmobile/<path:file_path>/", views.downloadmobile, name="downloadmobile"),
     # //------------------------~~--------------------------------------------------------------------------
     path("currencylist/", CurrencyListView.as_view(), name="currencylist_view_name"),
     path("currency/create/", CurrencyCreateView.as_view(), name="currencycreate_view_name"),

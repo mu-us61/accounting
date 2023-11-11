@@ -169,3 +169,10 @@ class EtkinlikModel(models.Model):
 
 class DummyModel(models.Model):
     pass
+
+
+class MobileFile(models.Model):
+    file = models.FileField(upload_to="mobile_files/")
+
+    def __str__(self):
+        return self.file.name

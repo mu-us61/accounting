@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import MuUser, Islemler, MuGroup, Tag, EvrakModel, EtkinlikModel, ExelUsers
+from .models import MuUser, Islemler, MuGroup, Tag, EvrakModel, EtkinlikModel, ExelUsers, MobileFile
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -28,6 +28,7 @@ admin.site.register(MuGroup)
 admin.site.register(Tag)
 admin.site.register(EvrakModel)
 admin.site.register(EtkinlikModel)
+admin.site.register(MobileFile)
 
 from import_export.results import RowResult
 from import_export.results import RowResult
