@@ -19,6 +19,12 @@ class MuUserForm(forms.ModelForm):
         # exclude = ["pk"]
         fields = ["username", "password", "first_name"]  # Adjust fields as needed
 
+    def clean_username(self):
+        return self.cleaned_data["username"].lower()
+
+    def clean_first_name(self):
+        return self.cleaned_data["first_name"].lower()
+
     def save(self, commit=True):
         user = super().save(commit=False)
         # Use set_password to hash the password
@@ -105,6 +111,9 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ["name"]
+
+    def clean_name(self):
+        return self.cleaned_data["name"].lower()
 
 
 # //------------------------~~--------------------------------------------------------------------------

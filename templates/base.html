@@ -27,9 +27,9 @@
     </head>
     <body x-data="{ muside: false }">
         {% include "navbar.html" %}
-        <div class="columns mx-0">
+        <div class="columns mx-0 mb-0 mt-0">
             <!-- Sidebar -->
-            <div {% if user.is_authenticated %}  {% else %}  class="is-hidden"  {% endif %} class="column is-2 has-background-grey-darker" x-bind:class="{ 'is-hidden': muside }">
+            <div {% if user.is_authenticated %}  {% else %}  class="is-hidden"  {% endif %} class="column is-narrow has-background-grey-darker" x-bind:class="{ 'is-hidden': muside }">
                 {% if user.is_authenticated %}
                     {% include "sidebar.html" %}
                 {% else %}

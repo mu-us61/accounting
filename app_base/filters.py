@@ -1,6 +1,6 @@
 # filters.py
 import django_filters
-from .models import Islemler, MuUser, Tag, Currency
+from .models import Islemler, MuUser, Tag, Currency, ExelUsers
 from django import forms
 
 # from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -37,6 +37,12 @@ class IslemlerFilter(django_filters.FilterSet):
         empty_label="Select an option",
         widget=forms.Select(attrs={"class": "select22"}),
     )
+    exelusers = django_filters.ModelMultipleChoiceFilter(
+        label="Exel Kullanicilari",
+        queryset=ExelUsers.objects.all(),
+        # widget=django_filters.widgets.FilteredSelectMultiple(attrs={"class": "custom-class"}),
+        widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+    )
     tags = django_filters.ModelMultipleChoiceFilter(
         label="Tags",
         queryset=Tag.objects.all(),
@@ -64,7 +70,7 @@ class IslemlerFilter(django_filters.FilterSet):
 
     class Meta:
         model = Islemler
-        fields = ["miktar", "islem_tarihi", "kimden_geldi", "kime_gitti", "tags", "islem_ismi", "islemsahibi", "currency"]
+        fields = ["miktar", "islem_tarihi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islemsahibi", "currency"]
 
 
 # //------------------------~~--------------------------------------------------------------------------

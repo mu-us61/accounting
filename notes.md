@@ -54,6 +54,7 @@
 - [ ] isim aramalari nasil fuzzy searcmi arastirilsin
 - [ ] kayit edilirken kullanci adi olsun ad soyad olsun hepsi kucuk harfle kayit olsun
 - [ ] isim ve soysisim yerine sadece isim fieldinde olsun hepsi
+- [ ] adminler birbirlerinin sifrelerini felan silebiliyorlar
 
 
 

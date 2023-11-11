@@ -13,17 +13,32 @@ from .models import Islemler
 
 class IslemlerTable(tables.Table):
     tags = tables.Column(verbose_name="Tags")  # Create a custom column for the 'tags' field
+    exelusers = tables.Column(verbose_name="Exel Kullanıcıları")
+    islem_tarihi = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
+    islem_ismi = tables.LinkColumn(
+        "transactiondetail_view_name",  # Replace with your actual view name for evrak details
+        text=lambda record: record.islem_ismi,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "name-link"}},  # Add any additional classes or attributes
+        verbose_name="Islem Ismi",
+    )
 
     class Meta:
         model = Islemler
         attrs = {"class": "table table-striped table-bordered"}
         per_page = 10  # Number of items to display per page
         template_name = "app_base/transactions/transaction_big_table_pagination.html"
+        fields = ("islem_tarihi", "islemsahibi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "currency", "miktar", "islemler_picture", "islemler_pdf")
 
     def render_tags(self, value):
         # Define how you want to display the ManyToMany field 'tags'
         # You can customize this based on your requirements
         return ", ".join(tag.name for tag in value.all())
+
+    def render_exelusers(self, value):
+        # Define how you want to display the ManyToMany field 'tags'
+        # You can customize this based on your requirements
+        return ", ".join(exeluser.name for exeluser in value.all())
 
 
 # //------------------------~~--------------------------------------------------------------------------
