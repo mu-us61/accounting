@@ -3,16 +3,16 @@
     <div class="column is-half m-auto">
         <div class="box">
             <!-- delete_evrak.html -->
-            <h1 class="has-text-centered is-size-3 has-text-weight-bold">ExelKullanıcı Silme</h1>
+            <h1 class="has-text-centered is-size-3 has-text-weight-bold">ExcelKullanıcı Silme</h1>
             <br>
             <p>
-                <b>{{ exelusers.name }} {{ exelusers.surname }}</b> isimli ExelKullanıcısını silmek istediğinizden eminmisiniz?
+                <b>{{ exelusers.name }} {{ exelusers.surname }}</b> isimli ExcelKullanıcısını silmek istediğinizden eminmisiniz?
             </p>
             <form method="post">
                 {% csrf_token %}
                 <br>
                 <button class="button is-danger mr-2" type="submit">Sil</button>
-                <a class="button is-link" href="{% url 'exelusers_list' %}">ExelKullanıcı Listesine Dön</a>
+                <a class="button is-link" href="{% url 'exelusers_list' %}">ExcelKullanıcı Listesine Dön</a>
             </form>
         </div>
     </div>

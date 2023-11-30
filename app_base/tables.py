@@ -13,7 +13,7 @@ from .models import Islemler
 
 class IslemlerTable(tables.Table):
     tags = tables.Column(verbose_name="Tags")  # Create a custom column for the 'tags' field
-    exelusers = tables.Column(verbose_name="Exel Kullanıcıları")
+    exelusers = tables.Column(verbose_name="Excel Kullanıcıları")
     islem_tarihi = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
     islem_ismi = tables.LinkColumn(
         "transactiondetail_view_name",  # Replace with your actual view name for evrak details
@@ -166,7 +166,7 @@ class ExelUsersTable(tables.Table):
         text=lambda record: record.name,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
         attrs={"a": {"class": "name-link"}},  # Add any additional classes or attributes
-        verbose_name="Exel Kullanıcısı",
+        verbose_name="Excel Kullanıcısı",
     )
 
     class Meta:

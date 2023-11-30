@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+{% for hidden_field in form.hidden_fields %}
+    {% if hidden_field.errors %}
+        {% for error in hidden_field.errors %}
+            (Hidden field {{ hidden_field.name }})
+            <div class="form-text text-danger">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+    {{ hidden_field }}
+{% endfor %}
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+{% endif %}
+{% for field in form.visible_fields %}
+    <div class="mb-3">
+        {% comment %} {{ field.label_tag }} {% endcomment %}
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% comment %} {{ field }} {% endcomment %}
+        {{ field|add_class:"form-control" }}
+        {% if field.errors %}
+            {% for error in field.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+        {% endif %}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    </div>
+{% endfor %}

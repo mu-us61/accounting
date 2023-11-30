@@ -2,8 +2,8 @@
 {% load render_table from django_tables2 %}
 {% block content %}
     <div class="column is-half m-auto">
-        <a class="button is-link" href="{% url "exelusers_create" %}">Yeni ExelKullanıcı Oluştur</a>
-        <h1 class="has-text-centered has-text-weight-bold is-size-3">ExelKullanıcı Listesi</h1>
+        <a class="button is-link" href="{% url "exelusers_create" %}">Yeni ExcelKullanıcı Oluştur</a>
+        <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Listesi</h1>
         <div class="table-responsive">{% render_table table %}</div>
     </div>
     {% comment %} <!-- exelusers_list.html -->
