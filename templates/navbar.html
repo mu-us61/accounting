@@ -19,7 +19,9 @@
         <!-- navbar start, navbar end -->
         <div class="navbar-start">
             <!-- navbar items -->
-            <a class="navbar-item is-info is-light" href="{% url "home_view_name" %}">Anasayfa</a>
+            <a class="navbar-item is-info is-light" href="{% url "home_view_name" %}">
+                <img src="{% static 'Images/hayvakfi.png' %}" alt="hayvakfi" width="30" height="30" class="image " style="margin-right: 5px;">
+            Anasayfa</a>
             {% if user.is_authenticated %}
                 <span class="navbar-item">{{ user.username }}</span>
             {% else %}

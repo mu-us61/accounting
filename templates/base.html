@@ -10,6 +10,7 @@
             {% block title %}
             {% endblock title %}
         </title>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'Images/favicon.ico' %}">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iconify/2.0.0/iconify.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -19,6 +20,12 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <style>
+            .collapse {
+                display: none;
+              }
+              .collapse.show {
+                display: block;
+              }
             .main-content {
                 {% comment %} height: 100vh; {% endcomment %}
                 min-height: calc(100vh - 56px); /* Adjust for your navbar height in pixels */
@@ -43,5 +50,12 @@
         </div>
         {% comment %} <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js" defer></script> {% endcomment %}
         <script src="{% static 'Js/alpine.min.js' %}"></script>
+        <script>
+            $(document).ready(function () {
+              $('.sidebar-item').click(function () {
+                $($(this).data('target')).toggleClass('show');
+              });
+            });
+        </script>
     </body>
 </html>

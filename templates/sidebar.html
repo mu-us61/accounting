@@ -4,16 +4,27 @@
         {% comment %} <p class="menu-label">General</p> {% endcomment %}
         <ul class="menu-list ">
             <li class="mt-2">
-                <a class="button is-dark has-text-left" href="{% url 'userlist_view_name' %}"><span class="iconify" data-icon="dashicons:admin-users"></span>  Kullanıcılar</a>
-            </li>
-            <li>
-                <a class="button is-dark has-text-left" href="{% url 'grouplist_view_name' %}"><span class="iconify" data-icon="material-symbols:groups"></span>  Kullanıcı Grupları</a>
+                <a class="sidebar-item button is-dark has-text-left" data-toggle="collapse" data-target="#item1">Kişiler</a>
+                <ul id="item1" class="collapse">
+                    <li>
+                        <a class="button is-dark has-text-left" href="{% url 'userlist_view_name' %}"><span class="iconify" data-icon="dashicons:admin-users"></span>  Kullanıcılar</a>
+                    </li>
+                    <li>
+                        <a class="button is-dark has-text-left" href="{% url 'grouplist_view_name' %}"><span class="iconify" data-icon="material-symbols:groups"></span>  Kullanıcı Grupları</a>
+                    </li>
+                    <li>
+                        <a class="button is-dark has-text-left" href="{% url "upload_exel_view_name" %}"><span class="iconify" data-icon="mdi:account-multiple-plus"></span> Excel kullanici yukleme</a>
+                    </li>
+                    <li>
+                        <a class="button is-dark has-text-left" href="{% url "exelusers_list" %}"><span class="iconify" data-icon="teenyicons:users-solid"></span> Excel kullanicilari</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a class="button is-dark has-text-left" href="{% url 'balance_view_name' %}"><span class="iconify" data-icon="material-symbols:account-balance-wallet-sharp"></span>  Bakiye</a>
             </li>
             <li>
-                <a class="button is-dark has-text-left" href="{% url 'taglist_view_name' %}"><span class="iconify" data-icon="fa6-solid:tags"></span>  Etiketler</a>
+                <a class="button is-dark has-text-left" href="{% url 'taglist_view_name' %}"><span class="iconify" data-icon="fa6-solid:tags"></span>  Harcama Kalemi</a>
             </li>
             <li>
                 <a class="button is-dark has-text-left" href="{% url 'currencylist_view_name' %}"><span class="iconify" data-icon="grommet-icons:currency"></span>  Para Birimleri</a>
@@ -38,12 +49,6 @@
             </li>
             <li>
                 <a class="button is-dark has-text-left" href="{% url 'evrak_list' %}"><span class="iconify" data-icon="gg:file-document"></span>  Evraklar</a>
-            </li>
-            <li>
-                <a class="button is-dark has-text-left" href="{% url "upload_exel_view_name" %}"><span class="iconify" data-icon="mdi:account-multiple-plus"></span> Exel kullanici yukleme</a>
-            </li>
-            <li>
-                <a class="button is-dark has-text-left" href="{% url "exelusers_list" %}"><span class="iconify" data-icon="teenyicons:users-solid"></span> Exel kullanicilari</a>
             </li>
             <li>
                 <a class="button is-dark has-text-left" href="{% url "mobile_view_name" %}"><span class="iconify" data-icon="material-symbols-light:app-promo"></span>  mobile app linkeleri</a>
