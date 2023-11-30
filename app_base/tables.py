@@ -12,7 +12,7 @@ from .models import Islemler
 
 
 class IslemlerTable(tables.Table):
-    tags = tables.Column(verbose_name="Tags")  # Create a custom column for the 'tags' field
+    tags = tables.Column(verbose_name="Harcama Kalemi")  # Create a custom column for the 'tags' field
     exelusers = tables.Column(verbose_name="Excel Kullanıcıları")
     islem_tarihi = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
     islem_ismi = tables.LinkColumn(
@@ -48,7 +48,7 @@ from .models import EvrakModel, EtkinlikModel
 
 
 class EvrakTable(tables.Table):
-    evrak_tags = tables.Column(verbose_name="Etiketler", empty_values=(), orderable=True)
+    evrak_tags = tables.Column(verbose_name="Harcama Kalemi", empty_values=(), orderable=True)
     evrak_date = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
     evrak_owner = tables.Column(verbose_name="Evrağı Yükleyen")  # Customize the "evrak_owner" column header
     # evrak_name = tables.Column(verbose_name="Evrak İsmi")  # Customize the "evrak_name" column header
@@ -89,7 +89,7 @@ class EtkinlikTable(tables.Table):
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
         attrs={"a": {"class": "etkinlik-name-link"}},  # Add any additional classes or attributes
     )
-    etkinlik_tags = tables.Column(verbose_name="Etiketler", empty_values=(), orderable=True)
+    etkinlik_tags = tables.Column(verbose_name="Harcama Kalemi", empty_values=(), orderable=True)
 
     class Meta:
         model = EtkinlikModel

@@ -5,15 +5,15 @@
         <div class="box">
             <h2 class="title has-text-centered">
                 {% if tag %}
-                    Etiket Düzenle
+                Harcama Kalemi Düzenle
                 {% else %}
-                    Etiket Oluştur
+                Harcama Kalemi Oluştur
                 {% endif %}
             </h2>
             <form method="post">
                 {% csrf_token %}
                 <div class="field">
-                    <label for="{{ form.name.id_for_label }}" class="label">Etiket İsmi Giriniz</label>
+                    <label for="{{ form.name.id_for_label }}" class="label">Harcama Kalemi İsmi Giriniz</label>
                     <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
                 </div>
                 <div class="field is-grouped">
@@ -27,7 +27,7 @@
                         </button>
                     </div>
                     <div class="control">
-                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Etiket Listesine Dön</a>
+                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
                     </div>
                 </div>
             </form>

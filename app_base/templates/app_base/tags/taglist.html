@@ -2,15 +2,15 @@
 {% block content %}
     <div class="column is-half m-auto">
         <div class="box">
-            <a href="{% url 'tagcreate_view_name' %}" class="button is-primary">Yeni Etiket Oluştur</a>
-            <h2 class="title has-text-centered">Etiket Listesi</h2>
+            <a href="{% url 'tagcreate_view_name' %}" class="button is-primary">Yeni Harcama Kalemi Oluştur</a>
+            <h2 class="title has-text-centered">Harcama Kalemi Listesi</h2>
             <ul class="menu-list">
                 {% for tag in page %}
                     <li>
                         <a href="{% url 'tagdetail_view_name' tag.slug %}">{{ tag.name }}</a>
                     </li>
                 {% empty %}
-                    <li>Etiket Yok</li>
+                    <li>Harcama Kalemi Yok</li>
                 {% endfor %}
             </ul>
         </div>

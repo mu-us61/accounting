@@ -3,10 +3,10 @@
     <div class="columns is-centered">
         <div class="column is-half">
             <div class="box mt-4">
-                <h2 class="title has-text-centered">Etiket Detayı</h2>
+                <h2 class="title has-text-centered">Harcama Kalemi Detayı</h2>
                 <div class="content">
                     <p>
-                        <strong>Etiket İsmi :</strong> {{ tag.name }}
+                        <strong>Harcama Kalemi İsmi :</strong> {{ tag.name }}
                     </p>
                 </div>
                 <div class="field is-grouped">
@@ -17,7 +17,7 @@
                         <a href="{% url 'tagdelete_view_name' tag.slug %}" class="button is-danger">Sil</a>
                     </div>
                     <div class="control">
-                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Etiket Listesine Dön</a>
+                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
                     </div>
                 </div>
             </div>
