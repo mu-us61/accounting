@@ -11,7 +11,46 @@ import string
 from datetime import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 # //------------------------~~--------------------------------------------------------------------------
+class BaseModelSoftDelete(models.Model):
+    is_active = models.BooleanField(_("active"), default=True)
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
+    class Meta:
+        abstract = True
+
+
+from django.contrib.auth.models import BaseUserManager
+
+
+class ActiveObjectsManager(BaseUserManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
+
+    def get_by_natural_key(self, username):
+        return self.get(username=username)
+
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError("The Username field must be set")
+        user = self.model(username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(username, password, **extra_fields)
+
+
+# class ActiveObjectsManager(models.Manager):
+#     def get_queryset(self):
+#         return super().get_queryset().filter(is_active=True)
 
 
 def generate_unique_filename(instance, filename):
@@ -40,9 +79,11 @@ def generate_unique_imagename(instance, filename):
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class Currency(models.Model):
+class Currency(BaseModelSoftDelete):
     name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=10, unique=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.name
@@ -53,10 +94,19 @@ class Currency(models.Model):
 
 class MuGroup(Group):
     creation_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(_("active"), default=True)
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
+    class Meta:
+        verbose_name = _("MuGroup")
+        verbose_name_plural = _("MuGroups")
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class MuUser(AbstractUser):
+class MuUser(AbstractUser, BaseModelSoftDelete):
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(_("Kullanıcı Adı"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("Bu isimde bir kullanici zaten var")})
     password = models.CharField(_("password"), max_length=128, null=False)
@@ -66,8 +116,9 @@ class MuUser(AbstractUser):
     is_staff = models.BooleanField(_("Yönetici Durumu"), default=False, help_text=_("Kullanıcının bu yönetici paneline giriş yapabilmesini belirler."))
     # is_uye = (models.BooleanField(default=False),)
     is_active = models.BooleanField(_("active"), default=True, help_text=_("Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."))
+    objects = ActiveObjectsManager()
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True, blank=True)
     gruplar = models.ManyToManyField(MuGroup, blank=True)
 
     def calculate_currency_balance(self, currency):
@@ -83,9 +134,11 @@ class MuUser(AbstractUser):
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class Tag(models.Model):
+class Tag(BaseModelSoftDelete):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.name
@@ -97,19 +150,21 @@ class Tag(models.Model):
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class ExelUsers(models.Model):
+class ExelUsers(BaseModelSoftDelete):
     name = models.CharField(max_length=250)
     # surname = models.CharField(max_length=250)
     phonenumber = PhoneNumberField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.name
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class Islemler(models.Model):
+class Islemler(BaseModelSoftDelete):
     islem_tarihi = models.DateTimeField(auto_now_add=True)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
@@ -124,6 +179,8 @@ class Islemler(models.Model):
     miktar = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     islemler_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
     islemler_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.islem_ismi
@@ -137,7 +194,7 @@ EVRAK_TYPE_CHOICES = [
 ]
 
 
-class EvrakModel(models.Model):
+class EvrakModel(BaseModelSoftDelete):
     evrak_date = models.DateTimeField(auto_now_add=True)
     evrak_last_updated = models.DateTimeField(auto_now=True)
     evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
@@ -147,13 +204,15 @@ class EvrakModel(models.Model):
     evrak_type = models.CharField(max_length=7, choices=EVRAK_TYPE_CHOICES, default="gelen")
     evrak_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
     evrak_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.evrak_name
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class EtkinlikModel(models.Model):
+class EtkinlikModel(BaseModelSoftDelete):
     etkinlik_date = models.DateTimeField(auto_now_add=True)
     etkinlik_last_updated = models.DateTimeField(auto_now=True)  # Auto-updated on every save
     etkinlik_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
@@ -162,6 +221,8 @@ class EtkinlikModel(models.Model):
     etkinlik_tags = models.ManyToManyField(Tag, blank=True)
     etkinlik_youtubelink = models.CharField(max_length=200, blank=True, null=True)
     etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.etkinlik_name
