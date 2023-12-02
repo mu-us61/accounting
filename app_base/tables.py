@@ -19,7 +19,7 @@ class IslemlerTable(tables.Table):
         "transactiondetail_view_name",  # Replace with your actual view name for evrak details
         text=lambda record: record.islem_ismi,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
-        attrs={"a": {"class": "name-link"}},  # Add any additional classes or attributes
+        attrs={"a": {"class": "name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
         verbose_name="Islem Ismi",
     )
 
@@ -46,6 +46,8 @@ class IslemlerTable(tables.Table):
 import django_tables2 as tables
 from .models import EvrakModel, EtkinlikModel
 
+# your_long_field = tables.TemplateColumn(template_code='{{ value|truncatechars:50 }}')
+
 
 class EvrakTable(tables.Table):
     evrak_tags = tables.Column(verbose_name="Harcama Kalemi", empty_values=(), orderable=True)
@@ -60,8 +62,9 @@ class EvrakTable(tables.Table):
         "evrak_detail",  # Replace with your actual view name for evrak details
         text=lambda record: record.evrak_name,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
-        attrs={"a": {"class": "evrak-name-link"}},  # Add any additional classes or attributes
+        attrs={"a": {"class": "evrak-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
         verbose_name="Evrak İsmi",
+        # attrs={'td': {'class': 'long-text'}}
     )
 
     class Meta:
@@ -87,7 +90,7 @@ class EtkinlikTable(tables.Table):
         verbose_name="Etkinlik İsmi",
         text=lambda record: record.etkinlik_name,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
-        attrs={"a": {"class": "etkinlik-name-link"}},  # Add any additional classes or attributes
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
     )
     etkinlik_tags = tables.Column(verbose_name="Harcama Kalemi", empty_values=(), orderable=True)
 
@@ -165,7 +168,7 @@ class ExelUsersTable(tables.Table):
         "exelusers_detail",  # Replace with your actual view name for evrak details
         text=lambda record: record.name,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
-        attrs={"a": {"class": "name-link"}},  # Add any additional classes or attributes
+        attrs={"a": {"class": "name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
         verbose_name="Excel Kullanıcısı",
     )
 
