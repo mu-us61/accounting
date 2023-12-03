@@ -12,3 +12,13 @@ def relative_url(value, field_name, urlencode=None):
         encoded_querystring = "&".join(filtered_querystring)
         url = "{}&{}".format(url, encoded_querystring)
     return url
+
+
+from decimal import Decimal
+
+
+@register.filter
+def trim_decimal(value):
+    if isinstance(value, Decimal):
+        return "{0:g}".format(value)
+    return value

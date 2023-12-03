@@ -176,7 +176,7 @@ class Islemler(BaseModelSoftDelete):
     islem_aciklamasi = models.TextField()
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     # miktar = models.IntegerField(default=0)
-    miktar = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    miktar = models.DecimalField(max_digits=18, decimal_places=4, default=0)
     islemler_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
     islemler_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True)
     is_active = models.BooleanField(_("active"), default=True)

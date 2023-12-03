@@ -36,26 +36,81 @@ def groupcreate_view(request):
     return render(request, "app_base/groups/groupcreate.html")
 
 
-@login_required
+# @login_required
+# def groupdetail_view(request, group_id):
+#     group = get_object_or_404(MuGroup, pk=group_id)
+#     all_users = MuUser.objects.all()
+
+#     # Handle adding users
+#     if request.method == "POST" and "add_users" in request.POST:
+#         selected_users_ids = request.POST.getlist("add_user")
+#         group.user_set.add(*selected_users_ids)
+
+#     # Handle removing users
+#     if request.method == "POST" and "remove_users" in request.POST:
+#         selected_users_ids = request.POST.getlist("remove_user")
+#         group.user_set.remove(*selected_users_ids)
+
+#     context = {
+#         "group": group,
+#         "all_users": all_users,
+#     }
+#     return render(request, "app_base/groups/groupdetail.html", context)
+# from django.shortcuts import render, get_object_or_404
+# from ..models import MuGroup, MuUser
+
+# def groupdetail_view(request, group_id):
+#     group = get_object_or_404(MuGroup, pk=group_id)
+#     all_users = MuUser.objects.all()
+
+#     if request.method == "POST":
+#         if "add_users" in request.POST:
+#             selected_users_ids = request.POST.getlist("add_user")
+#             group.user_set.add(*selected_users_ids)
+#         elif "remove_users" in request.POST:
+#             selected_users_ids = request.POST.getlist("remove_user")
+#             group.user_set.remove(*selected_users_ids)
+
+#     context = {
+#         "group": group,
+#         "all_users": all_users,
+#     }
+#     return render(request, "app_base/groups/groupdetail.html", context)
+
+from django.shortcuts import get_object_or_404
+
+# from django.contrib.auth.models import User  # Assuming MuUser is a custom model that extends User
+
+
 def groupdetail_view(request, group_id):
     group = get_object_or_404(MuGroup, pk=group_id)
-    all_users = MuUser.objects.all()
+    all_users = MuUser.objects.all()  # Use the appropriate User model here
 
-    # Handle adding users
-    if request.method == "POST" and "add_users" in request.POST:
-        selected_users_ids = request.POST.getlist("add_user")
-        group.user_set.add(*selected_users_ids)
-
-    # Handle removing users
-    if request.method == "POST" and "remove_users" in request.POST:
-        selected_users_ids = request.POST.getlist("remove_user")
-        group.user_set.remove(*selected_users_ids)
+    if request.method == "POST":
+        if "add_users" in request.POST:
+            selected_usernames = request.POST.getlist("add_user")
+            selected_users = MuUser.objects.filter(username__in=selected_usernames)
+            group.user_set.add(*selected_users)
+        elif "remove_users" in request.POST:
+            selected_usernames = request.POST.getlist("remove_user")
+            selected_users = MuUser.objects.filter(username__in=selected_usernames)
+            group.user_set.remove(*selected_users)
 
     context = {
         "group": group,
         "all_users": all_users,
     }
     return render(request, "app_base/groups/groupdetail.html", context)
+
+
+from django.http import JsonResponse
+from ..models import MuUser
+
+
+def user_autocomplete(request):
+    query = request.GET.get("query", "")
+    users = MuUser.objects.filter(username__icontains=query).values("id", "username")
+    return JsonResponse(list(users), safe=False)
 
 
 @login_required

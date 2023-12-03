@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <div class="table-container">{% render_table table %}</div>
-        </div>
-        <div class="pagination is-centered" role="navigation">
+    <div class="column ">
+        {% render_table table %}
+        {% comment %} <div class="box">{% render_table table %}</div> {% endcomment %}
+        {% comment %} <div class="pagination is-centered" role="navigation">
             <ul class="pagination-list">
                 {% if page.has_previous %}
                     <li>
@@ -33,7 +32,7 @@
                     </li>
                 {% endif %}
             </ul>
-        </div>
+        </div> {% endcomment %}
     </div>
     {% comment %} <div class="container mt-4">
         <div class="table-container">{% render_table table %}</div>

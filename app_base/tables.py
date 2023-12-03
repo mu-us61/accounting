@@ -10,18 +10,27 @@
 import django_tables2 as tables
 from .models import Islemler
 
+# from .templatetags.templatehelpers import trim_decimal
+
 
 class IslemlerTable(tables.Table):
     tags = tables.Column(verbose_name="Harcama Kalemi")  # Create a custom column for the 'tags' field
     exelusers = tables.Column(verbose_name="Excel Kullanıcıları")
     islem_tarihi = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
     islem_ismi = tables.LinkColumn(
-        "transactiondetail_view_name",  # Replace with your actual view name for evrak details
+        "transactionpublicdetail_view_name",  # Replace with your actual view name for evrak details
         text=lambda record: record.islem_ismi,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
         attrs={"a": {"class": "name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
         verbose_name="Islem Ismi",
     )
+    # miktar = tables.Column(
+    #     verbose_name="Miktar",
+    #     accessor="miktar",
+    #     orderable=True,
+    #     empty_values=(),
+    #     attrs={"td": {"class": "your-class"}},
+    # )
 
     class Meta:
         model = Islemler
@@ -40,11 +49,14 @@ class IslemlerTable(tables.Table):
         # You can customize this based on your requirements
         return ", ".join(exeluser.name for exeluser in value.all())
 
+    # def render_miktar(self, value):
+    #     return trim_decimal(value)
+
 
 # //------------------------~~--------------------------------------------------------------------------
 # tables.py
 import django_tables2 as tables
-from .models import EvrakModel, EtkinlikModel
+from .models import EvrakModel, EtkinlikModel, ActiveObjectsManager
 
 # your_long_field = tables.TemplateColumn(template_code='{{ value|truncatechars:50 }}')
 
@@ -79,6 +91,42 @@ class EvrakTable(tables.Table):
         return ", ".join(tag.name for tag in value.all())
 
 
+class EvrakSilinenlerTable(tables.Table):
+    evrak_tags = tables.Column(verbose_name="Harcama Kalemi", empty_values=(), orderable=True)
+    evrak_date = tables.Column(verbose_name="Tarih")  # Customize the "evrak_date" column header
+    evrak_owner = tables.Column(verbose_name="Evrağı Yükleyen")  # Customize the "evrak_owner" column header
+    # evrak_name = tables.Column(verbose_name="Evrak İsmi")  # Customize the "evrak_name" column header
+    evrak_type = tables.Column(verbose_name="Tür")  # Customize the "evrak_type" column header
+    # evrak_description = tables.Column(verbose_name="Açıklama")  # Customize the "evrak_description" column header
+
+    # Create a clickable link for the evrak_name field
+    evrak_name = tables.LinkColumn(
+        "evrak_detail",  # Replace with your actual view name for evrak details
+        text=lambda record: record.evrak_name,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "evrak-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+        verbose_name="Evrak İsmi",
+        # attrs={'td': {'class': 'long-text'}}
+    )
+
+    class Meta:
+        model = EvrakModel
+        queryset = EvrakModel.objects.filter(is_active=False)
+        attrs = {"class": "table table-striped table-bordered"}
+        # template_name = "django_tables2/table.html"  # Use the default table template
+        per_page = 10  # Number of items to display per page
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        fields = ("evrak_date", "evrak_owner", "evrak_name", "evrak_type", "evrak_tags")
+
+    # def __init__(self, *args, **kwargs):
+    #     super(EvrakTable, self).__init__(*args, **kwargs)
+    #     # Filter the queryset to show only instances where is_active is False
+    #     self.queryset = EvrakModel.objects.filter(is_active=False)
+
+    def render_evrak_tags(self, value):
+        return ", ".join(tag.name for tag in value.all())
+
+
 # //------------------------~~--------------------------------------------------------------------------
 
 
@@ -96,6 +144,7 @@ class EtkinlikTable(tables.Table):
 
     class Meta:
         model = EtkinlikModel
+        per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
         template_name = "app_base/unsorted/django_tables_custom_bulma.html"
         fields = ("etkinlik_date", "etkinlik_owner", "etkinlik_name", "etkinlik_tags")
@@ -136,8 +185,9 @@ class UserBalanceTable(tables.Table):
 
     class Meta:
         model = MuUser
-        attrs = {"class": "table table-striped table-bordered"}
         fields = ["username"]
+        attrs = {"class": "table table-striped table-bordered is-narrow"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
 
 
 # //------------------------~~--------------------------------------------------------------------------

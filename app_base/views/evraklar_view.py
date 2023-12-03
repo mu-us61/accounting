@@ -21,7 +21,7 @@ class EvrakCreateView(CreateView):
 #     context_object_name = "evrak_list"
 from django_tables2 import SingleTableView
 from ..models import EvrakModel
-from ..tables import EvrakTable
+from ..tables import EvrakTable, EvrakSilinenlerTable
 
 
 class EvrakListView(SingleTableView):
@@ -34,6 +34,13 @@ class EvrakListView(SingleTableView):
     #     aa = self.get_table()
     #     print(dir(aa.page.paginator))  # Print the request object for debugging
     #     return super().get(request, *args, **kwargs)
+
+
+class EvrakSilinenlerListView(SingleTableView):
+    table_class = EvrakSilinenlerTable
+    model = EvrakModel
+    template_name = "app_base/evraklar/evrak_silinenler_list.html"
+    context_table_name = "evrak_table"
 
 
 class EvrakUpdateView(UpdateView):

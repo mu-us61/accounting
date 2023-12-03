@@ -55,6 +55,36 @@ def home_view(request):
 #     return render(request, "app_base/unsorted/balance.html", context)
 
 
+# def balance_view(request):
+#     users = MuUser.objects.all()
+#     currencies = Currency.objects.all()
+
+#     # Create a list to store user balances for each currency
+#     user_balances = []
+
+#     for user in users:
+#         user_balance = {"username": user.username}
+#         for currency in currencies:
+#             user_balance[currency.name] = user.calculate_currency_balance(currency)
+#         user_balances.append(user_balance)
+
+#     per_page = 10
+#     paginator = Paginator(user_balances, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
+
+#     # Use the UserBalanceTable to render the table
+#     table = UserBalanceTable(user_balances, currencies=currencies)
+#     RequestConfig(request, paginate={"per_page": per_page}).configure(table)
+
+#     context = {
+#         "table": table,
+#         "page": page,
+#     }
+#     return render(request, "app_base/unsorted/balance.html", context)
+from decimal import Decimal
+
+
 def balance_view(request):
     users = MuUser.objects.all()
     currencies = Currency.objects.all()
@@ -65,7 +95,10 @@ def balance_view(request):
     for user in users:
         user_balance = {"username": user.username}
         for currency in currencies:
-            user_balance[currency.name] = user.calculate_currency_balance(currency)
+            balance = user.calculate_currency_balance(currency)
+            # Convert Decimal balance to a string without trailing zeroes
+            trimmed_balance = str(balance).rstrip("0").rstrip(".") if isinstance(balance, Decimal) else balance
+            user_balance[currency.name] = trimmed_balance
         user_balances.append(user_balance)
 
     per_page = 10

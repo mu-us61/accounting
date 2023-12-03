@@ -9,6 +9,70 @@
             </div>
         </div>
         <div class="columns m-auto">
+            <!-- Group Members Column -->
+            <div class="column">
+                <h2 class="subtitle">Grup Üyeleri</h2>
+                <ul>
+                    {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
+                </ul>
+            </div>
+            <!-- Add autocomplete input for adding users -->
+            <div class="column">
+                <h2 class="subtitle">Gruba Ekle</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="add_user" class="typeahead" placeholder="Kullanıcı ara...">
+                    <button type="submit" name="add_users" class="button is-primary">Ekle</button>
+                </form>
+            </div>
+            <!-- Remove autocomplete input for removing users -->
+            <div class="column">
+                <h2 class="subtitle">Gruptan Sil</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="remove_user" class="typeahead" placeholder="Kullanıcı ara...">
+                    <button type="submit" name="remove_users" class="button is-danger">Sil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Include typeahead.js scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize typeahead for adding and removing users
+        var users = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('username'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/user-autocomplete/?query=%QUERY',
+                wildcard: '%QUERY',
+                cache: false
+            }
+        });
+
+        $('.typeahead').typeahead({
+            minLength: 1,
+            highlight: true
+        }, {
+            name: 'users',
+            display: 'username',
+            source: users
+        });
+        });
+    </script>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% block content %}
+    <div class="column m-auto">
+        <div class="block">
+            <h1 class="title has-text-centered">{{ group.name }}</h1>
+            <div class="box">
+                <a href="{% url 'groupupdate_view_name' group.id %}" class="button is-link">Grubu Düzenle</a>
+                <a href="{% url 'groupdelete_view_name' group.id %}" class="button is-danger">Grubu Sil</a>
+            </div>
+        </div>
+        <div class="columns m-auto">
             <div class="column">
                 <h2 class="subtitle">Grup Uyeleri</h2>
                 <ul>
@@ -51,44 +115,4 @@
             </div>
         </div>
     </div>
-{% endblock content %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <h1>{{ group.name }} Detail</h1>
-    <h2>Group Members</h2>
-    <ul>
-        {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
-    </ul>
-    <h2>Add Users</h2>
-    <form method="post">
-        {% csrf_token %}
-        <h3>Select users to add:</h3>
-        <ul>
-            {% for user in all_users %}
-                <li>
-                    <label>
-                        <input type="checkbox" name="add_user" value="{{ user.id }}" {% if user in group.user_set.all %}checked{% endif %}>
-                        {{ user.username }}
-                    </label>
-                </li>
-            {% endfor %}
-        </ul>
-        <button type="submit" name="add_users">Add Users</button>
-    </form>
-    <h2>Remove Users</h2>
-    <form method="post">
-        {% csrf_token %}
-        <h3>Select users to remove:</h3>
-        <ul>
-            {% for user in group.user_set.all %}
-                <li>
-                    <label>
-                        <input type="checkbox" name="remove_user" value="{{ user.id }}">
-                        {{ user.username }}
-                    </label>
-                </li>
-            {% endfor %}
-        </ul>
-        <button type="submit" name="remove_users">Remove Users</button>
-    </form>
 {% endblock content %} {% endcomment %}

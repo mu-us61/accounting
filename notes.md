@@ -63,3 +63,19 @@ sorular
 exel den kullanicilar baska bir modeldemi tutulsun
 
 ii 
+
+
+pagination ===
+kullanicilar works
+kullnici gruplari works
+exelkullanicilari works
+bakiye table works , / bakiye tablosu kaymis , cok para biriminden kaynakli galiba
+harcama kalemi works
+para birimleri sadece liste cunku az para birimi var
+gecmis islemler tanblosu works
+Kişisel İşlemler Listesi , works
+----Etkinlik Listesi   , yoktu eklendi
+Evrak Listesi var
+
+
+Yeni İşlem Oluştur , uyari vermiyor mesela title ve yazi giriyorum gerisini istemiyor ama uyari yok , front endden currency secimi zorunlu yapilcak

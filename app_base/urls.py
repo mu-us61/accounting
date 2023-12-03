@@ -19,6 +19,7 @@ urlpatterns = [
     path("grouplist/", views.grouplist_view, name="grouplist_view_name"),
     path("groupcreate/", views.groupcreate_view, name="groupcreate_view_name"),
     path("groupdetail/<int:group_id>/", views.groupdetail_view, name="groupdetail_view_name"),
+    path("user-autocomplete/", views.user_autocomplete, name="user_autocomplete"),
     path("group/<int:group_id>/update/", views.groupupdate_view, name="groupupdate_view_name"),
     path("group/<int:group_id>/delete/", views.groupdelete_view, name="groupdelete_view_name"),
     # //------------------------~~--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ urlpatterns = [
     path("transactionlist/", views.TransactionListView.as_view(), name="transactionlist_view_name"),
     path("transaction/create/", views.TransactionCreateView.as_view(), name="transactioncreate_view_name"),
     path("transaction/<int:pk>/", views.TransactionDetailView.as_view(), name="transactiondetail_view_name"),
+    path("transaction/p/<int:pk>/", views.TransactionPuplicDetailView.as_view(), name="transactionpublicdetail_view_name"),
     path("transaction/<int:pk>/update/", views.TransactionUpdateView.as_view(), name="transactionupdate_view_name"),
     path("transaction/<int:pk>/delete/", views.TransactionDeleteView.as_view(), name="transactiondelete_view_name"),
     # path("transactions/table/", views.TransactionTable.as_view(), name="transaction_table_name"),
@@ -57,6 +59,7 @@ urlpatterns = [
     # //------------------------~~--------------------------------------------------------------------------
     path("evrak/create/", views.EvrakCreateView.as_view(), name="evrak_create"),
     path("evrak/list/", views.EvrakListView.as_view(), name="evrak_list"),
+    path("evrak/silinenlerlist/", views.EvrakSilinenlerListView.as_view(), name="evrak_silinenler_list"),
     path("evrak/update/<int:pk>/", views.EvrakUpdateView.as_view(), name="evrak_update"),
     path("evrak/delete/<int:pk>/", views.EvrakDeleteView.as_view(), name="evrak_delete"),
     path("evrak/detail/<int:pk>/", views.EvrakDetailView.as_view(), name="evrak_detail"),

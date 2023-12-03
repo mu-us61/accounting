@@ -69,6 +69,14 @@ class TransactionDetailView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"transaction": transaction})
 
 
+class TransactionPuplicDetailView(LoginRequiredMixin, View):
+    template_name = "app_base/transactions/transaction_public_detail.html"
+
+    def get(self, request, pk):
+        transaction = Islemler.objects.get(pk=pk)
+        return render(request, self.template_name, {"transaction": transaction})
+
+
 def is_owner_or_admin(user, transaction):
     return user == transaction.islemsahibi or user.is_staff
 
