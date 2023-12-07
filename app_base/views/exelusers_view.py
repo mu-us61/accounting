@@ -20,12 +20,22 @@ from django_tables2 import RequestConfig
 from ..models import ExelUsers
 from ..tables import ExelUsersTable
 
+
 def exelusers_list(request):
     queryset = ExelUsers.objects.all()
     table = ExelUsersTable(queryset)
     RequestConfig(request).configure(table)
 
-    return render(request, 'app_base/exelusers/exelusers_list.html', {'table': table})
+    return render(request, "app_base/exelusers/exelusers_list.html", {"table": table})
+
+
+def exelusers_listmasked(request):
+    queryset = ExelUsers.all_objects.get_deleted()
+    table = ExelUsersTable(queryset)
+    RequestConfig(request).configure(table)
+
+    return render(request, "app_base/exelusers/exelusers_listmasked.html", {"table": table})
+
 
 class ExelUsersUpdateView(UpdateView):
     model = ExelUsers

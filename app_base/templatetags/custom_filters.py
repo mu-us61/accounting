@@ -25,3 +25,14 @@ def query_transform(context, **kwargs):
     for k, v in kwargs.items():
         query[k] = v
     return query.urlencode()
+
+
+from decimal import Decimal
+
+
+@register.filter
+def remove_trailing_zeros(value):
+    # Check if the value is a float or Decimal
+    if isinstance(value, (float, Decimal)):
+        return str(value).rstrip("0").rstrip(".") if "." in str(value) else str(value)
+    return value

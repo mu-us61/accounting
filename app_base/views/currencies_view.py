@@ -15,6 +15,16 @@ class CurrencyListView(LoginRequiredMixin, ListView):
     context_object_name = "currencies"
 
 
+class CurrencyListMaskedView(LoginRequiredMixin, ListView):
+    model = Currency
+    template_name = "app_base/currencies/currencylistmasked.html"
+    context_object_name = "currencies"  #!TODO eklencek all_objects.get_deleted()
+
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
+
+
 class CurrencyCreateView(LoginRequiredMixin, CreateView):
     model = Currency
     form_class = CurrencyForm

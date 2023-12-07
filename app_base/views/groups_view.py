@@ -22,6 +22,17 @@ def grouplist_view(request):
 
 
 @login_required
+def grouplistmasked_view(request):
+    groups = MuGroup.all_objects.get_deleted()  # silinenler
+    per_page = 10  # You can adjust this as needed
+    paginator = Paginator(groups, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    return render(request, "app_base/groups/grouplistmasked.html", {"page": page})
+
+
+@login_required
 @user_passes_test(is_staff)
 def groupcreate_view(request):
     if request.method == "POST":
@@ -141,7 +152,7 @@ def groupdelete_view(request, group_id):
         group.delete()
         # Group deleted successfully
         # You can perform any additional actions here
-        return redirect("usergroups_view_name")  # Redirect to a group list view
+        return redirect("grouplist_view_name")  # Redirect to a group list view
 
     context = {
         "group": group,

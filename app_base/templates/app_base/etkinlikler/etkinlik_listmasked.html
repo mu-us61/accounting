@@ -3,7 +3,7 @@
 {% block content %}
     <div class="column is-half m-auto">
         <a class="button is-link" href="{% url "etkinlik_create" %}">Yeni Etkinlik Oluştur</a>
-        <a class="button is-link" href="{% url "etkinlik_listmasked" %}">Silinenler</a>
+        <a class="button is-link" href="{% url "etkinlik_list" %}">Listeye geri dön</a>
         <h1 class="has-text-centered has-text-weight-bold is-size-3">Etkinlik Listesi</h1>
         <div class="table-responsive">{% render_table etkinlik_table %}</div>
     </div>
@@ -11,8 +11,8 @@
 {% comment %} <!-- etkinlik_list.html -->
 <h1>Etkinlik List</h1>
 <ul>
-            {% for etkinlik in etkinlik_list %}
-                <li>
+                {% for etkinlik in etkinlik_list %}
+                    <li>
             <a href="{% url 'etkinlik_detail' etkinlik.pk %}">{{ etkinlik.etkinlik_name }}</a>
             <a href="{% url 'etkinlik_update' etkinlik.pk %}">Edit</a>
             <a href="{% url 'etkinlik_delete' etkinlik.pk %}">Delete</a>

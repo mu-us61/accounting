@@ -3,6 +3,7 @@
     <div class="column is-half m-auto">
         <div class="box">
             <a class="button is-primary" href="{% url 'groupcreate_view_name' %}">Yeni Grup oluştur</a>
+            <a class="button is-primary" href="{% url 'grouplistmasked_view_name' %}">Silinenler</a>
             <h1 class="title has-text-centered">Grup Listesi</h1>
             <ul class="menu-list">
                 {% for group in page %}

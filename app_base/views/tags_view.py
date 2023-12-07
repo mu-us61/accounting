@@ -25,6 +25,23 @@ def taglist_view(request):
 
 
 @login_required
+def taglistmasked_view(request):
+    tags = Tag.all_objects.get_deleted().order_by("name")
+
+    # Number of tags to display per page
+    per_page = 10  # You can adjust this as needed
+
+    paginator = Paginator(tags, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    context = {
+        "page": page,
+    }
+    return render(request, "app_base/tags/taglistmasked.html", context)
+
+
+@login_required
 def tagdetail_view(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     return render(request, "app_base/tags/tagdetail.html", {"tag": tag})
@@ -44,7 +61,7 @@ def tagcreate_view(request):
 
 @login_required
 def tagupdate_view(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
+    tag = get_object_or_404(Tag.all_objects, slug=slug)  #!TODO olmadi
     if request.method == "POST":
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():

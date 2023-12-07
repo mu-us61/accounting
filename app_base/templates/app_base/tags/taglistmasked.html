@@ -3,8 +3,8 @@
     <div class="column is-half m-auto">
         <div class="box">
             <a href="{% url 'tagcreate_view_name' %}" class="button is-primary">Yeni Harcama Kalemi Oluştur</a>
-            <a href="{% url 'taglistmasked_view_name' %}" class="button is-primary">Silinenler</a>
-            <h2 class="title has-text-centered">Harcama Kalemi Listesi</h2>
+            <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
+            <h2 class="title has-text-centered">Silinen Harcama Kalemi Listesi</h2>
             <ul class="menu-list">
                 {% for tag in page %}
                     <li>

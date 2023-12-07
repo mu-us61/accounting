@@ -86,7 +86,7 @@ class TransactionUpdateView(LoginRequiredMixin, View):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        self.transaction = get_object_or_404(Islemler, pk=kwargs["pk"])
+        self.transaction = get_object_or_404(Islemler.all_objects, pk=kwargs["pk"])  #!TODO burda sorun var
         # Apply the user_passes_test decorator here
         if not is_owner_or_admin(request.user, self.transaction):
             return redirect("permission_denied_page_name")
@@ -104,6 +104,10 @@ class TransactionUpdateView(LoginRequiredMixin, View):
             # Update balances here if needed
             return redirect("transactionlist_view_name")
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
+
+    # def get_queryset(self):
+    #     # Fetch both active and deleted objects using all_objects manager
+    #     return self.model.all_objects()
 
 
 # @method_decorator(login_required, name="dispatch")
@@ -135,3 +139,14 @@ class TransactionTableView(SingleTableMixin, FilterView):
 
     #     # Call the super class's get method to continue the view execution
     #     return super().get(request, *args, **kwargs)
+
+
+class TransactionTableMaskedView(SingleTableMixin, FilterView):
+    table_class = IslemlerTable
+    model = Islemler
+    template_name = "app_base/transactions/transaction_big_tablemasked.html"
+    filterset_class = IslemlerFilter
+
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()

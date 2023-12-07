@@ -42,6 +42,10 @@ class EvrakSilinenlerListView(SingleTableView):
     template_name = "app_base/evraklar/evrak_silinenler_list.html"
     context_table_name = "evrak_table"
 
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
+
 
 class EvrakUpdateView(UpdateView):
     model = EvrakModel

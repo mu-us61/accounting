@@ -2,16 +2,16 @@
 {% block content %}
     <div class="column is-half m-auto">
         <div class="box">
-            <a href="{% url 'tagcreate_view_name' %}" class="button is-primary">Yeni Harcama Kalemi Oluştur</a>
-            <a href="{% url 'taglistmasked_view_name' %}" class="button is-primary">Silinenler</a>
-            <h2 class="title has-text-centered">Harcama Kalemi Listesi</h2>
+            <a class="button is-primary" href="{% url 'groupcreate_view_name' %}">Yeni Grup oluştur</a>
+            <a class="button is-primary" href="{% url 'grouplist_view_name' %}">Grup Listesi</a>
+            <h1 class="title has-text-centered">Silinen Gruplar Listesi</h1>
             <ul class="menu-list">
-                {% for tag in page %}
+                {% for group in page %}
                     <li>
-                        <a href="{% url 'tagdetail_view_name' tag.slug %}">{{ tag.name }}</a>
+                        <a href="{% url 'groupdetail_view_name' group.id %}">{{ group.name }}</a>
                     </li>
                 {% empty %}
-                    <li>Harcama Kalemi Yok</li>
+                    <li>Kayıtlı grup yok.</li>
                 {% endfor %}
             </ul>
         </div>
@@ -46,21 +46,3 @@
         </div>
     </div>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <a href="{% url 'tag_create_name' %}" class="button is-primary">Yeni Etiket Oluştur</a>
-            <h2 class="title has-text-centered">Etiket Listesi</h2>
-            <ul class="menu-list">
-                {% for tag in tags %}
-                    <li>
-                        <a href="{% url 'tag_detail_name' tag.slug %}">{{ tag.name }}</a>
-                    </li>
-                {% empty %}
-                    <li>Etiket Yok</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-{% endblock content %} {% endcomment %}

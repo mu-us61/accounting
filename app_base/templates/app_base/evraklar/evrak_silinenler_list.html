@@ -3,6 +3,7 @@
 {% block content %}
     <div class="column is-half m-auto">
         <a class="button is-link" href="{% url "evrak_create" %}">Yeni Evrak Oluştur</a>
+        <a class="button is-link" href="{% url "evrak_list" %}">Listeye geri dön</a>
         <h1 class="has-text-centered has-text-weight-bold is-size-3">Silinen Evrak Listesi</h1>
         <div class="table-responsive">{% render_table evrak_table %}</div>
     </div>
@@ -10,8 +11,8 @@
 {% comment %} <!-- evrak_list.html -->
 <h1>Evrak List</h1>
 <ul>
-                                                                                                        {% for evrak in evrak_list %}
-                                                                                                            <li>
+                                                                                                                {% for evrak in evrak_list %}
+                                                                                                                    <li>
             <a href="{% url 'evrak_update' evrak.pk %}">{{ evrak.evrak_name }}</a>
             <a href="{% url 'evrak_delete' evrak.pk %}">Delete</a>
         </li>

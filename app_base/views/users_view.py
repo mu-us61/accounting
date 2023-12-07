@@ -24,6 +24,19 @@ def userlist_view(request):
     return render(request, "app_base/users/userlist.html", {"page": page})
 
 
+def userlistmasked_view(request):
+    users = MuUser.all_objects.get_deleted()
+
+    # Number of users to display per page
+    per_page = 10  # You can adjust this as needed
+
+    paginator = Paginator(users, per_page)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
+    return render(request, "app_base/users/userlistmasked.html", {"page": page})
+
+
 @login_required
 @user_passes_test(is_staff)
 def usercreate_view(request):
@@ -41,7 +54,7 @@ def usercreate_view(request):
 @login_required
 @user_passes_test(is_staff)
 def userupdate_view(request, pk):
-    user = get_object_or_404(MuUser, pk=pk)
+    user = get_object_or_404(MuUser.all_objects, pk=pk)
     if request.method == "POST":
         form = MuUserForm(request.POST, instance=user)
         if form.is_valid():
@@ -56,6 +69,7 @@ def userupdate_view(request, pk):
 @user_passes_test(is_staff)
 def userdelete_view(request, pk):
     user = get_object_or_404(MuUser, pk=pk)
+    # user = MuUser.all_objects.get(pk=pk)
     if request.method == "POST":
         user.delete()
         return redirect("userlist_view_name")

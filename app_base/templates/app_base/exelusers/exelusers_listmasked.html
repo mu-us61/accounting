@@ -3,15 +3,15 @@
 {% block content %}
     <div class="column is-half m-auto">
         <a class="button is-link" href="{% url "exelusers_create" %}">Yeni ExcelKullanıcı Oluştur</a>
-        <a class="button is-link" href="{% url "exelusers_listmasked" %}">ExcelKullanıcı Silinenler</a>
-        <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Listesi</h1>
+        <a class="button is-link" href="{% url "exelusers_list" %}">ExcelKullanıcı Listesi</a>
+        <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Silinenler Listesi</h1>
         <div class="table-responsive">{% render_table table %}</div>
     </div>
     {% comment %} <!-- exelusers_list.html -->
-                        <h1>Exel User List</h1>
-                        <ul>
-                            {% for exeluser in exelusers_list %}
-                                <li>
+                    <h1>Exel User List</h1>
+                    <ul>
+                        {% for exeluser in exelusers_list %}
+                            <li>
                 <a href="{% url 'exelusers_detail' exeluser.pk %}">{{ exeluser.name }} {{ exeluser.surname }}</a>
                 <a href="{% url 'exelusers_update' exeluser.pk %}">Edit</a>
                 <a href="{% url 'exelusers_delete' exeluser.pk %}">Delete</a>

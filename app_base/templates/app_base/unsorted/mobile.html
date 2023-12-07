@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-    <a href="{% url 'downloadmobile' 'mobile_files/vakif.apk' %}" download>Download APK</a>
-    ios link
+    <div class="column is-half m-auto">
+        <div class="box">
+            <h1 class="title has-text-centered">Mobile Uygulama İndir</h1>
+            <br>
+            <ul>
+                <li>
+                    <a href="{% url 'downloadmobile' 'mobile_files/vakif.apk' %}"download><span class="iconify" data-icon="devicon:android"></span> Android Uygulamasını İndir</a>
+                </li>
+                <br>
+                <li>
+                    <a><span class="iconify" data-icon="devicon:apple"></span> Link yok su an - IOS Uygulamasını İndir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 {% endblock content %}

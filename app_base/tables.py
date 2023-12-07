@@ -31,6 +31,8 @@ class IslemlerTable(tables.Table):
     #     empty_values=(),
     #     attrs={"td": {"class": "your-class"}},
     # )
+    # miktar = tables.TemplateColumn("{% load custom_filters %}{{ record.miktar|remove_trailing_zeros }}{{ record.currency.abbreviation }}")
+    miktar = tables.TemplateColumn('{% load custom_filters %}{{ record.miktar|remove_trailing_zeros }}<span style="white-space: nowrap;"> {{ record.currency.abbreviation }}</span>')
 
     class Meta:
         model = Islemler

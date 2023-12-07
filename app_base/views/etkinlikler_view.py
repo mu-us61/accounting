@@ -30,6 +30,17 @@ class EtkinlikListView(SingleTableView):
     context_table_name = "etkinlik_table"
 
 
+class EtkinlikListMaskedView(SingleTableView):
+    table_class = EtkinlikTable
+    model = EtkinlikModel
+    template_name = "app_base/etkinlikler/etkinlik_listmasked.html"
+    context_table_name = "etkinlik_table"
+
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
+
+
 class EtkinlikUpdateView(UpdateView):
     model = EtkinlikModel
     form_class = EtkinlikForm

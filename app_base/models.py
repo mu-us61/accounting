@@ -13,15 +13,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 # //------------------------~~--------------------------------------------------------------------------
-class BaseModelSoftDelete(models.Model):
-    is_active = models.BooleanField(_("active"), default=True)
+class AllObjectsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()
 
-    def delete(self, using=None, keep_parents=False):
-        self.is_active = False
-        self.save()
-
-    class Meta:
-        abstract = True
+    def get_deleted(self):
+        return self.get_queryset().filter(is_active=False)
 
 
 from django.contrib.auth.models import BaseUserManager
@@ -46,6 +43,19 @@ class ActiveObjectsManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(username, password, **extra_fields)
+
+
+class BaseModelSoftDelete(models.Model):
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()  # Active objects manager
+    all_objects = AllObjectsManager()  # Custom manager including soft-deleted items
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
+    class Meta:
+        abstract = True
 
 
 # class ActiveObjectsManager(models.Manager):
@@ -92,17 +102,18 @@ class Currency(BaseModelSoftDelete):
 # //------------------------~~--------------------------------------------------------------------------
 
 
-class MuGroup(Group):
+class MuGroup(Group, BaseModelSoftDelete):
     creation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
-    def delete(self, using=None, keep_parents=False):
-        self.is_active = False
-        self.save()
+    # def delete(self, using=None, keep_parents=False):
+    #     self.is_active = False
+    #     self.save()
 
-    class Meta:
-        verbose_name = _("MuGroup")
-        verbose_name_plural = _("MuGroups")
+    # class Meta:
+    #     verbose_name = _("MuGroup")
+    #     verbose_name_plural = _("MuGroups")
 
 
 # //------------------------~~--------------------------------------------------------------------------
