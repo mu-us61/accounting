@@ -47,6 +47,10 @@ class EtkinlikUpdateView(UpdateView):
     template_name = "app_base/etkinlikler/etkinlik_update.html"
     success_url = reverse_lazy("etkinlik_list")
 
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
+
 
 class EtkinlikDeleteView(DeleteView):
     model = EtkinlikModel

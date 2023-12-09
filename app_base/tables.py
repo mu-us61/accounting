@@ -175,21 +175,71 @@ class EtkinlikTable(tables.Table):
 
 import django_tables2 as tables
 from .models import MuUser, Currency
+from decimal import Decimal
+
+
+# class UserBalanceTable(tables.Table):
+#     username = tables.Column(verbose_name="Kullanıcılar")
+
+#     def __init__(self, *args, currencies, **kwargs):
+#         super(UserBalanceTable, self).__init__(*args, **kwargs)
+#         for currency in currencies:
+#             self.base_columns[currency.name] = tables.Column()
+
+#     class Meta:
+#         model = MuUser
+#         fields = ["username"]
+#         attrs = {"class": "table table-striped table-bordered is-narrow"}
+#         template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+
+
+# class UserBalanceTable(tables.Table):
+#     username = tables.Column(verbose_name="Username")
+
+#     # Define columns for each currency
+#     def __init__(self, *args, **kwargs):
+#         currencies = kwargs.pop("currencies", [])
+#         for currency in currencies:
+#             # self.base_columns[currency.abbreviation] = tables.Column(verbose_name=currency.name)
+#             self.base_columns[currency.abbreviation] = tables.Column(verbose_name=currency.name)
+#         super().__init__(*args, **kwargs)
+
+#     class Meta:
+#         per_page = 10  # Number of items to display per page
+#         attrs = {"class": "table table-striped table-bordered"}
+#         template_name = "app_base/unsorted/django_tables_custom_bulma_balance.html"
+import django_tables2 as tables
+
+
+# class UserBalanceTable(tables.Table):
+#     username = tables.Column(verbose_name="Username")
+
+#     # Define columns for each currency
+#     def __init__(self, *args, **kwargs):
+#         currencies = kwargs.pop("currencies", [])
+#         for currency in currencies:
+#             self.base_columns[currency.abbreviation] = tables.Column(verbose_name=f"{currency.name} ({currency.abbreviation})", accessor=f"{currency.abbreviation}.balance_with_abbreviation", attrs={"th": {"class": "balance-header"}})  # Combined accessor  # Add CSS class to header
+#         super().__init__(*args, **kwargs)
+
+#     class Meta:
+#         per_page = 10  # Number of items to display per page
+#         attrs = {"class": "table table-striped table-bordered"}
+#         template_name = "app_base/unsorted/django_tables_custom_bulma_balance.html"
 
 
 class UserBalanceTable(tables.Table):
-    username = tables.Column(verbose_name="Kullanıcılar")
+    username = tables.Column(verbose_name="Username")
 
-    def __init__(self, *args, currencies, **kwargs):
-        super(UserBalanceTable, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        currencies = kwargs.pop("currencies", [])
         for currency in currencies:
-            self.base_columns[currency.name] = tables.Column()
+            self.base_columns[currency.abbreviation] = tables.Column(verbose_name=f"{currency.name} ({currency.abbreviation})", accessor=currency.abbreviation, attrs={"th": {"class": "balance-header"}})  # Access the column directly without custom formatting
+        super().__init__(*args, **kwargs)
 
     class Meta:
-        model = MuUser
-        fields = ["username"]
-        attrs = {"class": "table table-striped table-bordered is-narrow"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+        per_page = 10
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma_balance.html"
 
 
 # //------------------------~~--------------------------------------------------------------------------

@@ -98,6 +98,10 @@ class Currency(BaseModelSoftDelete):
     def __str__(self):
         return self.name
 
+    @property
+    def balance_with_abbreviation(self):
+        return f"{self.calculate_balance()} {self.abbreviation}"
+
 
 # //------------------------~~--------------------------------------------------------------------------
 

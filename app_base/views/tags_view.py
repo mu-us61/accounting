@@ -59,9 +59,17 @@ def tagcreate_view(request):
     return render(request, "app_base/tags/tagform.html", {"form": form})
 
 
-@login_required
+from django.http import Http404
+
+
+# @login_required
 def tagupdate_view(request, slug):
-    tag = get_object_or_404(Tag.all_objects, slug=slug)  #!TODO olmadi
+    tag = get_object_or_404(Tag.all_objects, slug=slug, with_deleted=True)  #!TODO olmadi
+    # tag = Tag.all_objects.get(slug=slug)
+    # try:
+    #     tag = Tag.all_objects.get_deleted().get(slug=slug)
+    # except Tag.DoesNotExist:
+    #     raise Http404()
     if request.method == "POST":
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():

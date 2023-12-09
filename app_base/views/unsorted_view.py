@@ -85,36 +85,77 @@ def home_view(request):
 from decimal import Decimal
 
 
+# def balance_view(request):
+#     users = MuUser.objects.all()
+#     currencies = Currency.objects.all()
+
+#     # Create a list to store user balances for each currency
+#     user_balances = []
+
+#     for user in users:
+#         user_balance = {"username": user.username}
+#         for currency in currencies:
+#             balance = user.calculate_currency_balance(currency)
+#             # Convert Decimal balance to a string without trailing zeroes
+#             trimmed_balance = str(balance).rstrip("0").rstrip(".") if isinstance(balance, Decimal) else balance
+#             user_balance[currency.name] = trimmed_balance
+#         user_balances.append(user_balance)
+
+#     per_page = 10
+#     paginator = Paginator(user_balances, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
+
+#     # Use the UserBalanceTable to render the table
+#     table = UserBalanceTable(user_balances, currencies=currencies)
+#     RequestConfig(request, paginate={"per_page": per_page}).configure(table)
+
+#     context = {
+#         "table": table,
+#         "page": page,
+#     }
+#     return render(request, "app_base/unsorted/balance.html", context)
+from django.shortcuts import render
+from ..models import MuUser, Islemler, Currency
+import django_tables2 as tables
+
+
+# def balance_view(request):
+#     users = MuUser.objects.all()  # Fetch all users
+#     currencies = Currency.objects.all()  # Fetch all currencies
+
+#     table_data = []
+#     for user in users:
+#         user_data = {"username": user.username}
+#         for currency in currencies:
+#             balance = user.calculate_currency_balance(currency)  # Use the method in MuUser model
+#             user_data[currency.abbreviation] = balance  # Include currency abbreviation
+#         table_data.append(user_data)
+
+#     table = UserBalanceTable(table_data, currencies=currencies)
+#     tables.RequestConfig(request).configure(table)
+
+#     return render(request, "app_base/unsorted/balance.html", {"table": table})
+
+
 def balance_view(request):
-    users = MuUser.objects.all()
-    currencies = Currency.objects.all()
+    users = MuUser.objects.all()  # Fetch all users
+    currencies = Currency.objects.all()  # Fetch all currencies
 
-    # Create a list to store user balances for each currency
-    user_balances = []
-
+    table_data = []
     for user in users:
-        user_balance = {"username": user.username}
+        user_data = {"username": user.username}
         for currency in currencies:
-            balance = user.calculate_currency_balance(currency)
-            # Convert Decimal balance to a string without trailing zeroes
-            trimmed_balance = str(balance).rstrip("0").rstrip(".") if isinstance(balance, Decimal) else balance
-            user_balance[currency.name] = trimmed_balance
-        user_balances.append(user_balance)
+            balancemoney = user.calculate_currency_balance(currency)
+            balance_without_zeros = Decimal(str(balancemoney).rstrip("0").rstrip(".") if "." in str(balancemoney) else str(balancemoney))
+            balance = f"{balance_without_zeros} {currency.abbreviation}"
+            user_data[currency.abbreviation] = balance  # Include concatenated balance and abbreviation
+        table_data.append(user_data)
 
-    per_page = 10
-    paginator = Paginator(user_balances, per_page)
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+    table = UserBalanceTable(table_data, currencies=currencies)
+    tables.RequestConfig(request).configure(table)
 
-    # Use the UserBalanceTable to render the table
-    table = UserBalanceTable(user_balances, currencies=currencies)
-    RequestConfig(request, paginate={"per_page": per_page}).configure(table)
-
-    context = {
-        "table": table,
-        "page": page,
-    }
-    return render(request, "app_base/unsorted/balance.html", context)
+    return render(request, "app_base/unsorted/balance.html", {"table": table})
 
 
 # //------------------------~ MONTHLY SPENDINGS CHART ~--------------------------------------------------------------------------
