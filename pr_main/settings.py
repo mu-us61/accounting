@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_tables2",
     "import_export",
     "phonenumber_field",
+    "embed_video",
     # "django_flatpickr",
     # apps
     "app_base",

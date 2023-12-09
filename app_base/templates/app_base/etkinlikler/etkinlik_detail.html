@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load embed_video_tags %}
 {% block content %}
     <div class="column is-half m-auto">
         <div class="box">
@@ -41,6 +42,8 @@
                 </p>
             </div>
             <div class="block">
+                {% video etkinlik.etkinlik_youtubelink 'small' %}
+                {% comment %} query="&showinfo=0&controls=0&rel=0" {% endcomment %}
                 <p>
                     <strong>Link:</strong>
                     {% if etkinlik.etkinlik_youtubelink %}
@@ -65,13 +68,13 @@
 {% comment %} <!-- etkinlik_detail.html -->
 <h1>Etkinlik Detail</h1>
 <p>
-                <strong>Name:</strong> {{ etkinlik.etkinlik_name }}
+                                                                                                    <strong>Name:</strong> {{ etkinlik.etkinlik_name }}
 </p>
 <p>
-                <strong>Description:</strong> {{ etkinlik.etkinlik_description }}
+                                                                                                    <strong>Description:</strong> {{ etkinlik.etkinlik_description }}
 </p>
 <p>
-                <strong>YouTube Link:</strong> {{ etkinlik.etkinlik_youtubelink }}
+                                                                                                    <strong>YouTube Link:</strong> {{ etkinlik.etkinlik_youtubelink }}
 </p>
 <!-- Display other fields as needed -->
 <a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a> {% endcomment %}

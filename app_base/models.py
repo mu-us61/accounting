@@ -10,6 +10,7 @@ import random
 import string
 from datetime import datetime
 from phonenumber_field.modelfields import PhoneNumberField
+from embed_video.fields import EmbedVideoField
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -234,13 +235,18 @@ class EtkinlikModel(BaseModelSoftDelete):
     etkinlik_name = models.CharField(max_length=250)
     etkinlik_description = models.TextField()
     etkinlik_tags = models.ManyToManyField(Tag, blank=True)
-    etkinlik_youtubelink = models.CharField(max_length=200, blank=True, null=True)
+    etkinlik_youtubelink = EmbedVideoField(max_length=200, blank=True, null=True)
     etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
     is_active = models.BooleanField(_("active"), default=True)
     objects = ActiveObjectsManager()
 
     def __str__(self):
         return self.etkinlik_name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Check if it's a new object
+            self.is_active = True  # Set is_active to True for new objects
+        super().save(*args, **kwargs)
 
 
 class DummyModel(models.Model):
