@@ -94,7 +94,7 @@ from django.shortcuts import get_object_or_404
 
 
 def groupdetail_view(request, group_id):
-    group = get_object_or_404(MuGroup, pk=group_id)
+    group = get_object_or_404(MuGroup.all_objects, pk=group_id)
     all_users = MuUser.objects.all()  # Use the appropriate User model here
 
     if request.method == "POST":
@@ -126,7 +126,7 @@ def user_autocomplete(request):
 
 @login_required
 def groupupdate_view(request, group_id):
-    group = get_object_or_404(MuGroup, pk=group_id)
+    group = get_object_or_404(MuGroup.all_objects, pk=group_id)
 
     if request.method == "POST":
         group_name = request.POST.get("group_name")
@@ -145,7 +145,7 @@ def groupupdate_view(request, group_id):
 
 @login_required
 def groupdelete_view(request, group_id):
-    group = get_object_or_404(MuGroup, pk=group_id)
+    group = get_object_or_404(MuGroup.all_objects, pk=group_id)
 
     if request.method == "POST":
         # Confirm deletion

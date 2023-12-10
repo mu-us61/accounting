@@ -55,12 +55,14 @@
 - [ ] kayit edilirken kullanci adi olsun ad soyad olsun hepsi kucuk harfle kayit olsun
 - [ ] isim ve soysisim yerine sadece isim fieldinde olsun hepsi
 - [ ] adminler birbirlerinin sifrelerini felan silebiliyorlar
+- [ ] update yaparken vs olmazsa uyarisi ile goster
 
 
 
 sorular
 *********
 exel den kullanicilar baska bir modeldemi tutulsun
+kisisel islemler kismi silinsinmi, onun icin tablo var cunku
 
 ii 
 

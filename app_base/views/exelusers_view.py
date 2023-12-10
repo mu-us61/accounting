@@ -43,14 +43,23 @@ class ExelUsersUpdateView(UpdateView):
     template_name = "app_base/exelusers/exelusers_update.html"
     success_url = reverse_lazy("exelusers_list")
 
+    def get_queryset(self):
+        return ExelUsers.all_objects.all()
+
 
 class ExelUsersDeleteView(DeleteView):
     model = ExelUsers
     template_name = "app_base/exelusers/exelusers_delete.html"
     success_url = reverse_lazy("exelusers_list")
 
+    def get_queryset(self):
+        return ExelUsers.all_objects.all()
+
 
 class ExelUsersDetailView(DetailView):
     model = ExelUsers
     template_name = "app_base/exelusers/exelusers_detail.html"
     context_object_name = "exelusers"
+
+    def get_queryset(self):
+        return ExelUsers.all_objects.all()

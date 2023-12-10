@@ -53,7 +53,7 @@ class BaseModelSoftDelete(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         self.is_active = False
-        self.save()
+        self.save_fordelete()
 
     class Meta:
         abstract = True
@@ -103,6 +103,13 @@ class Currency(BaseModelSoftDelete):
     def balance_with_abbreviation(self):
         return f"{self.calculate_balance()} {self.abbreviation}"
 
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
 
 # //------------------------~~--------------------------------------------------------------------------
 
@@ -111,6 +118,13 @@ class MuGroup(Group, BaseModelSoftDelete):
     creation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(_("active"), default=True)
     objects = ActiveObjectsManager()
+
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     # def delete(self, using=None, keep_parents=False):
     #     self.is_active = False
@@ -144,6 +158,13 @@ class MuUser(AbstractUser, BaseModelSoftDelete):
 
         return received - sent
 
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
     # user = MuUser.objects.get(id=user_id)
     # currency = Currency.objects.get(id=currency_id)
     # balance = user.calculate_currency_balance(currency)  how to use
@@ -160,8 +181,12 @@ class Tag(BaseModelSoftDelete):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        self.slug = slugify(self.name)
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
 
@@ -177,6 +202,13 @@ class ExelUsers(BaseModelSoftDelete):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -200,6 +232,13 @@ class Islemler(BaseModelSoftDelete):
 
     def __str__(self):
         return self.islem_ismi
+
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -226,6 +265,13 @@ class EvrakModel(BaseModelSoftDelete):
     def __str__(self):
         return self.evrak_name
 
+    def save(self, *args, **kwargs):
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
 
 # //------------------------~~--------------------------------------------------------------------------
 class EtkinlikModel(BaseModelSoftDelete):
@@ -244,8 +290,10 @@ class EtkinlikModel(BaseModelSoftDelete):
         return self.etkinlik_name
 
     def save(self, *args, **kwargs):
-        if not self.pk:  # Check if it's a new object
-            self.is_active = True  # Set is_active to True for new objects
+        self.is_active = True
+        super().save(*args, **kwargs)
+
+    def save_fordelete(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
 

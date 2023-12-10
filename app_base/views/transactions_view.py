@@ -65,7 +65,7 @@ class TransactionDetailView(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_detail.html"
 
     def get(self, request, pk):
-        transaction = Islemler.objects.get(pk=pk, islemsahibi=request.user)
+        transaction = Islemler.all_objects.get(pk=pk, islemsahibi=request.user)
         return render(request, self.template_name, {"transaction": transaction})
 
 
@@ -73,7 +73,7 @@ class TransactionPuplicDetailView(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_public_detail.html"
 
     def get(self, request, pk):
-        transaction = Islemler.objects.get(pk=pk)
+        transaction = Islemler.all_objects.get(pk=pk)
         return render(request, self.template_name, {"transaction": transaction})
 
 
@@ -105,6 +105,9 @@ class TransactionUpdateView(LoginRequiredMixin, View):
             return redirect("transactionlist_view_name")
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
 
+    def get_queryset(self):
+        return self.model.all_objects.all()
+
     # def get_queryset(self):
     #     # Fetch both active and deleted objects using all_objects manager
     #     return self.model.all_objects()
@@ -113,11 +116,11 @@ class TransactionUpdateView(LoginRequiredMixin, View):
 # @method_decorator(login_required, name="dispatch")
 class TransactionDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        transaction = get_object_or_404(Islemler.all_objects, pk=pk, islemsahibi=request.user)
         return render(request, "app_base/transactions/transaction_delete.html", {"transaction": transaction})
 
     def post(self, request, pk):
-        transaction = get_object_or_404(Islemler, pk=pk, islemsahibi=request.user)
+        transaction = get_object_or_404(Islemler.all_objects, pk=pk, islemsahibi=request.user)
         transaction.delete()
         # Update balances here if needed
         return redirect("transactionlist_view_name")

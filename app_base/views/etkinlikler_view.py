@@ -4,6 +4,7 @@ from ..models import EtkinlikModel
 from ..forms import EtkinlikForm
 from django_tables2 import SingleTableView
 from ..tables import EtkinlikTable
+from ..filters import EtkinlikModelFilter
 
 
 class EtkinlikCreateView(CreateView):
@@ -22,19 +23,24 @@ class EtkinlikCreateView(CreateView):
 #     template_name = "app_base/etkinlikler/etkinlik_list.html"
 #     context_object_name = "etkinlik_list"
 
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
 
-class EtkinlikListView(SingleTableView):
+
+class EtkinlikListView(SingleTableMixin, FilterView):
     table_class = EtkinlikTable
     model = EtkinlikModel
     template_name = "app_base/etkinlikler/etkinlik_list.html"
     context_table_name = "etkinlik_table"
+    filterset_class = EtkinlikModelFilter
 
 
-class EtkinlikListMaskedView(SingleTableView):
+class EtkinlikListMaskedView(SingleTableMixin, FilterView):
     table_class = EtkinlikTable
     model = EtkinlikModel
     template_name = "app_base/etkinlikler/etkinlik_listmasked.html"
     context_table_name = "etkinlik_table"
+    filterset_class = EtkinlikModelFilter
 
     def get_queryset(self):
         # Fetch both active and deleted objects using all_objects manager
@@ -48,8 +54,7 @@ class EtkinlikUpdateView(UpdateView):
     success_url = reverse_lazy("etkinlik_list")
 
     def get_queryset(self):
-        # Fetch both active and deleted objects using all_objects manager
-        return self.model.all_objects.get_deleted()
+        return self.model.all_objects.all()
 
 
 class EtkinlikDeleteView(DeleteView):
@@ -57,8 +62,14 @@ class EtkinlikDeleteView(DeleteView):
     template_name = "app_base/etkinlikler/etkinlik_delete.html"
     success_url = reverse_lazy("etkinlik_list")
 
+    def get_queryset(self):
+        return self.model.all_objects.all()
+
 
 class EtkinlikDetailView(DetailView):
     model = EtkinlikModel
     template_name = "app_base/etkinlikler/etkinlik_detail.html"
     context_object_name = "etkinlik"
+
+    def get_queryset(self):
+        return self.model.all_objects.all()

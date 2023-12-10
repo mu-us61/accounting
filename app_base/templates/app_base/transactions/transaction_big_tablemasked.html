@@ -5,9 +5,10 @@
 <!-- Load widget tweaks -->
 {% block content %}
     <div class="container">
-        <div class="column is-half m-auto">
+        <div class="column is-half m-auto" x-data="{ mufiltre: false }">
             <a href="{% url 'transactiontable_view_name' %}" class="button is-link">Listeye Dön</a>
-            <div class="box">
+            <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
+            <div class="box"  x-bind:class="{ 'is-hidden': mufiltre }">
                 <!-- Filter Form -->
                 <form method="get">
                     <div class="field">
@@ -56,7 +57,7 @@
                 </form>
             </div>
         </div>
-        <h1 class="title has-text-centered">Bütün İşlem Tablosu</h1>
+        <h1 class="title has-text-centered">Silinen İşlem Tablosu</h1>
         <!-- Render the table with pagination and sorting -->
         {% render_table table %}
     </div>

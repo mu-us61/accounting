@@ -2,6 +2,8 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models import EvrakModel
 from ..forms import EvrakForm
+from django_filters.views import FilterView
+from ..filters import EvrakModelFilter
 
 
 class EvrakCreateView(CreateView):
@@ -19,16 +21,22 @@ class EvrakCreateView(CreateView):
 #     model = EvrakModel
 #     template_name = "app_base/evraklar/evrak_list.html"
 #     context_object_name = "evrak_list"
-from django_tables2 import SingleTableView
+from django_tables2 import SingleTableMixin
 from ..models import EvrakModel
 from ..tables import EvrakTable, EvrakSilinenlerTable
 
 
-class EvrakListView(SingleTableView):
+class EvrakListView(SingleTableMixin, FilterView):
     table_class = EvrakTable
     model = EvrakModel
     template_name = "app_base/evraklar/evrak_list.html"
-    context_table_name = "evrak_table"
+    filterset_class = EvrakModelFilter
+    # context_table_name = "evrak_table"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["filter"] = self.filterset_class(self.request.GET, queryset=self.get_queryset())
+    #     return context
 
     # def get(self, request, *args, **kwargs):
     #     aa = self.get_table()
@@ -36,11 +44,12 @@ class EvrakListView(SingleTableView):
     #     return super().get(request, *args, **kwargs)
 
 
-class EvrakSilinenlerListView(SingleTableView):
+class EvrakSilinenlerListView(SingleTableMixin, FilterView):
     table_class = EvrakSilinenlerTable
     model = EvrakModel
     template_name = "app_base/evraklar/evrak_silinenler_list.html"
-    context_table_name = "evrak_table"
+    filterset_class = EvrakModelFilter
+    # context_table_name = "evrak_table"
 
     def get_queryset(self):
         # Fetch both active and deleted objects using all_objects manager
@@ -53,11 +62,17 @@ class EvrakUpdateView(UpdateView):
     template_name = "app_base/evraklar/update_evrak.html"
     success_url = reverse_lazy("evrak_list")
 
+    def get_queryset(self):
+        return self.model.all_objects.all()
+
 
 class EvrakDeleteView(DeleteView):
     model = EvrakModel
     template_name = "app_base/evraklar/delete_evrak.html"
     success_url = reverse_lazy("evrak_list")
+
+    def get_queryset(self):
+        return self.model.all_objects.all()
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -77,3 +92,6 @@ class EvrakDetailView(DetailView):
     model = EvrakModel
     template_name = "app_base/evraklar/evrak_detail.html"
     context_object_name = "evrak"
+
+    def get_queryset(self):
+        return self.model.all_objects.all()

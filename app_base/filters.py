@@ -1,6 +1,6 @@
 # filters.py
 import django_filters
-from .models import Islemler, MuUser, Tag, Currency, ExelUsers
+from .models import Islemler, MuUser, Tag, Currency, ExelUsers, EvrakModel, EVRAK_TYPE_CHOICES, EtkinlikModel
 from django import forms
 
 # from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -121,3 +121,112 @@ class FilterProvenTags(django_filters.FilterSet):
         queryset=Tag.objects.all(),
         widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
     )
+
+
+# //------------------------~~--------------------------------------------------------------------------
+class EvrakModelFilter(django_filters.FilterSet):
+    evrak_last_updated = django_filters.DateFromToRangeFilter(
+        label="Son Degistirilme Tarihi",
+        # widget=django_filters.widgets.RangeWidget(attrs={"class": "custom-class"}),
+        widget=DateRangeWidget(
+            attrs={
+                "placeholder": "Select date range",
+                "class": "aaa",
+            },
+        ),
+    )
+
+    evrak_owner = django_filters.ModelChoiceFilter(
+        label="Girdiyi Olusturan",
+        queryset=MuUser.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    evrak_name = django_filters.CharFilter(
+        label="Evrak Ismi",
+        lookup_expr="icontains",
+        # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+        widget=forms.TextInput(attrs={"class": "custom-class"}),
+    )
+
+    evrak_tags = django_filters.ModelMultipleChoiceFilter(
+        label="Harcama Kalemleri",
+        queryset=Tag.objects.all(),
+        # widget=django_filters.widgets.FilteredSelectMultiple(attrs={"class": "custom-class"}),
+        widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+    )
+
+    evrak_type = django_filters.ChoiceFilter(
+        field_name="evrak_type",
+        label="Evrak Type",
+        choices=EVRAK_TYPE_CHOICES,
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    class Meta:
+        model = EvrakModel
+        fields = ["evrak_last_updated", "evrak_owner", "evrak_name", "evrak_tags", "evrak_type"]
+
+
+# //------------------------~~--------------------------------------------------------------------------
+
+
+class EtkinlikModelFilter(django_filters.FilterSet):
+    etkinlik_last_updated = django_filters.DateFromToRangeFilter(
+        label="Son Degistirilme Tarihi",
+        # widget=django_filters.widgets.RangeWidget(attrs={"class": "custom-class"}),
+        widget=DateRangeWidget(
+            attrs={
+                "placeholder": "Select date range",
+                "class": "aaa",
+            },
+        ),
+    )
+
+    etkinlik_owner = django_filters.ModelChoiceFilter(
+        label="Girdiyi Olusturan",
+        queryset=MuUser.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    etkinlik_name = django_filters.CharFilter(
+        label="Etkinlik Ismi",
+        lookup_expr="icontains",
+        # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+        widget=forms.TextInput(attrs={"class": "custom-class"}),
+    )
+
+    etkinlik_tags = django_filters.ModelMultipleChoiceFilter(
+        label="Harcama Kalemleri",
+        queryset=Tag.objects.all(),
+        # widget=django_filters.widgets.FilteredSelectMultiple(attrs={"class": "custom-class"}),
+        widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+    )
+
+    class Meta:
+        model = EtkinlikModel
+        fields = ["etkinlik_last_updated", "etkinlik_owner", "etkinlik_name", "etkinlik_tags"]
+
+
+# class EtkinlikModel(BaseModelSoftDelete):
+#     etkinlik_date = models.DateTimeField(auto_now_add=True)
+#     etkinlik_last_updated = models.DateTimeField(auto_now=True)  # Auto-updated on every save
+#     etkinlik_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
+#     etkinlik_name = models.CharField(max_length=250)
+#     etkinlik_description = models.TextField()
+#     etkinlik_tags = models.ManyToManyField(Tag, blank=True)
+#     etkinlik_youtubelink = EmbedVideoField(max_length=200, blank=True, null=True)
+#     etkinlik_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
+#     is_active = models.BooleanField(_("active"), default=True)
+#     objects = ActiveObjectsManager()
+
+#     def __str__(self):
+#         return self.etkinlik_name
+
+#     def save(self, *args, **kwargs):
+#         if not self.pk:  # Check if it's a new object
+#             self.is_active = True  # Set is_active to True for new objects
+#         super().save(*args, **kwargs)

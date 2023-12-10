@@ -68,7 +68,7 @@ def userupdate_view(request, pk):
 @login_required
 @user_passes_test(is_staff)
 def userdelete_view(request, pk):
-    user = get_object_or_404(MuUser, pk=pk)
+    user = get_object_or_404(MuUser.all_objects, pk=pk)
     # user = MuUser.all_objects.get(pk=pk)
     if request.method == "POST":
         user.delete()

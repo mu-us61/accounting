@@ -1,22 +1,114 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
-    <div class="column is-half m-auto">
+    <div class="column is-half m-auto" x-data="{ mufiltre: false }">
         <a class="button is-link" href="{% url "etkinlik_create" %}">Yeni Etkinlik Oluştur</a>
         <a class="button is-link" href="{% url "etkinlik_listmasked" %}">Silinenler</a>
+        <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
+        <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
+            <!-- Filter Form -->
+            <form method="get">
+                {% comment %} <div class="field">
+                    <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
+                    <div class="control">{{ filter.form.islem_tarihi|add_class:"input date-picker" }}</div>
+                </div> {% endcomment %}
+                <div class="field">
+                    <label class="label" for="{{ filter.form.etkinlik_last_updated.start.id_for_label }}">Son Degistirilme Tarihi</label>
+                    <div class="control">{{ filter.form.etkinlik_last_updated|add_class:"input date-picker" }}</div>
+                </div>
+                <div class="field">
+                    <label class="label" for="{{ filter.form.etkinlik_owner.id_for_label }}">Girdiyi Olusturan</label>
+                    <div class="control">{{ filter.form.etkinlik_owner|add_class:"select select22" }}</div>
+                </div>
+                <div class="field">
+                    <label class="label" for="{{ filter.form.etkinlik_name.id_for_label }}">Etkinlik Ismi</label>
+                    <div class="control">{{ filter.form.etkinlik_name|add_class:"input custom-class" }}</div>
+                </div>
+                <div class="field">
+                    <label class="label" for="{{ filter.form.etkinlik_tags.id_for_label }}">Harcama Kalemleri</label>
+                    <div class="control">{{ filter.form.etkinlik_tags|add_class:"select select22" }}</div>
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-primary">Filterele</button>
+                </div>
+            </form>
+        </div>
         <h1 class="has-text-centered has-text-weight-bold is-size-3">Etkinlik Listesi</h1>
         <div class="table-responsive">{% render_table etkinlik_table %}</div>
     </div>
+    <script>
+        // In your JavaScript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.select22').select2({
+                placeholder: "Seçiniz",
+                allowClear: true,
+                width: '100%',
+            });
+        });
+</script>
+<script>
+    // Initialize flatpickr with Turkish locale and date format
+    flatpickr(".date-picker", {
+        locale: {
+            firstDayOfWeek: 0, // Start with Monday
+            weekdays: {
+                shorthand: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
+                longhand: [
+                    "Pazartesi",
+                    "Salı",
+                    "Çarşamba",
+                    "Perşembe",
+                    "Cuma",
+                    "Cumartesi",
+                    "Pazar"
+                ]
+            },
+            months: {
+                shorthand: [
+                    "Oca",
+                    "Şub",
+                    "Mar",
+                    "Nis",
+                    "May",
+                    "Haz",
+                    "Tem",
+                    "Ağu",
+                    "Eyl",
+                    "Eki",
+                    "Kas",
+                    "Ara"
+                ],
+                longhand: [
+                    "Ocak",
+                    "Şubat",
+                    "Mart",
+                    "Nisan",
+                    "Mayıs",
+                    "Haziran",
+                    "Temmuz",
+                    "Ağustos",
+                    "Eylül",
+                    "Ekim",
+                    "Kasım",
+                    "Aralık"
+                ]
+            }
+        },
+        dateFormat: "d/m/Y", // Turkish date format (day/month/year)
+        // defaultDate: "today", // Set the default date to today
+    });
+</script>
 {% endblock content %}
 {% comment %} <!-- etkinlik_list.html -->
 <h1>Etkinlik List</h1>
 <ul>
-            {% for etkinlik in etkinlik_list %}
-                <li>
+                    {% for etkinlik in etkinlik_list %}
+                        <li>
             <a href="{% url 'etkinlik_detail' etkinlik.pk %}">{{ etkinlik.etkinlik_name }}</a>
             <a href="{% url 'etkinlik_update' etkinlik.pk %}">Edit</a>
             <a href="{% url 'etkinlik_delete' etkinlik.pk %}">Delete</a>
         </li>
     {% endfor %}
 </ul>
-<a href="{% url 'etkinlik_create' %}">Create Etkinlik</a> {% endcomment %}
+    <a href="{% url 'etkinlik_create' %}">Create Etkinlik</a> {% endcomment %}

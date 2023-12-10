@@ -5,9 +5,11 @@
 <!-- Load widget tweaks -->
 {% block content %}
     <div class="container">
-        <div class="column is-half m-auto">
+        <div class="column is-half m-auto" x-data="{ mufiltre: false }">
             <a href="{% url 'transactiontablemasked_view_name' %}" class="button is-link">Silinenler</a>
-            <div class="box">
+            <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
+            {% comment %} <button></button> {% endcomment %}
+            <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
                 <!-- Filter Form -->
                 <form method="get">
                     <div class="field">
@@ -24,11 +26,7 @@
                     </div>
                     <div class="field">
                         <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
-                        <div class="control">
-                            {{ filter.form.islem_tarihi|add_class:"input date-picker" }}
-                            {% comment %} <input type="text" placeholder="Baslangic" name="islem_tarihi_after" id="id_islem_tarihi_0" class="aaa input date-picker">
-                            <input type="text" placeholder="Bitis" name="islem_tarihi_before" id="id_islem_tarihi_1" class="aaa input date-picker"> {% endcomment %}
-                        </div>
+                        <div class="control">{{ filter.form.islem_tarihi|add_class:"input date-picker" }}</div>
                     </div>
                     <div class="field">
                         <label class="label" for="{{ filter.form.exelusers.id_for_label }}">Excel Kullanicilari</label>

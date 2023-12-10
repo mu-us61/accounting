@@ -43,7 +43,7 @@ def taglistmasked_view(request):
 
 @login_required
 def tagdetail_view(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
+    tag = get_object_or_404(Tag.all_objects, slug=slug)
     return render(request, "app_base/tags/tagdetail.html", {"tag": tag})
 
 
@@ -64,7 +64,7 @@ from django.http import Http404
 
 # @login_required
 def tagupdate_view(request, slug):
-    tag = get_object_or_404(Tag.all_objects, slug=slug, with_deleted=True)  #!TODO olmadi
+    tag = get_object_or_404(Tag.all_objects, slug=slug)  # TODO olmadi
     # tag = Tag.all_objects.get(slug=slug)
     # try:
     #     tag = Tag.all_objects.get_deleted().get(slug=slug)
@@ -82,7 +82,7 @@ def tagupdate_view(request, slug):
 
 @login_required
 def tagdelete_view(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
+    tag = get_object_or_404(Tag.all_objects, slug=slug)
     if request.method == "POST":
         tag.delete()
         return redirect("taglist_view_name")
