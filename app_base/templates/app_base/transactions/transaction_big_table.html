@@ -6,6 +6,7 @@
 {% block content %}
     <div class="container">
         <div class="column is-half m-auto" x-data="{ mufiltre: false }">
+            <a href="{% url 'transactioncreate_view_name' %}" class="button is-link">Yeni İslem</a>
             <a href="{% url 'transactiontablemasked_view_name' %}" class="button is-link">Silinenler</a>
             <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
             {% comment %} <button></button> {% endcomment %}
