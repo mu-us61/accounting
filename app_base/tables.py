@@ -8,7 +8,7 @@
 #         attrs = {"class": "table table-striped table-bordered"}
 #         per_page = 10  # Number of items to display per page
 import django_tables2 as tables
-from .models import Islemler, Tag
+from .models import Islemler, Tag, MuGroup
 
 # from .templatetags.templatehelpers import trim_decimal
 
@@ -298,19 +298,36 @@ class TagTable(tables.Table):
         fields = ["name"]
 
 
-# class ExelUsersTable(tables.Table):
-#     name = tables.LinkColumn(
-#         "exelusers_detail",
-#         verbose_name="Kullanici İsmi",
-#         text=lambda record: record.name,
-#         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
-#         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
-#     )
-#     phonenumber = tables.Column(verbose_name="Telefon")
+class GroupTable(tables.Table):
+    name = tables.LinkColumn(
+        "groupdetail_view_name",
+        verbose_name="Grup İsmi",
+        text=lambda record: record.name,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
 
-#     class Meta:
-#         model = Tag
-#         per_page = 10  # Number of items to display per page
-#         attrs = {"class": "table table-striped table-bordered"}
-#         template_name = "app_base/unsorted/django_tables_custom_bulma.html"
-#         fields = ["name", "phonenumber"]
+    class Meta:
+        model = MuGroup
+        per_page = 10  # Number of items to display per page
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        fields = ["name"]
+
+
+class MuUserTable(tables.Table):
+    username = tables.LinkColumn(
+        "userupdate_view_name",
+        verbose_name="Kullanici",
+        text=lambda record: record.username,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
+    first_name = tables.Column(verbose_name="Ad Soyad")
+
+    class Meta:
+        model = MuUser
+        per_page = 10  # Number of items to display per page
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        fields = ["username", "first_name"]

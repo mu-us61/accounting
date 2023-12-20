@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django_tables2 import RequestConfig
 from ..models import MuUser, Currency, DummyModel
 from ..tables import UserBalanceTable, TableProvenTags
-from ..filters import FilterProvenTags
+from ..filters import FilterProvenTags, BalanceFilter
 
 from django.db.models.functions import ExtractMonth
 
@@ -141,9 +141,14 @@ import django_tables2 as tables
 def balance_view(request):
     users = MuUser.objects.all()  # Fetch all users
     currencies = Currency.objects.all()  # Fetch all currencies
+    # Apply filtering if request contains filter data
+    balance_filter = BalanceFilter(request.GET, queryset=users)
+
+    # Fetch filtered users based on filter criteria
+    filtered_users = balance_filter.qs
 
     table_data = []
-    for user in users:
+    for user in filtered_users:
         user_data = {"username": user.username}
         for currency in currencies:
             balancemoney = user.calculate_currency_balance(currency)
@@ -155,7 +160,7 @@ def balance_view(request):
     table = UserBalanceTable(table_data, currencies=currencies)
     tables.RequestConfig(request).configure(table)
 
-    return render(request, "app_base/unsorted/balance.html", {"table": table})
+    return render(request, "app_base/unsorted/balance.html", {"table": table, "balance_filter": balance_filter})
 
 
 # //------------------------~ MONTHLY SPENDINGS CHART ~--------------------------------------------------------------------------

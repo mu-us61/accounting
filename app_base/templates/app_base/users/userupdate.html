@@ -22,6 +22,7 @@
                 <div class="field">
                     <div class="control">
                         <button class="button is-primary" type="submit">Onay</button>
+                        <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-danger" href="{% url 'userdelete_view_name' muser.pk %}">Sil</a>
                     </div>
                 </div>
             </form>

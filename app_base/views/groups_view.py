@@ -2,6 +2,12 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from ..models import MuGroup, MuUser
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
+from ..tables import GroupTable
+from ..filters import MuGroupFilter, MuGroupFilterMasked
+
+# from ..filters import
 
 # //------------------------~ GROUP ~--------------------------------------------------------------------------
 
@@ -10,26 +16,45 @@ def is_staff(user):
     return user.is_staff
 
 
-@login_required
-def grouplist_view(request):
-    groups = MuGroup.objects.all()
-    per_page = 10  # You can adjust this as needed
-    paginator = Paginator(groups, per_page)
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+# @login_required
+# def grouplist_view(request):
+#     groups = MuGroup.objects.all()
+#     per_page = 10  # You can adjust this as needed
+#     paginator = Paginator(groups, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
 
-    return render(request, "app_base/groups/grouplist.html", {"page": page})
+#     return render(request, "app_base/groups/grouplist.html", {"page": page})
 
 
-@login_required
-def grouplistmasked_view(request):
-    groups = MuGroup.all_objects.get_deleted()  # silinenler
-    per_page = 10  # You can adjust this as needed
-    paginator = Paginator(groups, per_page)
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+# @login_required
+# def grouplistmasked_view(request):
+#     groups = MuGroup.all_objects.get_deleted()  # silinenler
+#     per_page = 10  # You can adjust this as needed
+#     paginator = Paginator(groups, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
 
-    return render(request, "app_base/groups/grouplistmasked.html", {"page": page})
+
+#     return render(request, "app_base/groups/grouplistmasked.html", {"page": page})
+class GroupListView(SingleTableMixin, FilterView):
+    table_class = GroupTable
+    model = MuGroup
+    template_name = "app_base/groups/grouplist.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = MuGroupFilter
+
+
+class GroupListMaskedView(SingleTableMixin, FilterView):
+    table_class = GroupTable
+    model = MuGroup
+    template_name = "app_base/groups/grouplistmasked.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = MuGroupFilterMasked
+
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
 
 
 @login_required

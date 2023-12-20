@@ -1,7 +1,34 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
-    <div class="column ">
+    <div class="column" x-data="{ mufiltre: false }">
+        <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
+        <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
+            <!-- Filter Form -->
+            <form method="get">
+                {% comment %} <div class="field">
+                <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
+                <div class="control">{{ filter.form.islem_tarihi|add_class:"input date-picker" }}</div>
+                </div> {% endcomment %}
+                {% comment %} <div class="field">
+                <label class="label" for="{{ filter.form.etkinlik_last_updated.start.id_for_label }}">Son Degistirilme Tarihi</label>
+                <div class="control">{{ filter.form.etkinlik_last_updated|add_class:"input date-picker" }}</div>
+                </div> {% endcomment %}
+                <div class="field">
+                    <label class="label" for="{{ balance_filter.form.username.id_for_label }}">Kullanici</label>
+                    <div class="control">{{ balance_filter.form.username|add_class:"select select22" }}</div>
+                </div>
+                {% comment %}
+            <div class="field">
+                <label class="label" for="{{ filter.form.etkinlik_tags.id_for_label }}">Harcama Kalemleri</label>
+                <div class="control">{{ filter.form.etkinlik_tags|add_class:"select select22" }}</div>
+                </div> {% endcomment %}
+                <div class="control">
+                    <button type="submit" class="button is-primary">Filterele</button>
+                </div>
+            </form>
+        </div>
         {% render_table table %}
         {% comment %} <div class="box">{% render_table table %}</div> {% endcomment %}
         {% comment %} <div class="pagination is-centered" role="navigation">
@@ -66,4 +93,14 @@
             </ul>
         </div>
     </div> {% endcomment %}
+    <script>
+        // In your JavaScript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.select22').select2({
+                placeholder: "Seçiniz",
+                allowClear: true,
+                width: '100%',
+            });
+        });
+</script>
 {% endblock content %}

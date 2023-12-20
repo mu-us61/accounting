@@ -1,6 +1,6 @@
 # filters.py
 import django_filters
-from .models import Islemler, MuUser, Tag, Currency, ExelUsers, EvrakModel, EVRAK_TYPE_CHOICES, EtkinlikModel
+from .models import Islemler, MuUser, Tag, Currency, ExelUsers, EvrakModel, EVRAK_TYPE_CHOICES, EtkinlikModel, MuGroup
 from django import forms
 
 # from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -288,7 +288,7 @@ class ExelUsersFilter(django_filters.FilterSet):
     # )
 
     class Meta:
-        model = Tag
+        model = ExelUsers
         fields = ["name"]
 
 
@@ -308,5 +308,118 @@ class ExelUsersFilterMasked(django_filters.FilterSet):
     # )
 
     class Meta:
-        model = Tag
+        model = ExelUsers
         fields = ["name"]
+
+
+class MuGroupFilter(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=MuGroup.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = MuGroup
+        fields = ["name"]
+
+
+class MuGroupFilterMasked(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=MuGroup.all_objects.get_deleted(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = MuGroup
+        fields = ["name"]
+
+
+class MuUserFilter(django_filters.FilterSet):
+    username = django_filters.ModelChoiceFilter(
+        label="Kullanici",
+        queryset=MuUser.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    first_name = django_filters.CharFilter(
+        label="Ad Soyad",
+        lookup_expr="icontains",
+        # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+        widget=forms.TextInput(attrs={"class": "custom-class"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = MuUser
+        fields = ["username", "first_name"]
+
+
+class MuUserFilterMasked(django_filters.FilterSet):
+    username = django_filters.ModelChoiceFilter(
+        label="Kullanici",
+        queryset=MuUser.all_objects.get_deleted(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+    first_name = django_filters.CharFilter(
+        label="Ad Soyad",
+        lookup_expr="icontains",
+        # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+        widget=forms.TextInput(attrs={"class": "custom-class"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = MuUser
+        fields = ["username", "first_name"]
+
+
+class BalanceFilter(django_filters.FilterSet):
+    username = django_filters.ModelChoiceFilter(
+        label="Kullanici",
+        queryset=MuUser.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = MuUser
+        fields = ["username"]
