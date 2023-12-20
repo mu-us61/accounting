@@ -8,7 +8,7 @@
 #         attrs = {"class": "table table-striped table-bordered"}
 #         per_page = 10  # Number of items to display per page
 import django_tables2 as tables
-from .models import Islemler
+from .models import Islemler, Tag
 
 # from .templatetags.templatehelpers import trim_decimal
 
@@ -279,3 +279,38 @@ class ExelUsersTable(tables.Table):
         fields = ["name", "phonenumber"]
         attrs = {"class": "table table-striped table-bordered"}
         template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+
+
+class TagTable(tables.Table):
+    name = tables.LinkColumn(
+        "tagdetail_view_name",
+        verbose_name="Harcama Kalemi İsmi",
+        text=lambda record: record.name,
+        args=[tables.A("slug")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
+
+    class Meta:
+        model = Tag
+        per_page = 10  # Number of items to display per page
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        fields = ["name"]
+
+
+# class ExelUsersTable(tables.Table):
+#     name = tables.LinkColumn(
+#         "exelusers_detail",
+#         verbose_name="Kullanici İsmi",
+#         text=lambda record: record.name,
+#         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+#         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+#     )
+#     phonenumber = tables.Column(verbose_name="Telefon")
+
+#     class Meta:
+#         model = Tag
+#         per_page = 10  # Number of items to display per page
+#         attrs = {"class": "table table-striped table-bordered"}
+#         template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+#         fields = ["name", "phonenumber"]

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="column is-half m-auto">
+        <div class="box">
+            <a href="{% url 'tagcreate_view_name' %}" class="button is-primary">Yeni Harcama Kalemi Oluştur</a>
+            <a href="{% url 'taglistmasked_view_name' %}" class="button is-primary">Silinenler</a>
+            <h2 class="title has-text-centered">Harcama Kalemi Listesi</h2>
+            <ul class="menu-list">
+                {% for tag in page %}
+                    <li>
+                        <a href="{% url 'tagdetail_view_name' tag.slug %}">{{ tag.name }}</a>
+                    </li>
+                {% empty %}
+                    <li>Harcama Kalemi Yok</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="pagination is-centered" role="navigation">
+            <ul class="pagination-list">
+                {% if page.has_previous %}
+                    <li>
+                        <a class="pagination-link" href="?page=1">«</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                <li>
+                    <span class="pagination-link is-current">{{ page.number }}</span>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">…</span>
+                </li>
+                {% if page.has_next %}
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.next_page_number }}">next</a>
+                    </li>
+                    <li>
+                        <a class="pagination-link" href="?page={{ page.paginator.num_pages }}">»</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

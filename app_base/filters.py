@@ -230,3 +230,83 @@ class EtkinlikModelFilter(django_filters.FilterSet):
 #         if not self.pk:  # Check if it's a new object
 #             self.is_active = True  # Set is_active to True for new objects
 #         super().save(*args, **kwargs)
+
+
+class TagFilter(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=Tag.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = Tag
+        fields = ["name"]
+
+
+class TagFilterMasked(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=Tag.all_objects.get_deleted(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = Tag
+        fields = ["name"]
+
+
+class ExelUsersFilter(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=ExelUsers.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = Tag
+        fields = ["name"]
+
+
+class ExelUsersFilterMasked(django_filters.FilterSet):
+    name = django_filters.ModelChoiceFilter(
+        label="Isim",
+        queryset=ExelUsers.all_objects.get_deleted(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    # etkinlik_name = django_filters.CharFilter(
+    #     label="Etkinlik Ismi",
+    #     lookup_expr="icontains",
+    #     # widget=django_filters.widgets.TextInput(attrs={"class": "custom-class"}),
+    #     widget=forms.TextInput(attrs={"class": "custom-class"}),
+    # )
+
+    class Meta:
+        model = Tag
+        fields = ["name"]

@@ -4,41 +4,64 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from ..forms import TagForm
 from ..models import Tag
-
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
+from ..tables import TagTable
+from ..filters import TagFilter, TagFilterMasked
 
 # //------------------------~~--------------------------------------------------------------------------
-@login_required
-def taglist_view(request):
-    tags = Tag.objects.all().order_by("name")
+# @login_required
+# def taglist_view(request):
+#     tags = Tag.objects.all().order_by("name")
 
-    # Number of tags to display per page
-    per_page = 10  # You can adjust this as needed
+#     # Number of tags to display per page
+#     per_page = 10  # You can adjust this as needed
 
-    paginator = Paginator(tags, per_page)
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+#     paginator = Paginator(tags, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
 
-    context = {
-        "page": page,
-    }
-    return render(request, "app_base/tags/taglist.html", context)
+#     context = {
+#         "page": page,
+#     }
+#     return render(request, "app_base/tags/taglist.html", context)
 
 
-@login_required
-def taglistmasked_view(request):
-    tags = Tag.all_objects.get_deleted().order_by("name")
+class TagListView(SingleTableMixin, FilterView):
+    table_class = TagTable
+    model = Tag
+    template_name = "app_base/tags/taglist.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = TagFilter
 
-    # Number of tags to display per page
-    per_page = 10  # You can adjust this as needed
 
-    paginator = Paginator(tags, per_page)
-    page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+class TagListMaskedView(SingleTableMixin, FilterView):
+    table_class = TagTable
+    model = Tag
+    template_name = "app_base/tags/taglistmasked.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = TagFilterMasked
 
-    context = {
-        "page": page,
-    }
-    return render(request, "app_base/tags/taglistmasked.html", context)
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
+
+
+# @login_required
+# def taglistmasked_view(request):
+#     tags = Tag.all_objects.get_deleted().order_by("name")
+
+#     # Number of tags to display per page
+#     per_page = 10  # You can adjust this as needed
+
+#     paginator = Paginator(tags, per_page)
+#     page_number = request.GET.get("page")
+#     page = paginator.get_page(page_number)
+
+#     context = {
+#         "page": page,
+#     }
+#     return render(request, "app_base/tags/taglistmasked.html", context)
 
 
 @login_required

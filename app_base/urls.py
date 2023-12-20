@@ -43,8 +43,9 @@ urlpatterns = [
     path("transactions/bigtable/", views.TransactionTableView.as_view(), name="transactiontable_view_name"),
     path("transactions/bigtablemasked/", views.TransactionTableMaskedView.as_view(), name="transactiontablemasked_view_name"),
     # //-------------------------------------------------~~-------------------------------------------------
-    path("taglist/", views.taglist_view, name="taglist_view_name"),
-    path("taglistmasked/", views.taglistmasked_view, name="taglistmasked_view_name"),
+    # path("taglist/", views.taglist_view, name="taglist_view_name"),
+    path("taglist/", views.TagListView.as_view(), name="taglist_view_name"),
+    path("taglistmasked/", views.TagListMaskedView.as_view(), name="taglistmasked_view_name"),
     path("tag/create/", views.tagcreate_view, name="tagcreate_view_name"),
     path("tag/<slug:slug>/", views.tagdetail_view, name="tagdetail_view_name"),
     path("tag/<slug:slug>/update/", views.tagupdate_view, name="tagupdate_view_name"),
@@ -79,8 +80,8 @@ urlpatterns = [
     # //------------------------~~--------------------------------------------------------------------------
     path("exelusers/create/", views.ExelUsersCreateView.as_view(), name="exelusers_create"),
     # path("exelusers/list/", views.ExelUsersListView.as_view(), name="exelusers_list"),
-    path("exelusers/list/", views.exelusers_list, name="exelusers_list"),
-    path("exelusers/listmasked/", views.exelusers_listmasked, name="exelusers_listmasked"),
+    path("exelusers/list/", views.ExelusersListView.as_view(), name="exelusers_list"),
+    path("exelusers/listmasked/", views.ExelusersListMaskedView.as_view(), name="exelusers_listmasked"),
     path("exelusers/update/<int:pk>/", views.ExelUsersUpdateView.as_view(), name="exelusers_update"),
     path("exelusers/delete/<int:pk>/", views.ExelUsersDeleteView.as_view(), name="exelusers_delete"),
     path("exelusers/detail/<int:pk>/", views.ExelUsersDetailView.as_view(), name="exelusers_detail"),

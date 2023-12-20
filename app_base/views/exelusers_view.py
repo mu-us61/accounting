@@ -3,6 +3,8 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 from ..models import ExelUsers
 from ..forms import ExelUsersForm
 from django.shortcuts import render
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
 
 
 class ExelUsersCreateView(CreateView):
@@ -19,22 +21,43 @@ class ExelUsersCreateView(CreateView):
 from django_tables2 import RequestConfig
 from ..models import ExelUsers
 from ..tables import ExelUsersTable
+from ..filters import ExelUsersFilter, ExelUsersFilterMasked
 
 
-def exelusers_list(request):
-    queryset = ExelUsers.objects.all()
-    table = ExelUsersTable(queryset)
-    RequestConfig(request).configure(table)
+# def exelusers_list(request):
+#     queryset = ExelUsers.objects.all()
+#     table = ExelUsersTable(queryset)
+#     RequestConfig(request).configure(table)
 
-    return render(request, "app_base/exelusers/exelusers_list.html", {"table": table})
+#     return render(request, "app_base/exelusers/exelusers_list.html", {"table": table})
 
 
-def exelusers_listmasked(request):
-    queryset = ExelUsers.all_objects.get_deleted()
-    table = ExelUsersTable(queryset)
-    RequestConfig(request).configure(table)
+# def exelusers_listmasked(request):
+#     queryset = ExelUsers.all_objects.get_deleted()
+#     table = ExelUsersTable(queryset)
+#     RequestConfig(request).configure(table)
 
-    return render(request, "app_base/exelusers/exelusers_listmasked.html", {"table": table})
+#     return render(request, "app_base/exelusers/exelusers_listmasked.html", {"table": table})
+
+
+class ExelusersListView(SingleTableMixin, FilterView):
+    table_class = ExelUsersTable
+    model = ExelUsers
+    template_name = "app_base/exelusers/exelusers_list.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = ExelUsersFilter
+
+
+class ExelusersListMaskedView(SingleTableMixin, FilterView):
+    table_class = ExelUsersTable
+    model = ExelUsers
+    template_name = "app_base/exelusers/exelusers_listmasked.html"
+    # context_table_name = "etkinlik_table"
+    filterset_class = ExelUsersFilterMasked
+
+    def get_queryset(self):
+        # Fetch both active and deleted objects using all_objects manager
+        return self.model.all_objects.get_deleted()
 
 
 class ExelUsersUpdateView(UpdateView):
