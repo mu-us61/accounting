@@ -104,7 +104,7 @@ class Currency(BaseModelSoftDelete):
         return f"{self.calculate_balance()} {self.abbreviation}"
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -120,7 +120,7 @@ class MuGroup(Group, BaseModelSoftDelete):
     objects = ActiveObjectsManager()
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -159,7 +159,7 @@ class MuUser(AbstractUser, BaseModelSoftDelete):
         return received - sent
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -182,7 +182,7 @@ class Tag(BaseModelSoftDelete):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -204,7 +204,7 @@ class ExelUsers(BaseModelSoftDelete):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -234,7 +234,7 @@ class Islemler(BaseModelSoftDelete):
         return self.islem_ismi
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -266,7 +266,7 @@ class EvrakModel(BaseModelSoftDelete):
         return self.evrak_name
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):
@@ -290,7 +290,7 @@ class EtkinlikModel(BaseModelSoftDelete):
         return self.etkinlik_name
 
     def save(self, *args, **kwargs):
-        self.is_active = True
+        # self.is_active = True
         super().save(*args, **kwargs)
 
     def save_fordelete(self, *args, **kwargs):

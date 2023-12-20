@@ -4,20 +4,32 @@ from .models import Currency, Islemler, MuUser, Tag
 from datetime import datetime
 
 
+# class CurrencyForm(forms.ModelForm):
+#     class Meta:
+#         model = Currency
+#         fields = ["name", "abbreviation"]
+from django import forms
+from .models import Currency
+
+
 class CurrencyForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = Currency
-        fields = ["name", "abbreviation"]
+        fields = ["name", "abbreviation", "is_active"]
 
 
 class MuUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+    # is_active = forms.CheckboxInput()
+    is_active = forms.BooleanField(label="Aktif", required=False)  # Use BooleanField for is_active
 
     class Meta:
         model = MuUser
         # fields = "__all__"
         # exclude = ["pk"]
-        fields = ["username", "password", "first_name"]  # Adjust fields as needed
+        fields = ["username", "password", "first_name", "is_active"]  # Adjust fields as needed
 
     def clean_username(self):
         return self.cleaned_data["username"].lower()
@@ -29,6 +41,7 @@ class MuUserForm(forms.ModelForm):
         user = super().save(commit=False)
         # Use set_password to hash the password
         user.set_password(self.cleaned_data["password"])
+        user.is_active = self.cleaned_data["is_active"]  # Assign is_active value
         if commit:
             user.save()
         return user
@@ -37,10 +50,16 @@ class MuUserForm(forms.ModelForm):
 # //-------------------------------------------------~~-------------------------------------------------
 
 
+# class TransactionForm(forms.ModelForm):
+#     class Meta:
+#         model = Islemler
+#         fields = ["kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf"]
 class TransactionForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = Islemler
-        fields = ["kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf"]
+        fields = ["kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf", "is_active"]
 
 
 class TransactionFilterForm(forms.Form):
@@ -107,10 +126,20 @@ class TransactionFilterForm(forms.Form):
 # //-------------------------------------------------~~-------------------------------------------------
 
 
+# class TagForm(forms.ModelForm):
+#     class Meta:
+#         model = Tag
+#         fields = ["name"]
+
+
+#     def clean_name(self):
+#         return self.cleaned_data["name"].lower()
 class TagForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = Tag
-        fields = ["name"]
+        fields = ["name", "is_active"]
 
     def clean_name(self):
         return self.cleaned_data["name"].lower()
@@ -122,11 +151,21 @@ from django import forms
 from .models import EvrakModel
 
 
+# class EvrakForm(forms.ModelForm):
+#     class Meta:
+#         model = EvrakModel
+#         # fields = "__all__"
+#         exclude = ["evrak_owner"]
+from django import forms
+from .models import EvrakModel
+
+
 class EvrakForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = EvrakModel
-        # fields = "__all__"
-        exclude = ["evrak_owner"]
+        exclude = ["evrak_owner"]  # You can exclude fields if needed
 
     # widgets = {
     #     "evrak_name": forms.TextInput(attrs={"class": "input"}),
@@ -144,7 +183,17 @@ from django import forms
 from .models import EtkinlikModel
 
 
+# class EtkinlikForm(forms.ModelForm):
+#     class Meta:
+#         model = EtkinlikModel
+#         exclude = ["etkinlik_owner"]  # You can exclude fields if needed
+from django import forms
+from .models import EtkinlikModel
+
+
 class EtkinlikForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = EtkinlikModel
         exclude = ["etkinlik_owner"]  # You can exclude fields if needed
@@ -158,7 +207,17 @@ from phonenumber_field.formfields import PhoneNumberField
 from .models import ExelUsers
 
 
+# class ExelUsersForm(forms.ModelForm):
+#     class Meta:
+#         model = ExelUsers
+#         exclude = []
 class ExelUsersForm(forms.ModelForm):
+    is_active = forms.BooleanField(label="Is Active", required=False)
+
     class Meta:
         model = ExelUsers
         exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super(ExelUsersForm, self).__init__(*args, **kwargs)
+        self.fields["is_active"].initial = self.instance.is_active if self.instance else False

@@ -56,7 +56,7 @@ class TransactionCreateView(LoginRequiredMixin, View):
             transaction.save()
             form.save_m2m()
             # Update balances here if needed
-            return redirect("transactionlist_view_name")
+            return redirect("transactiontable_view_name")
         return render(request, self.template_name, {"form": form})
 
 
@@ -81,13 +81,39 @@ def is_owner_or_admin(user, transaction):
     return user == transaction.islemsahibi or user.is_staff
 
 
+# class TransactionUpdateView(LoginRequiredMixin, View):
+#     template_name = "app_base/transactions/transaction_update.html"
+
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         self.transaction = get_object_or_404(Islemler.all_objects, pk=kwargs["pk"])  #!TODO burda sorun var
+#         # Apply the user_passes_test decorator here
+#         if not is_owner_or_admin(request.user, self.transaction):
+#             return redirect("permission_denied_page_name")
+#         return super().dispatch(request, *args, **kwargs)
+
+#     def get(self, request, *args, **kwargs):
+#         form = TransactionForm(instance=self.transaction)
+#         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
+
+#     def post(self, request, *args, **kwargs):
+#         # form = TransactionForm(request.POST, instance=self.transaction)
+#         form = TransactionForm(request.POST, request.FILES, instance=self.transaction)
+#         if form.is_valid():
+#             form.save()
+#             # Update balances here if needed
+#             return redirect("transactionlist_view_name")
+#         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
+
+
+#     def get_queryset(self):
+#         return self.model.all_objects.all()
 class TransactionUpdateView(LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_update.html"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        self.transaction = get_object_or_404(Islemler.all_objects, pk=kwargs["pk"])  #!TODO burda sorun var
-        # Apply the user_passes_test decorator here
+        self.transaction = get_object_or_404(Islemler.all_objects, pk=kwargs["pk"])
         if not is_owner_or_admin(request.user, self.transaction):
             return redirect("permission_denied_page_name")
         return super().dispatch(request, *args, **kwargs)
@@ -97,16 +123,11 @@ class TransactionUpdateView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
 
     def post(self, request, *args, **kwargs):
-        # form = TransactionForm(request.POST, instance=self.transaction)
         form = TransactionForm(request.POST, request.FILES, instance=self.transaction)
         if form.is_valid():
             form.save()
-            # Update balances here if needed
-            return redirect("transactionlist_view_name")
+            return redirect("transactiontable_view_name")
         return render(request, self.template_name, {"form": form, "transaction": self.transaction})
-
-    def get_queryset(self):
-        return self.model.all_objects.all()
 
     # def get_queryset(self):
     #     # Fetch both active and deleted objects using all_objects manager

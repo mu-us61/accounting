@@ -32,6 +32,21 @@ class CurrencyCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("currencylist_view_name")
 
 
+# class CurrencyUpdateView(LoginRequiredMixin, UpdateView):
+#     model = Currency
+#     form_class = CurrencyForm
+#     template_name = "app_base/currencies/currencyform.html"
+#     success_url = reverse_lazy("currencylist_view_name")
+
+#     def get_queryset(self):
+#         return self.model.all_objects.all()
+from django.views.generic import UpdateView
+from ..models import Currency
+from ..forms import CurrencyForm
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 class CurrencyUpdateView(LoginRequiredMixin, UpdateView):
     model = Currency
     form_class = CurrencyForm

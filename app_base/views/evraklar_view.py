@@ -56,6 +56,20 @@ class EvrakSilinenlerListView(SingleTableMixin, FilterView):
         return self.model.all_objects.get_deleted()
 
 
+# class EvrakUpdateView(UpdateView):
+#     model = EvrakModel
+#     form_class = EvrakForm
+#     template_name = "app_base/evraklar/update_evrak.html"
+#     success_url = reverse_lazy("evrak_list")
+
+#     def get_queryset(self):
+#         return self.model.all_objects.all()
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
+from ..models import EvrakModel
+from ..forms import EvrakForm
+
+
 class EvrakUpdateView(UpdateView):
     model = EvrakModel
     form_class = EvrakForm

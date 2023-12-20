@@ -69,6 +69,10 @@
                     <label class="label">İşlem PDF</label>
                     <div class="control">{% render_field form.islemler_pdf %}</div>
                 </div>
+                <div class="field">
+                    <label class="label">Aktif</label>
+                    <div class="control">{% render_field form.is_active class="checkbox" %}</div>
+                </div>
                 <div class="field is-grouped">
                     <div class="control">
                         <button type="submit" class="button is-primary">Güncelle</button>

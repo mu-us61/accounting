@@ -60,6 +60,21 @@ class ExelusersListMaskedView(SingleTableMixin, FilterView):
         return self.model.all_objects.get_deleted()
 
 
+# class ExelUsersUpdateView(UpdateView):
+#     model = ExelUsers
+#     form_class = ExelUsersForm
+#     template_name = "app_base/exelusers/exelusers_update.html"
+#     success_url = reverse_lazy("exelusers_list")
+
+#     def get_queryset(self):
+#         return ExelUsers.all_objects.all()
+
+from django.views.generic import UpdateView
+from ..models import ExelUsers
+from ..forms import ExelUsersForm
+from django.urls import reverse_lazy
+
+
 class ExelUsersUpdateView(UpdateView):
     model = ExelUsers
     form_class = ExelUsersForm
@@ -68,6 +83,19 @@ class ExelUsersUpdateView(UpdateView):
 
     def get_queryset(self):
         return ExelUsers.all_objects.all()
+
+    def form_valid(self, form):
+        # Get the current instance being updated
+        exeluser_instance = form.instance
+
+        # Handling is_active field update
+        is_active = form.cleaned_data["is_active"]
+        exeluser_instance.is_active = is_active
+
+        # Save the changes
+        exeluser_instance.save()
+
+        return super().form_valid(form)
 
 
 class ExelUsersDeleteView(DeleteView):

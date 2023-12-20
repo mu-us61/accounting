@@ -86,13 +86,31 @@ from django.http import Http404
 
 
 # @login_required
+# def tagupdate_view(request, slug):
+#     tag = get_object_or_404(Tag.all_objects, slug=slug)  # TODO olmadi
+#     # tag = Tag.all_objects.get(slug=slug)
+#     # try:
+#     #     tag = Tag.all_objects.get_deleted().get(slug=slug)
+#     # except Tag.DoesNotExist:
+#     #     raise Http404()
+#     if request.method == "POST":
+#         form = TagForm(request.POST, instance=tag)
+#         if form.is_valid():
+#             tag = form.save()
+#             return redirect("tagdetail_view_name", slug=tag.slug)
+#     else:
+#         form = TagForm(instance=tag)
+#     return render(request, "app_base/tags/tagform.html", {"form": form, "tag": tag})
+
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404
+from ..models import Tag
+from ..forms import TagForm
+
+
 def tagupdate_view(request, slug):
-    tag = get_object_or_404(Tag.all_objects, slug=slug)  # TODO olmadi
-    # tag = Tag.all_objects.get(slug=slug)
-    # try:
-    #     tag = Tag.all_objects.get_deleted().get(slug=slug)
-    # except Tag.DoesNotExist:
-    #     raise Http404()
+    tag = get_object_or_404(Tag.all_objects, slug=slug)
+
     if request.method == "POST":
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
@@ -100,6 +118,7 @@ def tagupdate_view(request, slug):
             return redirect("tagdetail_view_name", slug=tag.slug)
     else:
         form = TagForm(instance=tag)
+
     return render(request, "app_base/tags/tagform.html", {"form": form, "tag": tag})
 
 

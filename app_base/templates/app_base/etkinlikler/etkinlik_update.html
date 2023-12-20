@@ -26,6 +26,10 @@
                     <div class="label">Etkinlik Tagi</div>
                     <div class="control">{{ form.etkinlik_tags | add_class:"select2" }}</div>
                 </div>
+                <div class="field">
+                    <label class="label">Aktif</label>
+                    <div class="control">{% render_field form.is_active class="checkbox" %}</div>
+                </div>
                 <div class="field is-grouped">
                     <div class="control">
                         <button type="submit" class="button is-primary">Düzenle</button>
@@ -51,11 +55,3 @@
         });
     </script>
 {% endblock content %}
-{% comment %} <!-- etkinlik_update.html -->
-<h1>Edit Etkinlik: {{ etkinlik.etkinlik_name }}</h1>
-<form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-    <button type="submit">Update</button>
-</form>
-<a href="{% url 'etkinlik_list' %}">Back to Etkinlik List</a> {% endcomment %}

@@ -63,6 +63,7 @@ sorular
 *********
 exel den kullanicilar baska bir modeldemi tutulsun
 kisisel islemler kismi silinsinmi, onun icin tablo var cunku
+formlarda olmayinca uyari ver eksik mesela telefon nosu
 
 ii 
 

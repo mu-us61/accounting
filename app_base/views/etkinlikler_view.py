@@ -47,6 +47,20 @@ class EtkinlikListMaskedView(SingleTableMixin, FilterView):
         return self.model.all_objects.get_deleted()
 
 
+# class EtkinlikUpdateView(UpdateView):
+#     model = EtkinlikModel
+#     form_class = EtkinlikForm
+#     template_name = "app_base/etkinlikler/etkinlik_update.html"
+#     success_url = reverse_lazy("etkinlik_list")
+
+#     def get_queryset(self):
+#         return self.model.all_objects.all()
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
+from ..models import EtkinlikModel
+from ..forms import EtkinlikForm
+
+
 class EtkinlikUpdateView(UpdateView):
     model = EtkinlikModel
     form_class = EtkinlikForm

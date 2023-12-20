@@ -149,14 +149,37 @@ def user_autocomplete(request):
     return JsonResponse(list(users), safe=False)
 
 
+# @login_required
+# def groupupdate_view(request, group_id):
+#     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
+
+#     if request.method == "POST":
+#         group_name = request.POST.get("group_name")
+#         if group_name:
+#             group.name = group_name
+#             group.save()
+#             # Group updated successfully
+#             # You can perform any additional actions here
+#             return redirect("grouplist_view_name")  # Redirect to a group list view
+
+#     context = {
+#         "group": group,
+#     }
+#     return render(request, "app_base/groups/groupupdate.html", context)
+from django.shortcuts import render, get_object_or_404, redirect
+from ..models import MuGroup
+
+
 @login_required
 def groupupdate_view(request, group_id):
     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
 
     if request.method == "POST":
         group_name = request.POST.get("group_name")
+        is_active = request.POST.get("is_active") == "on"  # Checkbox value handling
         if group_name:
             group.name = group_name
+            group.is_active = is_active  # Assign the is_active value
             group.save()
             # Group updated successfully
             # You can perform any additional actions here

@@ -5,7 +5,43 @@
         <div class="column is-half m-auto">
             <div class="box">
                 <h1 class="title has-text-centered">Para Birimi</h1>
-                {% comment %} <h1 class="title">{{ form.instance.pk|default:"Add" }} Para Birimi</h1> {% endcomment %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label class="label">İsmi</label>
+                        <div class="control">{% render_field form.name class="input" %}</div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Kısaltması</label>
+                        <div class="control">{% render_field form.abbreviation class="input" %}</div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Aktif</label>
+                        <div class="control">{% render_field form.is_active class="checkbox" %}</div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Kaydet</button>
+                        </div>
+                        <div class="control">
+                            <a href="{% url 'currencylist_view_name' %}" class="button is-link">İptal</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% comment %} {% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container">
+        <div class="column is-half m-auto">
+            <div class="box">
+                <h1 class="title has-text-centered">Para Birimi</h1>
+                
                 <form method="post">
                     {% csrf_token %}
                     <div class="field">
@@ -29,46 +65,4 @@
         </div>
     </div>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="container">
-        <section class="section">
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    <div class="box">
-                        <h1 class="title">{{ form.instance.pk|default:"Add" }} Currency</h1>
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="field">
-                                <label class="label">Name</label>
-                                <div class="control">{{ form.name }}</div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Abbreviation</label>
-                                <div class="control">{{ form.abbreviation }}</div>
-                            </div>
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <button type="submit" class="button is-primary">Save</button>
-                                </div>
-                                <div class="control">
-                                    <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-{% endblock content %} {% endcomment %}
-{% comment %} {% extends 'base.html' %}
-{% block content %}
-    <h1 class="title">{{ form.instance.pk|default:"Add" }} Currency</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="button is-primary">Save</button>
-        <a href="{% url 'currency_list' %}" class="button is-link">Cancel</a>
-    </form>
-{% endblock %} {% endcomment %}
+ {% endcomment %}
