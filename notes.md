@@ -82,3 +82,15 @@ Evrak Listesi var
 
 
 Yeni İşlem Oluştur , uyari vermiyor mesela title ve yazi giriyorum gerisini istemiyor ama uyari yok , front endden currency secimi zorunlu yapilcak
+
+
+
+//////
++ islemler tipi creationa eklenecek , 
++ detailse eklenecek , 
++ update ye eklenecek , 
++ tabloya eklenecek ,
++ filtreye eklenecek,
+
+/////
+ belgeli islemler sayfasi tamamlanacak

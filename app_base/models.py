@@ -212,12 +212,20 @@ class ExelUsers(BaseModelSoftDelete):
 
 
 # //------------------------~~--------------------------------------------------------------------------
+ISLEMLER_TYPE_CHOICES = [
+    ("gelen", "Gelen"),
+    ("giden", "Giden"),
+    ("vakifici", "Vakifici"),
+]
+
+
 class Islemler(BaseModelSoftDelete):
     islem_tarihi = models.DateTimeField(auto_now_add=True)
     # belge =
     islemsahibi = models.ForeignKey(MuUser, on_delete=models.PROTECT)
     kimden_geldi = models.ForeignKey(MuUser, related_name="gelen_paralar", on_delete=models.PROTECT, null=True, blank=True)
     kime_gitti = models.ForeignKey(MuUser, related_name="giden_paralar", on_delete=models.PROTECT, null=True, blank=True)
+    islemler_type = models.CharField(max_length=10, choices=ISLEMLER_TYPE_CHOICES, null=True, blank=True)
     exelusers = models.ManyToManyField(ExelUsers, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     islem_ismi = models.CharField(max_length=250)

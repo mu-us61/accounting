@@ -1,6 +1,6 @@
 # filters.py
 import django_filters
-from .models import Islemler, MuUser, Tag, Currency, ExelUsers, EvrakModel, EVRAK_TYPE_CHOICES, EtkinlikModel, MuGroup
+from .models import Islemler, MuUser, Tag, Currency, ExelUsers, EvrakModel, EVRAK_TYPE_CHOICES, EtkinlikModel, MuGroup, ISLEMLER_TYPE_CHOICES
 from django import forms
 
 # from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -67,10 +67,17 @@ class IslemlerFilter(django_filters.FilterSet):
         empty_label="Select an option",
         widget=forms.Select(attrs={"class": "select22"}),
     )
+    islemler_type = django_filters.ChoiceFilter(
+        field_name="islemler_type",
+        label="Islemler Type",
+        choices=ISLEMLER_TYPE_CHOICES,
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
 
     class Meta:
         model = Islemler
-        fields = ["miktar", "islem_tarihi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islemsahibi", "currency"]
+        fields = ["miktar", "islem_tarihi", "islemler_type", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islemsahibi", "currency"]
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -423,3 +430,32 @@ class BalanceFilter(django_filters.FilterSet):
     class Meta:
         model = MuUser
         fields = ["username"]
+
+
+class HarcamalarFilter(django_filters.FilterSet):
+    tags = django_filters.ModelMultipleChoiceFilter(
+        label="Tags",
+        queryset=Tag.objects.all(),
+        # widget=django_filters.widgets.FilteredSelectMultiple(attrs={"class": "custom-class"}),
+        widget=forms.SelectMultiple(attrs={"class": "select22", "multiple": "multiple"}),
+    )
+    YEAR_CHOICES = [(year, str(year)) for year in range(2023, 2036)]  # Define the range of years here
+
+    year = django_filters.ChoiceFilter(
+        field_name="islem_tarihi__year",
+        label="Year",
+        choices=YEAR_CHOICES,
+        empty_label="Select a year",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    currency = django_filters.ModelChoiceFilter(
+        label="Currency",
+        queryset=Currency.objects.all(),
+        empty_label="Select an option",
+        widget=forms.Select(attrs={"class": "select22"}),
+    )
+
+    class Meta:
+        model = Islemler
+        fields = ["tags", "year", "currency"]

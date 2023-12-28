@@ -315,67 +315,146 @@ from decimal import Decimal
 #     return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)
 
 
-def proventags_view(request):
-    table_data = []  # Create an empty list to store table data
+# def proventags_view(request):
+#     table_data = []  # Create an empty list to store table data
+#     currency_id = request.GET.get("currency")  # Get currency ID from request
 
-    if request.method == "GET":
-        all_tags = Islemler.objects.values_list("tags__name", flat=True).distinct()
-        # all_tags = Islemler.objects.unique_values('tags')
-        year = request.GET.get("year")
-        tags = request.GET.getlist("tags")
-        # filtered_data = Islemler.objects.filter(Q(year=year) & Q(tags__name__in=tags))
-        filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags))
-        # Your existing code to get year and tags...
-        # ... your existing code ...
+#     if request.method == "GET":
+#         all_tags = Islemler.objects.values_list("tags__name", flat=True).distinct()
+#         # all_tags = Islemler.objects.unique_values('tags')
+#         year = request.GET.get("year")
+#         tags = request.GET.getlist("tags")
+#         currency = Currency.objects.get(id=currency_id) if currency_id else None  # Get Currency object
+#         # filtered_data = Islemler.objects.filter(Q(year=year) & Q(tags__name__in=tags))
+#         filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags) & Q(islemler_type="giden") & Q(currency=currency) if currency else Q())
+#         # Your existing code to get year and tags...
+#         # ... your existing code ...
 
-        # Calculate the data
-        monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0})
+#         # Calculate the data
+#         monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0, "toplamgelen": 0, "toplamgiden": 0, "ispatlilar": 0})
 
-        for data in filtered_data:
-            month = data.islem_tarihi.month
-            monthly_data[month]["total"] += 1
-            if data.islemler_picture or data.islemler_pdf:
-                monthly_data[month]["with_documents"] += 1
+#         for data in filtered_data:
+#             month = data.islem_tarihi.month
+#             monthly_data[month]["total"] += 1
+#             if data.islemler_picture or data.islemler_pdf:
+#                 monthly_data[month]["with_documents"] += 1
 
-        for month_num in range(1, 13):
-            month_name = {
-                1: "Ocak",
-                2: "Şubat",
-                3: "Mart",
-                4: "Nisan",
-                5: "Mayıs",
-                6: "Haziran",
-                7: "Temmuz",
-                8: "Ağustos",
-                9: "Eylül",
-                10: "Ekim",
-                11: "Kasım",
-                12: "Aralık",
-            }[month_num]
-            total = monthly_data[month_num]["total"]
-            with_documents = monthly_data[month_num]["with_documents"]
-            percentage = int((Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0)
+#         for month_num in range(1, 13):
+#             month_name = {
+#                 1: "Ocak",
+#                 2: "Şubat",
+#                 3: "Mart",
+#                 4: "Nisan",
+#                 5: "Mayıs",
+#                 6: "Haziran",
+#                 7: "Temmuz",
+#                 8: "Ağustos",
+#                 9: "Eylül",
+#                 10: "Ekim",
+#                 11: "Kasım",
+#                 12: "Aralık",
+#             }[month_num]
+#             total = monthly_data[month_num]["total"]
+#             with_documents = monthly_data[month_num]["with_documents"]
+#             percentage = int((Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0)
+#             # toplamgelen =
+#             # toplamgiden
+#             # ispatlilar
 
-            table_data.append(
-                {
-                    "aylar": month_name,
-                    "toplam": total,
-                    "belgeli": with_documents,
-                    "yuzdesi": percentage,
-                }
-            )
+#             table_data.append(
+#                 {
+#                     "aylar": month_name,
+#                     "toplam": total,
+#                     "belgeli": with_documents,
+#                     "yuzdesi": percentage,
+#                     # "toplamgelen": toplamgelen,
+#                     # "toplamgiden": toplamgiden,
+#                     # "ispatlilar": ispatlilar,
+#                 }
+#             )
 
-    table = TableProvenTags(table_data)  # Create a table instance and pass data
+#     table = TableProvenTags(table_data)  # Create a table instance and pass data
 
-    context = {
-        "all_tags": all_tags,
-        "year": year,
-        "tags": tags,
-        "filtered_data": filtered_data,
-        "table": table,
-    }
+#     context = {
+#         "all_tags": all_tags,
+#         "year": year,
+#         "tags": tags,
+#         "filtered_data": filtered_data,
+#         "table": table,
+#     }
 
-    return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)
+#     return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)
+
+
+# from collections import defaultdict
+# from decimal import Decimal
+# from django.db.models import Sum, F
+
+# def proventags_view(request):
+#     table_data = []  # Create an empty list to store table data
+#     currency_id = request.GET.get("currency")  # Get currency ID from request
+
+#     if request.method == "GET":
+#         all_tags = Islemler.objects.values_list("tags__name", flat=True).distinct()
+#         year = request.GET.get("year")
+#         tags = request.GET.getlist("tags")
+#         currency = Currency.objects.get(id=currency_id) if currency_id else None  # Get Currency object
+
+#         filtered_data = Islemler.objects.filter(
+#             Q(islem_tarihi__year=year) &
+#             Q(tags__name__in=tags) &
+#             Q(islemler_type="giden" if currency else "gelen") &
+#             Q(currency=currency) if currency else Q()
+#         )
+
+#         monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0, "toplamgelen": Decimal(0), "toplamgiden": Decimal(0)})
+
+#         for data in filtered_data:
+#             month = data.islem_tarihi.month
+#             monthly_data[month]["total"] += 1
+#             if data.islemler_type == "gelen":
+#                 monthly_data[month]["toplamgelen"] += data.miktar
+#             elif data.islemler_type == "giden":
+#                 monthly_data[month]["toplamgiden"] += data.miktar
+#                 if data.islemler_picture or data.islemler_pdf:
+#                     monthly_data[month]["with_documents"] += 1
+
+#         for month_num in range(1, 13):
+#             total = monthly_data[month_num]["total"]
+#             with_documents = monthly_data[month_num]["with_documents"]
+#             toplamgelen = monthly_data[month_num]["toplamgelen"]
+#             toplamgiden = monthly_data[month_num]["toplamgiden"]
+
+#             # Calculate ispatlilar percentage
+#             ispatlilar = 0 if toplamgiden == 0 else (with_documents / total) * 100 if total > 0 else 0
+
+#             table_data.append(
+#                 {
+#                     "aylar": {
+#                         1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
+#                         7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık",
+#                     }[month_num],
+#                     "toplam": total,
+#                     "belgeli": with_documents,
+#                     "yuzdesi": int((Decimal(with_documents) / Decimal(total)) * 100) if total > 0 else 0,
+#                     "toplamgelen": toplamgelen,
+#                     "toplamgiden": toplamgiden,
+#                     "ispatlilar": ispatlilar,
+#                 }
+#             )
+
+#     table = TableProvenTags(table_data)  # Create a table instance and pass data
+
+#     context = {
+#         "all_tags": all_tags,
+#         "year": year,
+#         "tags": tags,
+#         "currency_id": currency_id,
+#         "filtered_data": filtered_data,
+#         "table": table,
+#     }
+
+#     return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)
 
 
 # //------------------------~ EXEL USERS ~--------------------------------------------------------------------------
@@ -467,3 +546,85 @@ def downloadmobile(request, file_path):
             return response
     else:
         return HttpResponse("File not found", status=404)
+
+
+# def
+
+from django.shortcuts import render
+import django_filters
+from ..models import Islemler
+from ..filters import HarcamalarFilter  # Import your defined filter
+
+
+def proventags_view(request):
+    filter = HarcamalarFilter(request.GET, queryset=Islemler.objects.all())
+    table_data = []
+    if request.method == "GET":
+        year = request.GET.get("year")
+        tag_ids = request.GET.getlist("tags")
+        currency_id = request.GET.get("currency")
+        # print(year, tag_ids, currency_id)
+        # filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags) & Q(islemler_type="giden") & Q(currency=currency))
+        filtered_data = Islemler.objects.all()
+
+        if year:
+            # Convert year to integer if not None
+            year = int(year)
+            # Filter by year
+            filtered_data = filtered_data.filter(islem_tarihi__year=year)
+            # print(f"Filtered by year {year}: {filtered_data}")
+
+        if tag_ids:
+            # Filter by tag_ids (assuming tag_ids are primary keys)
+            filtered_data = filtered_data.filter(tags__id__in=tag_ids)
+            # print(f"Filtered by tag_ids {tag_ids}: {filtered_data}")
+
+        if currency_id:
+            # Filter by currency_id (assuming currency_id is the primary key)
+            filtered_data = filtered_data.filter(currency_id=currency_id)
+        # print("aaaaaaaaaaaaa")
+        # print(filtered_data)
+        monthly_data = defaultdict(lambda: {"total": 0, "with_documents": 0})
+
+        for data in filtered_data:
+            month = data.islem_tarihi.month
+            monthly_data[month]["total"] += 1
+            if data.islemler_picture or data.islemler_pdf:
+                monthly_data[month]["with_documents"] += 1
+
+        for month_num in range(1, 13):
+            month_name = {
+                1: "Ocak",
+                2: "Şubat",
+                3: "Mart",
+                4: "Nisan",
+                5: "Mayıs",
+                6: "Haziran",
+                7: "Temmuz",
+                8: "Ağustos",
+                9: "Eylül",
+                10: "Ekim",
+                11: "Kasım",
+                12: "Aralık",
+            }[month_num]
+            total = monthly_data[month_num]["total"]
+            with_documents = monthly_data[month_num]["with_documents"]
+            percentage = int((Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0)
+
+            table_data.append(
+                {
+                    "aylar": month_name,
+                    "toplam": total,
+                    "belgeli": with_documents,
+                    "yuzdesi": percentage,
+                }
+            )
+    table = TableProvenTags(table_data)  # Create a table instance and pass data
+
+    context = {
+        "filter": filter,
+        "filtered_data": filtered_data,
+        "table": table,
+    }
+
+    return render(request, template_name="app_base/unsorted/proven_tags.html", context=context)

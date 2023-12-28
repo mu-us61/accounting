@@ -59,7 +59,7 @@ class TransactionForm(forms.ModelForm):
 
     class Meta:
         model = Islemler
-        fields = ["kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf", "is_active"]
+        fields = ["kimden_geldi", "kime_gitti", "islemler_type", "exelusers", "tags", "islem_ismi", "islem_aciklamasi", "currency", "miktar", "islemler_picture", "islemler_pdf", "is_active"]
 
 
 class TransactionFilterForm(forms.Form):

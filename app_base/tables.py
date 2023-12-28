@@ -39,7 +39,7 @@ class IslemlerTable(tables.Table):
         attrs = {"class": "table table-striped table-bordered"}
         per_page = 10  # Number of items to display per page
         template_name = "app_base/transactions/transaction_big_table_pagination.html"
-        fields = ("islem_tarihi", "islemsahibi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "currency", "miktar", "islemler_picture", "islemler_pdf")
+        fields = ("islem_tarihi", "islemler_type", "islemsahibi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "currency", "miktar", "islemler_picture", "islemler_pdf")
 
     def render_tags(self, value):
         # Define how you want to display the ManyToMany field 'tags'
@@ -247,9 +247,12 @@ class UserBalanceTable(tables.Table):
 
 class TableProvenTags(tables.Table):
     aylar = tables.Column(verbose_name="Aylar")
-    toplam = tables.Column(verbose_name="Toplam")
+    toplam = tables.Column(verbose_name="Toplam İşlem Sayısı")
     belgeli = tables.Column(verbose_name="Belgeli Sayısı")
-    yuzdesi = tables.Column(verbose_name="Yüzdesi")
+    yuzdesi = tables.Column(verbose_name="Belegeli Yüzdesi")
+    toplamgelen = tables.Column(verbose_name="Toplam Gelen Para")
+    toplamgiden = tables.Column(verbose_name="Toplam Giden Para")
+    ispatlilar = tables.Column(verbose_name="İspatliların Yüzdesi")
 
     class Meta:
         attrs = {"class": "table table-striped table-bordered"}

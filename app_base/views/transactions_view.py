@@ -53,6 +53,7 @@ class TransactionCreateView(LoginRequiredMixin, View):
             # print(form)
             transaction = form.save(commit=False)
             transaction.islemsahibi = request.user
+            transaction.is_active = True
             transaction.save()
             form.save_m2m()
             # Update balances here if needed

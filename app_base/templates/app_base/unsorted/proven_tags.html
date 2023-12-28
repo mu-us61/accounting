@@ -1,103 +1,58 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <h1 class="has-text-centered has-text-weight-bold is-size-3">Filter Data</h1>
-            <form id="myForm" method="get">
+    {% comment %} <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit">Apply Filters</button>
+    </form>
+    {% if filter.qs %}
+        <h2>Filtered Results:</h2>
+        <ul>
+            {% for islemler in filter.qs %}
+                <li>
+                    <strong>Islem İsmi:</strong> {{ islemler.islem_ismi }}
+                    <br>
+                    <!-- Add other fields to display here -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %} {% endcomment %}
+    <div class="column is-half m-auto" x-data="{ mufiltre: false }">
+        <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
+        <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
+            <!-- Filter Form -->
+            <form method="get">
                 <div class="field">
-                    <label>Yıl</label>
-                    <div class="control">
-                        <div class="aaaa">
-                            <select id="choiceSelect" class="select2">
-                                <option>2023</option>
-                                <option>2024</option>
-                                <option>2025</option>
-                                <option>2026</option>
-                                <option>2027</option>
-                                <option>2028</option>
-                                <option>2029</option>
-                                <option>2029</option>
-                                <option>2030</option>
-                                <option>2031</option>
-                                <option>2032</option>
-                                <option>2033</option>
-                            </select>
-                        </div>
-                    </div>
+                    <label class="label" for="{{ filter.form.year.id_for_label }}">Yil</label>
+                    <div class="control">{{ filter.form.year|add_class:"select select22" }}</div>
                 </div>
                 <div class="field">
-                    <label>Harcama Kalemi</label>
-                    <div class="control">
-                        <div class="aaaa">
-                            <select id="select_tags" class="select2" multiple="multiple">
-                                {% for tag in all_tags %}<option>{{ tag }}</option>{% endfor %}
-                            </select>
-                        </div>
-                    </div>
+                    <label class="label" for="{{ filter.form.tags.id_for_label }}">Harcama Kalemleri</label>
+                    <div class="control">{{ filter.form.tags|add_class:"select select22" }}</div>
                 </div>
-                <input class="button is-primary" type="submit" value="Apply Filter">
+                <div class="field">
+                    <label class="label" for="{{ filter.form.currency.id_for_label }}">Para Birimi</label>
+                    <div class="control">{{ filter.form.currency|add_class:"select select22" }}</div>
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-primary">Filterele</button>
+                </div>
             </form>
         </div>
-        {% comment %} <p>{{ year }} yili ve {{ tags }}icin tablo</p> {% endcomment %}
-        <p>
-            {{ year }} yili ve
-            {% for tag in tags %}{{ tag }}{% endfor %}
-            taglari icin tablo:
-        </p>
+        {% comment %} <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Listesi</h1> {% endcomment %}
         <div class="table-responsive">{% render_table table %}</div>
     </div>
     <script>
         // In your JavaScript (external .js resource or <script> tag)
         $(document).ready(function() {
-            $('.select2').select2({
-                //placeholder: "Seçiniz",
-                //allowClear: true,
-               width: "200px",
+            $('.select22').select2({
+                placeholder: "Seçiniz",
+                allowClear: true,
+                width: '100%',
             });
-            
         });
 </script>
-<script>
-    const form = document.getElementById('myForm');
-    const select = document.getElementById('choiceSelect');
-    const selectTags = document.getElementById('select_tags');
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const selectedValue = select.value;
-        const selectedTags = Array.from(selectTags.selectedOptions).map(option => option.value);
-        
-        // Construct the query string for tags
-        const tagsQueryString = selectedTags.length > 0 ? `&tags=${selectedTags.join(',')}` : '';
-
-        // Redirect with the selected year and tags in the query string
-        window.location.href = `?year=${selectedValue}${tagsQueryString}`;
-    });
-</script>
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% load render_table from django_tables2 %}
-{% block content %}
-    <div class="container">
-        <h1>Proven Tags Table</h1>
-        <form method="get">
-            {{ filter.form.year.label_tag }} {{ filter.form.year }}
-            {{ filter.form.tags.label_tag }} {{ filter.form.tags }}
-            <button type="submit">Filter</button>
-        </form>
-        <div class="table-responsive">{% render_table table %}</div>
-    </div>
-{% endblock %}
-{% extends "base.html" %}
-{% block content %}
-    <div class="container">
-        <h1>Proven Tags Table</h1>
-        <form method="get">
-            {{ filter.form.year.label_tag }} {{ filter.form.year }}
-            {{ filter.form.tags.label_tag }} {{ filter.form.tags }}
-            <button type="submit">Filter</button>
-        </form>
-        <div class="table-responsive">{% render_table table %}</div>
-    </div>
-{% endblock %} {% endcomment %}
