@@ -247,11 +247,11 @@ class UserBalanceTable(tables.Table):
 
 class TableProvenTags(tables.Table):
     aylar = tables.Column(verbose_name="Aylar")
-    toplam = tables.Column(verbose_name="Toplam İşlem Sayısı")
-    belgeli = tables.Column(verbose_name="Belgeli Sayısı")
-    yuzdesi = tables.Column(verbose_name="Belegeli Yüzdesi")
-    toplamgelen = tables.Column(verbose_name="Toplam Gelen Para")
-    toplamgiden = tables.Column(verbose_name="Toplam Giden Para")
+    toplam = tables.Column(verbose_name="Toplam İşlem Sayısı (Giden)")
+    belgeli = tables.Column(verbose_name="Belgeli Sayısı (Giden)")
+    yuzdesi = tables.Column(verbose_name="Belegeli Yüzdesi (Giden)")
+    toplam_gelen = tables.Column(verbose_name="Toplam Gelen Para")
+    toplam_giden = tables.Column(verbose_name="Toplam Giden Para")
     ispatlilar = tables.Column(verbose_name="İspatliların Yüzdesi")
 
     class Meta:

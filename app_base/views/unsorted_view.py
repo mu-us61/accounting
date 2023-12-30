@@ -565,7 +565,8 @@ def proventags_view(request):
         currency_id = request.GET.get("currency")
         # print(year, tag_ids, currency_id)
         # filtered_data = Islemler.objects.filter(Q(islem_tarihi__year=year) & Q(tags__name__in=tags) & Q(islemler_type="giden") & Q(currency=currency))
-        filtered_data = Islemler.objects.all()
+        # filtered_data = Islemler.objects.all()
+        filtered_data = Islemler.objects.filter(islemler_type="giden")
 
         if year:
             # Convert year to integer if not None
@@ -610,6 +611,31 @@ def proventags_view(request):
             total = monthly_data[month_num]["total"]
             with_documents = monthly_data[month_num]["with_documents"]
             percentage = int((Decimal(with_documents) / Decimal(total)) * 100 if total > 0 else 0)
+            # Calculate the total income (toplam_gelen) for "gelen" transactions in each month
+            total_income_for_month = Islemler.objects.filter(islem_tarihi__month=month_num, islem_tarihi__year=year, islemler_type="gelen").aggregate(total_gelen=Sum("miktar"))["total_gelen"] or 0
+            # Calculate the total outcome (toplam_giden) for "giden" transactions in each month
+            total_outcome_for_month = Islemler.objects.filter(islem_tarihi__month=month_num, islem_tarihi__year=year, islemler_type="giden").aggregate(total_giden=Sum("miktar"))["total_giden"] or 0
+            # total_ispatlilar = Islemler.objects.filter(islem_tarihi__month=month_num, islem_tarihi__year=year, islemler_type="giden", is has islemler_pdf or islemler_picture).aggregate(total_giden=Sum("miktar"))["total_giden"] or 0
+            # Calculate the total for transactions with either islemler_pdf or islemler_picture
+            total_ispatlilar = (
+                Islemler.objects.filter(
+                    islem_tarihi__month=month_num,
+                    islem_tarihi__year=year,
+                    islemler_type="giden",
+                )
+                # .filter(Q(islemler_picture__isnull=False) | Q(islemler_pdf__isnull=False))
+                .filter((Q(islemler_picture__isnull=False) & ~Q(islemler_picture__exact="")) | (Q(islemler_pdf__isnull=False) & ~Q(islemler_pdf__exact=""))).aggregate(total_ispatlilar=Sum("miktar"))["total_ispatlilar"]
+                or 0
+            )
+            # print(total_ispatlilar)
+            # query_set = Islemler.objects.filter(
+            #     islem_tarihi__month=month_num,
+            #     islem_tarihi__year=year,
+            #     islemler_type="giden",
+            # ).filter(Q(islemler_picture__isnull=False) | Q(islemler_pdf__isnull=False))
+
+            # print(query_set.query)
+            percentage_of_ispatlilar = int((Decimal(total_ispatlilar) / Decimal(total_outcome_for_month)) * 100 if total_outcome_for_month > 0 else 0)
 
             table_data.append(
                 {
@@ -617,6 +643,9 @@ def proventags_view(request):
                     "toplam": total,
                     "belgeli": with_documents,
                     "yuzdesi": percentage,
+                    "toplam_gelen": total_income_for_month,  # Total income for "gelen" transactions
+                    "toplam_giden": total_outcome_for_month,  # Total outcome for "giden" transactions
+                    "ispatlilar": percentage_of_ispatlilar,  # Total for transactions with islemler_pdf or islemler_picture
                 }
             )
     table = TableProvenTags(table_data)  # Create a table instance and pass data
