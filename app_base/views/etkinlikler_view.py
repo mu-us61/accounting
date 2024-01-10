@@ -5,9 +5,10 @@ from ..forms import EtkinlikForm
 from django_tables2 import SingleTableView
 from ..tables import EtkinlikTable
 from ..filters import EtkinlikModelFilter
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
 
 
-class EtkinlikCreateView(CreateView):
+class EtkinlikCreateView(WritePermissionRequiredMixin, CreateView):
     model = EtkinlikModel
     form_class = EtkinlikForm
     template_name = "app_base/etkinlikler/etkinlik_create.html"
@@ -15,6 +16,7 @@ class EtkinlikCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.etkinlik_owner = self.request.user  # Set the owner to the currently logged-in user
+        form.instance.is_active = True  # Set is_active to True
         return super().form_valid(form)
 
 
@@ -61,7 +63,7 @@ from ..models import EtkinlikModel
 from ..forms import EtkinlikForm
 
 
-class EtkinlikUpdateView(UpdateView):
+class EtkinlikUpdateView(WritePermissionRequiredMixin, UpdateView):
     model = EtkinlikModel
     form_class = EtkinlikForm
     template_name = "app_base/etkinlikler/etkinlik_update.html"
@@ -71,7 +73,7 @@ class EtkinlikUpdateView(UpdateView):
         return self.model.all_objects.all()
 
 
-class EtkinlikDeleteView(DeleteView):
+class EtkinlikDeleteView(DeletePermissionRequiredMixin, DeleteView):
     model = EtkinlikModel
     template_name = "app_base/etkinlikler/etkinlik_delete.html"
     success_url = reverse_lazy("etkinlik_list")

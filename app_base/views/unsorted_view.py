@@ -15,11 +15,13 @@ from django_tables2 import RequestConfig
 from ..models import MuUser, Currency, DummyModel
 from ..tables import UserBalanceTable, TableProvenTags
 from ..filters import FilterProvenTags, BalanceFilter
-
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
 from django.db.models.functions import ExtractMonth
 
 
 def home_view(request):
+    # user = MuUser.objects.get(username="denemeadmin")
+    # print(user.MuGroup)  # Check the value of mu_group attribute
     return render(request, template_name="app_base/unsorted/home.html")
 
 
@@ -206,6 +208,7 @@ def monthlyspendings_view(request):
         islem_tarihi__year=selected_year,
         islem_tarihi__month=selected_month,
         currency__abbreviation=selected_currency,
+        islemler_type="giden",
     )
 
     # Calculate the sum of the selected currency field
@@ -218,6 +221,7 @@ def monthlyspendings_view(request):
     tag_data_json = json.dumps(list(tag_data))
 
     context = {
+        "tag_data": tag_data,
         "years": years,
         "months": months,
         "currencies": currencies,
@@ -510,6 +514,7 @@ from tablib import Dataset
 from ..resources import ExelUsersResource
 
 
+@WritePermissionRequiredMixin()
 def upload_excel_view(request):
     if request.method == "POST":
         person_resource = ExelUsersResource()

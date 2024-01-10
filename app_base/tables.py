@@ -315,7 +315,7 @@ class GroupTable(tables.Table):
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
         template_name = "app_base/unsorted/django_tables_custom_bulma.html"
-        fields = ["name"]
+        fields = ["name", "can_write", "can_delete"]
 
 
 class MuUserTable(tables.Table):

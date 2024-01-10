@@ -5,9 +5,10 @@ from ..forms import ExelUsersForm
 from django.shortcuts import render
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
 
 
-class ExelUsersCreateView(CreateView):
+class ExelUsersCreateView(WritePermissionRequiredMixin,CreateView):
     model = ExelUsers
     form_class = ExelUsersForm
     template_name = "app_base/exelusers/exelusers_create.html"
@@ -75,7 +76,7 @@ from ..forms import ExelUsersForm
 from django.urls import reverse_lazy
 
 
-class ExelUsersUpdateView(UpdateView):
+class ExelUsersUpdateView(WritePermissionRequiredMixin,UpdateView):
     model = ExelUsers
     form_class = ExelUsersForm
     template_name = "app_base/exelusers/exelusers_update.html"
@@ -98,7 +99,7 @@ class ExelUsersUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ExelUsersDeleteView(DeleteView):
+class ExelUsersDeleteView(DeletePermissionRequiredMixin,DeleteView):
     model = ExelUsers
     template_name = "app_base/exelusers/exelusers_delete.html"
     success_url = reverse_lazy("exelusers_list")

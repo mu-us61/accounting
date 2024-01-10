@@ -6,6 +6,7 @@ from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
 from ..tables import GroupTable
 from ..filters import MuGroupFilter, MuGroupFilterMasked
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
 
 # from ..filters import
 
@@ -59,12 +60,18 @@ class GroupListMaskedView(SingleTableMixin, FilterView):
 
 @login_required
 @user_passes_test(is_staff)
+@WritePermissionRequiredMixin()
 def groupcreate_view(request):
     if request.method == "POST":
         group_name = request.POST.get("group_name")
+        can_write = request.POST.get("can_write") == "on"
+        can_delete = request.POST.get("can_delete") == "on"
         if group_name:
             group, created = MuGroup.objects.get_or_create(name=group_name)
             if created:
+                group.can_write = can_write
+                group.can_delete = can_delete
+                group.save()
                 # Group created successfully
                 # You can perform any additional actions here
                 return redirect("grouplist_view_name")  # Redirect to a group list view
@@ -171,6 +178,7 @@ from ..models import MuGroup
 
 
 @login_required
+@WritePermissionRequiredMixin()
 def groupupdate_view(request, group_id):
     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
 
@@ -192,6 +200,7 @@ def groupupdate_view(request, group_id):
 
 
 @login_required
+@DeletePermissionRequiredMixin()
 def groupdelete_view(request, group_id):
     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
 

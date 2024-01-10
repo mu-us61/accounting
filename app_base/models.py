@@ -118,6 +118,8 @@ class MuGroup(Group, BaseModelSoftDelete):
     creation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(_("active"), default=True)
     objects = ActiveObjectsManager()
+    can_write = models.BooleanField(_("yazabilme"), default=False)
+    can_delete = models.BooleanField(_("silebilme"), default=False)
 
     def save(self, *args, **kwargs):
         # self.is_active = True

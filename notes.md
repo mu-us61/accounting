@@ -86,11 +86,9 @@ Yeni İşlem Oluştur , uyari vermiyor mesela title ve yazi giriyorum gerisini i
 
 
 //////
-+ islemler tipi creationa eklenecek , 
-+ detailse eklenecek , 
-+ update ye eklenecek , 
-+ tabloya eklenecek ,
-+ filtreye eklenecek,
+gruplar , canwrite or candelete , okuma herkese acik
+yonetici gruptan bagimsiz herseyi yapar
 
-/////
- belgeli islemler sayfasi tamamlanacak
+gruplara yazabilme silebilme eklendi , gruplarda bir is kalmadi
+
+

@@ -9,6 +9,25 @@
             </div>
         </div>
         <div class="columns m-auto">
+            <div class="column">
+                <h2 class="subtitle">Grup Yetkileri</h2>
+                <p>
+                    Yazma İzni:
+                    {% if group.can_write %}
+                        Var
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </p>
+                <p>
+                    Silme İzni:
+                    {% if group.can_delete %}
+                        Var
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </p>
+            </div>
             <!-- Group Members Column -->
             <div class="column">
                 <h2 class="subtitle">Grup Üyeleri</h2>

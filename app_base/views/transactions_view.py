@@ -15,6 +15,7 @@ from ..filters import IslemlerFilter
 from ..forms import TransactionForm
 from ..models import Islemler
 from ..tables import IslemlerTable
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
 
 
 # //------------------------~ TRANSACTIONS ~--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ class TransactionListView(LoginRequiredMixin, View):
 
 
 # @method_decorator(login_required, name="dispatch")
-class TransactionCreateView(LoginRequiredMixin, View):
+class TransactionCreateView(WritePermissionRequiredMixin, LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_create.html"
 
     def get(self, request):
@@ -109,7 +110,7 @@ def is_owner_or_admin(user, transaction):
 
 #     def get_queryset(self):
 #         return self.model.all_objects.all()
-class TransactionUpdateView(LoginRequiredMixin, View):
+class TransactionUpdateView(WritePermissionRequiredMixin, LoginRequiredMixin, View):
     template_name = "app_base/transactions/transaction_update.html"
 
     @method_decorator(login_required)
@@ -136,7 +137,7 @@ class TransactionUpdateView(LoginRequiredMixin, View):
 
 
 # @method_decorator(login_required, name="dispatch")
-class TransactionDeleteView(LoginRequiredMixin, View):
+class TransactionDeleteView(DeletePermissionRequiredMixin, LoginRequiredMixin, View):
     def get(self, request, pk):
         transaction = get_object_or_404(Islemler.all_objects, pk=pk, islemsahibi=request.user)
         return render(request, "app_base/transactions/transaction_delete.html", {"transaction": transaction})

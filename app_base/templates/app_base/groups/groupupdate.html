@@ -10,11 +10,29 @@
                         <input class="input" type="text" name="group_name" value="{{ group.name }}">
                     </div>
                 </div>
-                <div class="field">
+                {% comment %} <div class="field">
                     <label class="label">Aktif</label>
                     <div class="control">
                         <input class="checkbox" type="checkbox" name="is_active" {% if group.is_active %}checked{% endif %}>
                     </div>
+                </div> {% endcomment %}
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox" id="is_active" name="is_active" {% if group.is_active %}checked{% endif %}>
+                        Aktif
+                    </label>
+                </div>
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox" id="can_write" name="can_write" {% if group.can_write %}checked{% endif %}>
+                        Yazma İzni
+                    </label>
+                </div>
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox" id="can_delete" name="can_delete" {% if group.can_delete %}checked{% endif %}>
+                        Silme İzni
+                    </label>
                 </div>
                 <div class="field is-grouped">
                     <div class="control">

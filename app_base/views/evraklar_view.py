@@ -4,9 +4,12 @@ from ..models import EvrakModel
 from ..forms import EvrakForm
 from django_filters.views import FilterView
 from ..filters import EvrakModelFilter
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
+
+# from ..izinler import CanWriteMixin, CanDeleteMixin
 
 
-class EvrakCreateView(CreateView):
+class EvrakCreateView(WritePermissionRequiredMixin, CreateView):
     model = EvrakModel
     form_class = EvrakForm
     template_name = "app_base/evraklar/create_evrak.html"
@@ -14,6 +17,7 @@ class EvrakCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.evrak_owner = self.request.user  # Set the owner to the currently logged-in user
+        form.instance.is_active = True  # Set is_active to True
         return super().form_valid(form)
 
 
@@ -70,7 +74,7 @@ from ..models import EvrakModel
 from ..forms import EvrakForm
 
 
-class EvrakUpdateView(UpdateView):
+class EvrakUpdateView(WritePermissionRequiredMixin, UpdateView):
     model = EvrakModel
     form_class = EvrakForm
     template_name = "app_base/evraklar/update_evrak.html"
@@ -80,7 +84,7 @@ class EvrakUpdateView(UpdateView):
         return self.model.all_objects.all()
 
 
-class EvrakDeleteView(DeleteView):
+class EvrakDeleteView(DeletePermissionRequiredMixin, DeleteView):
     model = EvrakModel
     template_name = "app_base/evraklar/delete_evrak.html"
     success_url = reverse_lazy("evrak_list")
