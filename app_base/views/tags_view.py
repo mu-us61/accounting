@@ -8,7 +8,7 @@ from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
 from ..tables import TagTable
 from ..filters import TagFilter, TagFilterMasked
-from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin, func_delete_permission_required, func_write_permission_required
 
 # //------------------------~~--------------------------------------------------------------------------
 # @login_required
@@ -72,7 +72,7 @@ def tagdetail_view(request, slug):
 
 
 @login_required
-@WritePermissionRequiredMixin()
+@func_write_permission_required
 def tagcreate_view(request):
     if request.method == "POST":
         form = TagForm(request.POST)
@@ -110,7 +110,7 @@ from ..models import Tag
 from ..forms import TagForm
 
 
-@WritePermissionRequiredMixin()
+@func_write_permission_required
 def tagupdate_view(request, slug):
     tag = get_object_or_404(Tag.all_objects, slug=slug)
 
@@ -126,7 +126,7 @@ def tagupdate_view(request, slug):
 
 
 @login_required
-@DeletePermissionRequiredMixin()
+@func_delete_permission_required
 def tagdelete_view(request, slug):
     tag = get_object_or_404(Tag.all_objects, slug=slug)
     if request.method == "POST":

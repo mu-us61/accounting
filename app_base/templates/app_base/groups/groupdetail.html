@@ -28,36 +28,45 @@
                     {% endif %}
                 </p>
             </div>
-            <!-- Group Members Column -->
-            <div class="column">
-                <h2 class="subtitle">Grup Üyeleri</h2>
-                <ul>
-                    {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
-                </ul>
-            </div>
-            <!-- Add autocomplete input for adding users -->
-            <div class="column">
-                <h2 class="subtitle">Gruba Ekle</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="text" name="add_user" class="typeahead" placeholder="Kullanıcı ara...">
-                    <button type="submit" name="add_users" class="button is-primary">Ekle</button>
-                </form>
-            </div>
-            <!-- Remove autocomplete input for removing users -->
-            <div class="column">
-                <h2 class="subtitle">Gruptan Sil</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="text" name="remove_user" class="typeahead" placeholder="Kullanıcı ara...">
-                    <button type="submit" name="remove_users" class="button is-danger">Sil</button>
-                </form>
-            </div>
-        </div>
+            {% comment %} <!-- Group Members Column -->
+                        <div class="column">
+                        <h2 class="subtitle">Grup Üyeleri</h2>
+                        <ul>
+                            {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
+                    </ul>
+    </div> {% endcomment %}
+    <!-- Group Members Column -->
+    <div class="column">
+        <h2 class="subtitle">Grup Üyeleri</h2>
+        <ul>
+            {% for user in muuser %}
+                {% if group in user.gruplar.all %}<li>{{ user.username }}</li>{% endif %}
+            {% endfor %}
+        </ul>
     </div>
-    <!-- Include typeahead.js scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-    <script>
+    <!-- Add autocomplete input for adding users -->
+    <div class="column">
+        <h2 class="subtitle">Gruba Ekle</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="add_user" class="typeahead" placeholder="Kullanıcı ara...">
+            <button type="submit" name="add_users" class="button is-primary">Ekle</button>
+        </form>
+    </div>
+    <!-- Remove autocomplete input for removing users -->
+    <div class="column">
+        <h2 class="subtitle">Gruptan Sil</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="remove_user" class="typeahead" placeholder="Kullanıcı ara...">
+            <button type="submit" name="remove_users" class="button is-danger">Sil</button>
+        </form>
+    </div>
+</div>
+</div>
+<!-- Include typeahead.js scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+<script>
         $(document).ready(function() {
             // Initialize typeahead for adding and removing users
         var users = new Bloodhound({
@@ -79,7 +88,7 @@
             source: users
         });
         });
-    </script>
+</script>
 {% endblock content %}
 {% comment %} {% extends "base.html" %}
 {% block content %}

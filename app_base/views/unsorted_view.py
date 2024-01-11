@@ -15,7 +15,7 @@ from django_tables2 import RequestConfig
 from ..models import MuUser, Currency, DummyModel
 from ..tables import UserBalanceTable, TableProvenTags
 from ..filters import FilterProvenTags, BalanceFilter
-from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin
+from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin, func_write_permission_required
 from django.db.models.functions import ExtractMonth
 
 
@@ -514,7 +514,7 @@ from tablib import Dataset
 from ..resources import ExelUsersResource
 
 
-@WritePermissionRequiredMixin()
+@func_write_permission_required
 def upload_excel_view(request):
     if request.method == "POST":
         person_resource = ExelUsersResource()
