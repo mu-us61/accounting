@@ -18,6 +18,10 @@
                     <div class="label">ExcelKullanıcı Telefonu</div>
                     <div class="control">{{ form.phonenumber | add_class:"input" }}</div>
                 </div>
+                <div class="field">
+                    <div class="label">Aktif</div>
+                    <div class="control">{{ form.is_active | add_class:"checkbox" }}</div>
+                </div>
                 <div class="field is-grouped">
                     <div class="control">
                         <button type="submit" class="button is-primary">Onay</button>
@@ -30,10 +34,10 @@
         </div>
     </div>
     {% comment %} <!-- exelusers_create.html -->
-            <h1>Create Exel User</h1>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
+                <h1>Create Exel User</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
         <button type="submit">Create</button>
     </form>
 <a href="{% url 'exelusers_list' %}">Back to Exel User List</a> {% endcomment %}

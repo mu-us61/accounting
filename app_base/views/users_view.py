@@ -67,6 +67,7 @@ def usercreate_view(request):
     if request.method == "POST":
         form = MuUserForm(request.POST)
         if form.is_valid():
+            # form.instance.is_active = True
             form.save()
             return redirect("userlist_view_name")
     else:
