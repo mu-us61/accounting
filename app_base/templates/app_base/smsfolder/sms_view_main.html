@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if balance %}
+        <p>Kalan SMS: {{ balance }}</p>
+    {% elif error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <p>Something went wrong. Please try again later.</p>
+    {% endif %}
+    <a class="button is-dark has-text-left" href="{% url "send_sms" %}">SMS Yolla</a>
+{% endblock content %}

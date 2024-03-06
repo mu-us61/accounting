@@ -86,6 +86,9 @@ urlpatterns = [
     path("exelusers/update/<int:pk>/", views.ExelUsersUpdateView.as_view(), name="exelusers_update"),
     path("exelusers/delete/<int:pk>/", views.ExelUsersDeleteView.as_view(), name="exelusers_delete"),
     path("exelusers/detail/<int:pk>/", views.ExelUsersDetailView.as_view(), name="exelusers_detail"),
+    # //------------------------~~--------------------------------------------------------------------------
+    path("sms/main/", views.smsler_view, name="sms_view_main"),
+    path("sms/send/", views.send_sms, name="send_sms"),
 ]
 
 

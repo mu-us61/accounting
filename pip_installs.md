@@ -8,3 +8,6 @@ pip install django-embed-video
 
 pip freeze > requirements.txt
 pip install -r requirements.txt
+
+
+pip install requests

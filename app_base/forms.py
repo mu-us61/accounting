@@ -221,3 +221,10 @@ class ExelUsersForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ExelUsersForm, self).__init__(*args, **kwargs)
         self.fields["is_active"].initial = self.instance.is_active if self.instance else False
+
+
+from django import forms
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

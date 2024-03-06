@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Send SMS</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'send_sms' %}">
+        {% csrf_token %}
+        <label for="header">Header:</label>
+        <br>
+        <input type="text" id="header" name="header" required>
+        <br>
+        <label for="message">Message:</label>
+        <br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea>
+        <br>
+        <label for="phone_numbers">Phone Numbers:</label>
+        <br>
+        <input type="file" id="phone_numbers" name="file" accept=".xlsx, .xls" required>
+        <br>
+        <button type="submit">Send SMS</button>
+    </form>
+{% endblock content %}
+{% comment %} {% extends "base.html" %}
+{% block content %}
+    <h1>Send SMS</h1>
+    <form method="post" action="{% url 'send_sms' %}">
+        {% csrf_token %}
+        <label for="header">Header:</label>
+        <br>
+        <input type="text" id="header" name="header" required>
+        <br>
+        <label for="message">Message:</label>
+        <br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea>
+        <br>
+        <label for="phone_numbers">Phone Numbers (separate with comma):</label>
+        <br>
+        <input type="text" id="phone_numbers" name="phone_numbers" required>
+        <br>
+        <button type="submit">Send SMS</button>
+    </form>
+{% endblock content %} {% endcomment %}
