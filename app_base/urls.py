@@ -56,6 +56,7 @@ urlpatterns = [
     path("proventags", views.proventags_view, name="proventags_view_name"),
     # path("harcamalar", views.harcamalar, name="harcamalar"),
     path("uploadexel/", views.upload_excel_view, name="upload_exel_view_name"),
+    path("uploadexelresult/", views.excel_upload_result, name="excel_upload_result"),
     path("mobile/", views.mobile_view, name="mobile_view_name"),
     path("downloadmobile/<path:file_path>/", views.downloadmobile, name="downloadmobile"),
     # //------------------------~~--------------------------------------------------------------------------

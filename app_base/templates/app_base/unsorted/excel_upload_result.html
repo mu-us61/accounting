@@ -1,0 +1,14 @@
+<!-- excel_upload_result.html -->
+<h2>Sonuclar</h2>
+<h3>kaydedilen Kayitlar</h3>
+<ul>
+    {% for record in saved_records %}<li>{{ record }}</li>{% endfor %}
+</ul>
+<h3>database de zaten olan numaralar</h3>
+<ul>
+    {% for number in duplicate_numbers %}<li>{{ number }}</li>{% endfor %}
+</ul>
+<h3>hatali kayitlar:</h3>
+<ul>
+    {% for record, error in error_records %}<li>{{ record }} - {{ error }}</li>{% endfor %}
+</ul>

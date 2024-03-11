@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Send SMS</h1>
+    <h1>SMS Yolla</h1>
     <form method="post" enctype="multipart/form-data" action="{% url 'send_sms' %}">
         {% csrf_token %}
-        <label for="header">Header:</label>
+        <label for="header">Başlık:</label>
         <br>
         <input type="text" id="header" name="header" required>
         <br>
-        <label for="message">Message:</label>
+        <label for="message">Mesaj:</label>
         <br>
         <textarea id="message" name="message" rows="4" cols="50" required></textarea>
         <br>
-        <label for="phone_numbers">Phone Numbers:</label>
+        <label for="phone_numbers">Telefon Numaraları Yükle :</label>
         <br>
         <input type="file" id="phone_numbers" name="file" accept=".xlsx, .xls" required>
         <br>
-        <button type="submit">Send SMS</button>
+        <button type="submit">Onay</button>
     </form>
 {% endblock content %}
 {% comment %} {% extends "base.html" %}

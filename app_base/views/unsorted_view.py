@@ -10,7 +10,7 @@ from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
 from ..models import Currency, Islemler, MuUser, Tag
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
 from ..models import MuUser, Currency, DummyModel
 from ..tables import UserBalanceTable, TableProvenTags
@@ -572,6 +572,13 @@ def upload_excel_view(request):
                 except Exception as e:
                     # Error occurred while saving, add to error list
                     error_records.append((phonenumber, str(e)))
+        request.session["upload_results"] = {
+            "saved_records": saved_records,
+            "duplicate_numbers": duplicate_numbers,
+            "error_records": error_records,
+        }
+        # Redirect to the result view
+        return redirect("excel_upload_result")
 
         # Redirect to a success page or render a template
         # (you can customize this part based on your project)
@@ -580,6 +587,25 @@ def upload_excel_view(request):
         # to provide feedback to the user
 
     return render(request, "app_base/unsorted/uploadexel.html")
+
+
+def excel_upload_result(request):
+    # Retrieve data from session
+    upload_results = request.session.get("upload_results", None)
+
+    if upload_results:
+        saved_records = upload_results.get("saved_records", [])
+        duplicate_numbers = upload_results.get("duplicate_numbers", [])
+        error_records = upload_results.get("error_records", [])
+
+        # Clear session data
+        del request.session["upload_results"]
+
+        # Render the template with the data
+        return render(request, "app_base/unsorted/excel_upload_result.html", {"saved_records": saved_records, "duplicate_numbers": duplicate_numbers, "error_records": error_records})
+    else:
+        # If no data found in session, redirect to upload view
+        return redirect("upload_excel_view")
 
 
 # //------------------------~~--------------------------------------------------------------------------
