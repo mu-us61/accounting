@@ -510,22 +510,74 @@ from decimal import Decimal
 #     return render(request, "app_base/unsorted/uploadexel.html")
 
 
-from tablib import Dataset
+# from tablib import Dataset
 from ..resources import ExelUsersResource
 
 
+# @func_write_permission_required
+# def upload_excel_view(request):
+#     if request.method == "POST":
+#         person_resource = ExelUsersResource()
+#         dataset = Dataset()
+#         new_persons = request.FILES["myfile"]
+
+#         imported_data = dataset.load(new_persons.read())
+#         result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+#         if not result.has_errors():
+#             person_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+#     return render(request, "app_base/unsorted/uploadexel.html")
+# Import necessary libraries
+# Import necessary libraries
+# Import necessary libraries
+# Import necessary libraries
+# Import necessary libraries
+# Import necessary libraries
+import pandas as pd
+from ..resources import ExelUsersResource
+from ..models import ExelUsers
+
+
+# Your existing view
 @func_write_permission_required
 def upload_excel_view(request):
     if request.method == "POST":
         person_resource = ExelUsersResource()
-        dataset = Dataset()
         new_persons = request.FILES["myfile"]
 
-        imported_data = dataset.load(new_persons.read())
-        result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+        # Read the Excel data into a pandas DataFrame
+        df = pd.read_excel(new_persons)
 
-        if not result.has_errors():
-            person_resource.import_data(dataset, dry_run=False)  # Actually import now
+        # Initialize lists to store results
+        saved_records = []
+        duplicate_numbers = []
+        error_records = []
+
+        # Assuming the first column is "name" and the second column is "phonenumber"
+        for index, row in df.iterrows():
+            name = row["name"]
+            phonenumber = row["phonenumber"]
+
+            # Check if the phone number already exists in the database
+            if ExelUsers.objects.filter(phonenumber=phonenumber).exists():
+                # Phone number already exists, add to duplicate list
+                duplicate_numbers.append(phonenumber)
+            else:
+                try:
+                    # Create an ExelUsers object and save it to the database
+                    exel_user = ExelUsers(name=name, phonenumber=phonenumber)
+                    exel_user.save()
+                    saved_records.append(phonenumber)
+                except Exception as e:
+                    # Error occurred while saving, add to error list
+                    error_records.append((phonenumber, str(e)))
+
+        # Redirect to a success page or render a template
+        # (you can customize this part based on your project)
+
+        # Now you can use the saved_records, duplicate_numbers, and error_records
+        # to provide feedback to the user
 
     return render(request, "app_base/unsorted/uploadexel.html")
 
