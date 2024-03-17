@@ -11,3 +11,4 @@ pip install -r requirements.txt
 
 
 pip install requests
+pip install python-decouple

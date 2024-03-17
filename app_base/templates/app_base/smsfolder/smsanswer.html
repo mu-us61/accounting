@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>
+        {% if success %}
+            SMS basari ile gonderildi
+        {% else %}
+            SMS gonderme basarisiz oldu
+        {% endif %}
+    </h1>
+    <p>Status Code: {{ status_code }}</p>
+    <p>Response Content: {{ response_content }}</p>
+    <p>ilk bakiye {{ balances.0 }}</p>
+    <p>simdiki bakiye {{ balances.1 }}</p>
+{% endblock content %}
