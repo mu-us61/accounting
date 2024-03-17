@@ -3,15 +3,14 @@
 from django.shortcuts import render, HttpResponse
 import requests
 from django.contrib.auth.decorators import login_required, user_passes_test
-from decouple import config
+
+from django.conf import settings
 
 
 def is_staff(user):
     return user.is_staff
 
 
-username = config("USERNAME")
-password = config("PASSWORD")
 validity = "2880"  # Example value
 
 
@@ -19,9 +18,10 @@ validity = "2880"  # Example value
 @user_passes_test(is_staff)
 def smsler_view(request):
     api_url = "http://panel.1sms.com.tr:8080/api/credit/v1"
+    print(settings.USERNAMESMS)
 
     # Sending GET request to the API endpoint
-    response = requests.get(api_url, params={"username": username, "password": password})
+    response = requests.get(api_url, params={"username": settings.USERNAMESMS, "password": settings.PASSWORDSMS})
 
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
@@ -84,8 +84,8 @@ def send_sms(request):
         # Constructing XML payload
         xml_payload = f"""
             <sms>
-                <username>{username}</username>
-                <password>{password}</password>
+                <username>{settings.USERNAMESMS}</username>
+                <password>{settings.PASSWORDSMS}</password>
                 <header>{header}</header>
                 <validity>{validity}</validity>
                 
@@ -112,7 +112,7 @@ def send_sms(request):
         api_url = "http://panel.1sms.com.tr:8080/api/credit/v1"
 
         # Sending GET request to the API endpoint
-        response2 = requests.get(api_url, params={"username": username, "password": password})
+        response2 = requests.get(api_url, params={"username": settings.USERNAMESMS, "password": settings.PASSWORDSMS})
 
         # Check if the request was successful (status code 200)
         if response2.status_code == 200:

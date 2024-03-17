@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     <h1>SMS Yolla</h1>
     <form method="post" enctype="multipart/form-data" action="{% url 'send_sms' %}">
@@ -17,6 +18,13 @@
         <br>
         <button type="submit">Onay</button>
     </form>
+    <br>
+    <br>
+    <p>burada excelde ilk satir "name" olmali sonraki satir "phonenumber" olmali bu sekilde aliyor</p>
+    <p>ornek</p>
+    <br>
+    <br>
+    <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image">
 {% endblock content %}
 {% comment %} {% extends "base.html" %}
 {% block content %}
