@@ -1,7 +1,118 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load widget_tweaks %}
 {% block content %}
-    <div class="column is-half m-auto">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center">Yeni İşlem Oluştur</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.islemler_type.id_for_label }}" class="form-label">Islem Durumu</label>
+                            <div class="input-group">
+                                {{ form.islemler_type|add_class:"form-control select2" }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.kimden_geldi.id_for_label }}" class="form-label">Kimden Geldi</label>
+                            <div class="input-group">
+                                <select name="{{ form.kimden_geldi.name }}" id="{{ form.kimden_geldi.id_for_label }}" class="form-control select2">
+                                    <option value="" selected>Seçiniz</option>
+                                    {% for choice in form.kimden_geldi.field.choices %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.kime_gitti.id_for_label }}" class="form-label">Kime Gitti</label>
+                            <div class="input-group">
+                                <select name="{{ form.kime_gitti.name }}" id="{{ form.kime_gitti.id_for_label }}" class="form-control select2">
+                                    <option value="" selected>Seçiniz</option>
+                                    {% for choice in form.kime_gitti.field.choices %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.exelusers.id_for_label }}" class="form-label">Excel kullanıcıları</label>
+                            <div class="input-group">
+                                <select name="{{ form.exelusers.name }}" id="{{ form.exelusers.id_for_label }}" class="form-control select2" multiple>
+                                    {% for choice in form.exelusers.field.choices %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Repeat similar structure for other form fields -->
+                        <div class="field">
+                            <label class="form-label">Harcama Kalemi</label>
+                            <div class="input-group">
+                                <select name="{{ form.tags.name }}" id="{{ form.tags.id_for_label }}" class="form-select" multiple>
+                                    {% for choice in form.tags.field.choices %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">İşlem İsmi</label>
+                            <div class="input-group">
+                                {% render_field form.islem_ismi class="form-control" %}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">İşlem Açıklaması</label>
+                            <div class="input-group">
+                                {% render_field form.islem_aciklamasi class="form-control" %}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="form-label">Para Birimi</label>
+                            <div class="input-group">
+                                <select name="{{ form.currency.name }}" id="{{ form.currency.id_for_label }}" class="form-select">
+                                    <option value="" selected>Seçiniz</option>
+                                    {% for currency_choice in form.currency.field.choices %}
+                                    <option value="{{ currency_choice.0 }}">{{ currency_choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.miktar.id_for_label }}" class="form-label">Miktar</label>
+                            <div class="input-group">
+                                {{ form.miktar|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.islemler_picture.id_for_label }}" class="form-label">İşlem Resmi (Picture)</label>
+                            <div class="input-group">
+                                {{ form.islemler_picture|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.islemler_pdf.id_for_label }}" class="form-label">İşlem PDF</label>
+                            <div class="input-group">
+                                {{ form.islemler_pdf|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">Oluştur</button>
+                            <a href="{% url 'transactionlist_view_name' %}" class="btn btn-link">Listeye Geri Dön</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% comment %} <div class="column is-half m-auto">
         <div class="box">
             <h1 class="title has-text-centered">Yeni İşlem Oluştur</h1>
             <form method="post" enctype="multipart/form-data">
@@ -10,15 +121,7 @@
                     <div class="label">Islem Durumu</div>
                     <div class="control">{{ form.islemler_type | add_class:"select2" }}</div>
                 </div>
-                {% comment %} <div class="field">
-                    <label class="label">Islem Durumu</label>
-                    <div class="control">
-                        <select name="{{ form.islemler_type }}" id="{{ form.islemler_type.id_for_label }}" class="select2">
-                            <option value="" selected>Seçiniz</option>
-                            {% for choice in form.islemler_type.field.choices %}<option value="{{ choice.0 }}">{{ choice.1 }}</option>{% endfor %}
-                        </select>
-                    </div>
-                </div> {% endcomment %}
+               
                 <div class="field">
                     <label class="label">Kimden Geldi</label>
                     <div class="control">
@@ -90,7 +193,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> {% endcomment %}
     <script>
         $(document).ready(function() {
             // Initialize Select2 for kimden_geldi, kime_gitti, tags, currency fields

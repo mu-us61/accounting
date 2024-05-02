@@ -38,7 +38,8 @@ class IslemlerTable(tables.Table):
         model = Islemler
         attrs = {"class": "table table-striped table-bordered"}
         per_page = 10  # Number of items to display per page
-        template_name = "app_base/transactions/transaction_big_table_pagination.html"
+        # template_name = "app_base/transactions/transaction_big_table_pagination.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ("islem_tarihi", "islemler_type", "islemsahibi", "kimden_geldi", "kime_gitti", "exelusers", "tags", "islem_ismi", "currency", "miktar", "islemler_picture", "islemler_pdf")
 
     def render_tags(self, value):
@@ -86,7 +87,8 @@ class EvrakTable(tables.Table):
         attrs = {"class": "table table-striped table-bordered"}
         # template_name = "django_tables2/table.html"  # Use the default table template
         per_page = 10  # Number of items to display per page
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ("evrak_date", "evrak_owner", "evrak_name", "evrak_type", "evrak_tags")
 
     def render_evrak_tags(self, value):
@@ -117,7 +119,8 @@ class EvrakSilinenlerTable(tables.Table):
         attrs = {"class": "table table-striped table-bordered"}
         # template_name = "django_tables2/table.html"  # Use the default table template
         per_page = 10  # Number of items to display per page
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ("evrak_date", "evrak_owner", "evrak_name", "evrak_type", "evrak_tags")
 
     # def __init__(self, *args, **kwargs):
@@ -148,7 +151,8 @@ class EtkinlikTable(tables.Table):
         model = EtkinlikModel
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ("etkinlik_date", "etkinlik_owner", "etkinlik_name", "etkinlik_tags")
 
     def render_etkinlik_tags(self, value):
@@ -239,7 +243,8 @@ class UserBalanceTable(tables.Table):
     class Meta:
         per_page = 10
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma_balance.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma_balance.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -256,7 +261,8 @@ class TableProvenTags(tables.Table):
 
     class Meta:
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -281,7 +287,8 @@ class ExelUsersTable(tables.Table):
         model = ExelUsers
         fields = ["name", "phonenumber"]
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+        template_name = "django_tables2/bootstrap5-responsive.html"
 
 
 class TagTable(tables.Table):
@@ -297,7 +304,8 @@ class TagTable(tables.Table):
         model = Tag
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ["name"]
 
 
@@ -314,14 +322,15 @@ class GroupTable(tables.Table):
         model = MuGroup
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ["name", "can_write", "can_delete"]
 
 
 class MuUserTable(tables.Table):
     username = tables.LinkColumn(
         "userupdate_view_name",
-        verbose_name="Kullanici",
+        verbose_name="Kullanıcı",
         text=lambda record: record.username,
         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
@@ -332,5 +341,6 @@ class MuUserTable(tables.Table):
         model = MuUser
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
-        template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ["username", "first_name"]

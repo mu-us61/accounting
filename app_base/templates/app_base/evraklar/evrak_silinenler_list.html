@@ -1,18 +1,103 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load render_table from django_tables2 %}
 {% load widget_tweaks %}
+
+{% block yanpanel %}
+<div class="left-part bg-light dashboard-right-part fixed-left-part">
+    <!-- Mobile toggle button -->
+    <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+    <!-- Mobile toggle button -->
+    <div class="scrollable position-relative" style="height: calc(100vh - 50px);">
+        
+        
+          <div class="list-group p-3">
+            <a class="list-group-item list-group-item-action list-group-item-warning" href="{% url 'evrak_create' %}">Yeni Evrak Oluştur</a>
+            
+            <br>
+            <a href="{% url 'evrak_list' %}" class="list-group-item list-group-item-action list-group-item-warning">Listeye geri dön</a>
+            
+            
+               </div>
+    </div>
+</div>
+{% endblock yanpanel %}
+
+{% block filtrepanel %}
+<aside class="customizer">
+    <a href="javascript:void(0)" class="service-panel-toggle"><i data-feather="settings" class="feather-sm fa fa-spin"></i></a>
+    <div class="customizer-body">
+        <div class="container">
+
+ 
+            <form method="get">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_last_updated.start.id_for_label }}">Son Değiştirilme Tarihi</label>
+                                <div class="input-group">
+                                    {{ filter.form.evrak_last_updated|add_class:"form-control date-picker" }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_owner.id_for_label }}">Girdiyi Oluşturan</label>
+                                {{ filter.form.evrak_owner|add_class:"form-select select22" }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_name.id_for_label }}">Evrak İsmi</label>
+                                <div class="input-group">
+                                    {{ filter.form.evrak_name|add_class:"form-control custom-class" }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_tags.id_for_label }}">Tags</label>
+                                {{ filter.form.evrak_tags|add_class:"form-select select22" }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_type.id_for_label }}">Evrak Tipi</label>
+                                {{ filter.form.evrak_type|add_class:"form-select select22" }}
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            
+
+        </div>
+        
+    </div>
+</aside>
+{% endblock filtrepanel %}
+
 {% block content %}
-    <div class="column is-half m-auto" x-data="{ mufiltre: false }">
+
+<div class="row col-md-6 page-titles">
+    <div class="col-md-6  align-self-center">
+        <h3 class="text-themecolor mb-0">Silinen Evrak Listesi</h3>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        <h4 class="card-title">Silinen Evrak Listesi</h4>
+    </div>
+    <div class="table-responsive">{% render_table table %}</div>
+</div>
+
+
+    {% comment %} <div class="column is-half m-auto" x-data="{ mufiltre: false }">
         <a class="button is-link" href="{% url "evrak_create" %}">Yeni Evrak Oluştur</a>
         <a class="button is-link" href="{% url "evrak_list" %}">Listeye geri dön</a>
         <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
         <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
             <!-- Filter Form -->
             <form method="get">
-                {% comment %} <div class="field">
-                    <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
-                    <div class="control">{{ filter.form.islem_tarihi|add_class:"input date-picker" }}</div>
-                </div> {% endcomment %}
+               
                 <div class="field">
                     <label class="label" for="{{ filter.form.evrak_last_updated.start.id_for_label }}">Son Degistirilme Tarihi</label>
                     <div class="control">{{ filter.form.evrak_last_updated|add_class:"input date-picker" }}</div>
@@ -40,7 +125,7 @@
         </div>
         <h1 class="has-text-centered has-text-weight-bold is-size-3">Silinen Evrak Listesi</h1>
         <div class="table-responsive">{% render_table table %}</div>
-    </div>
+    </div> {% endcomment %}
     <script>
         // In your JavaScript (external .js resource or <script> tag)
         $(document).ready(function() {

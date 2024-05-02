@@ -1,7 +1,40 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load static %}
 {% block content %}
-    <h1>SMS Yolla</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4">SMS Yolla</h1>
+            <form method="post" enctype="multipart/form-data" action="{% url 'send_sms' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="header" class="form-label">Başlık:</label>
+                    <input type="text" id="header" name="header" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Mesaj:</label>
+                    <textarea id="message" name="message" rows="4" class="form-control" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="phone_numbers" class="form-label">Telefon Numaraları Yükle :</label>
+                    <input type="file" id="phone_numbers" name="file" class="form-control" accept=".xlsx, .xls" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Onay</button>
+            </form>
+            <br>
+            <br>
+            <p>burada excelde ilk satır "name" olmalı, sonraki satırlar "phonenumber" olmalı, bu şekilde alıyor</p>
+            <p>Örnek:</p>
+            <br>
+            <br>
+            <img src="{% static 'Images/excel_ornegi.png' %}" class="img-fluid" alt="Example Image">
+        </div>
+    </div>
+</div>
+
+    {% comment %} <h1>SMS Yolla</h1>
     <form method="post" enctype="multipart/form-data" action="{% url 'send_sms' %}">
         {% csrf_token %}
         <label for="header">Başlık:</label>
@@ -24,25 +57,6 @@
     <p>ornek</p>
     <br>
     <br>
-    <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image">
+    <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image"> {% endcomment %}
 {% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <h1>Send SMS</h1>
-    <form method="post" action="{% url 'send_sms' %}">
-        {% csrf_token %}
-        <label for="header">Header:</label>
-        <br>
-        <input type="text" id="header" name="header" required>
-        <br>
-        <label for="message">Message:</label>
-        <br>
-        <textarea id="message" name="message" rows="4" cols="50" required></textarea>
-        <br>
-        <label for="phone_numbers">Phone Numbers (separate with comma):</label>
-        <br>
-        <input type="text" id="phone_numbers" name="phone_numbers" required>
-        <br>
-        <button type="submit">Send SMS</button>
-    </form>
-{% endblock content %} {% endcomment %}
+

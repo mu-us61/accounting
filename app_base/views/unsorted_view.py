@@ -22,6 +22,7 @@ from django.db.models.functions import ExtractMonth
 def home_view(request):
     # user = MuUser.objects.get(username="denemeadmin")
     # print(user.MuGroup)  # Check the value of mu_group attribute
+    # return render(request, template_name="app_base/unsorted/home.html")
     return render(request, template_name="app_base/unsorted/home.html")
 
 

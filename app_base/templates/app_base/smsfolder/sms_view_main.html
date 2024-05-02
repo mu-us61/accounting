@@ -1,11 +1,28 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% block content %}
-    {% if balance %}
+    {% comment %} {% if balance %}
         <p>Kalan SMS: {{ balance }}</p>
     {% elif error %}
         <p>{{ error }}</p>
     {% else %}
         <p>Something went wrong. Please try again later.</p>
     {% endif %}
-    <a class="button is-dark has-text-left" href="{% url "send_sms" %}">SMS Yolla</a>
+    <a class="button is-dark has-text-left" href="{% url "send_sms" %}">SMS Yolla</a> {% endcomment %}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {% if balance %}
+                    <p class="mb-3">Kalan SMS: {{ balance }}</p>
+                {% elif error %}
+                    <p class="mb-3">{{ error }}</p>
+                {% else %}
+                    <p class="mb-3">Something went wrong. Please try again later.</p>
+                {% endif %}
+                <a href="{% url 'send_sms' %}" class="btn btn-dark">SMS Yolla</a>
+            </div>
+        </div>
+    </div>
+    
 {% endblock content %}

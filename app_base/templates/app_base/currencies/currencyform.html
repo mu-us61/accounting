@@ -1,7 +1,46 @@
-{% extends 'base.html' %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load widget_tweaks %}
 {% block content %}
-    <div class="container">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center">Para Birimi</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">İsmi</label>
+                            <div class="input-group">
+                                {% render_field form.name class="form-control" %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="abbreviation" class="form-label">Kısaltması</label>
+                            <div class="input-group">
+                                {% render_field form.abbreviation class="form-control" %}
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            {% render_field form.is_active class="form-check-input" %}
+                            <label for="is_active" class="form-check-label">Aktif</label>
+                        </div>
+                        <div class="mb-3 d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                        <div class="mb-3 d-grid gap-2">
+                            <a href="{% url 'currencylist_view_name' %}" class="btn btn-link">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% comment %} <div class="container">
         <div class="column is-half m-auto">
             <div class="box">
                 <h1 class="title has-text-centered">Para Birimi</h1>
@@ -30,7 +69,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 {% endblock content %}
 
 

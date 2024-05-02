@@ -1,10 +1,129 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load render_table from django_tables2 %}
 {% load widget_tweaks %}
 {% load templatehelpers %}
 <!-- Load widget tweaks -->
+{% block yanpanel %}
+<div class="left-part bg-light dashboard-right-part fixed-left-part">
+    <!-- Mobile toggle button -->
+    <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+    <!-- Mobile toggle button -->
+    <div class="scrollable position-relative" style="height: calc(100vh - 50px);">
+        
+        
+          <div class="list-group p-3">
+            <a class="list-group-item list-group-item-action list-group-item-warning" href="{% url 'transactiontable_view_name' %}">Listeye Dön</a>
+            
+            <br>
+            
+            
+               </div>
+    </div>
+</div>
+{% endblock yanpanel %}
+
+{% block filtrepanel %}
+<aside class="customizer">
+    <a href="javascript:void(0)" class="service-panel-toggle"><i data-feather="settings" class="feather-sm fa fa-spin"></i></a>
+    <div class="customizer-body">
+        <div class="container">
+
+
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.islemsahibi.id_for_label }}">Islem Sahibi</label>
+                        <div class="input-group">
+                            {{ filter.form.islemsahibi|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Islem Durumu</label>
+                        <div class="input-group">
+                            {{ filter.form.islemler_type | add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.kimden_geldi.id_for_label }}">Kimden Geldi</label>
+                        <div class="input-group">
+                            {{ filter.form.kimden_geldi|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.kime_gitti.id_for_label }}">Kime Gitti</label>
+                        <div class="input-group">
+                            {{ filter.form.kime_gitti|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
+                        <div class="input-group">
+                            {{ filter.form.islem_tarihi|add_class:"form-control date-picker" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.exelusers.id_for_label }}">Excel Kullanicilari</label>
+                        <div class="input-group">
+                            {{ filter.form.exelusers|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.tags.id_for_label }}">Tags</label>
+                        <div class="input-group">
+                            {{ filter.form.tags|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.islem_ismi.id_for_label }}">Islem Ismi</label>
+                        <div class="input-group">
+                            {{ filter.form.islem_ismi|add_class:"form-control custom-class" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.currency.id_for_label }}">Currency</label>
+                        <div class="input-group">
+                            {{ filter.form.currency|add_class:"form-select select2" }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="{{ filter.form.miktar.id_for_label }}">Miktar</label>
+                        <div class="input-group">
+                            {{ filter.form.miktar|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                </div>
+            </form>
+            
+            
+
+        </div>
+        
+    </div>
+</aside>
+{% endblock filtrepanel %}
+
+
 {% block content %}
-    <div class="container">
+
+<div class="row col-md-6 page-titles">
+    <div class="col-md-6  align-self-center">
+        <h3 class="text-themecolor mb-0">Silinen İşlem Tablosu</h3>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        <h4 class="card-title">Silinen İşlem Tablosu</h4>
+    </div>
+    <div class="table-responsive">{% render_table table %}</div>
+</div>
+
+
+    {% comment %} <div class="container">
         <div class="column is-half m-auto" x-data="{ mufiltre: false }">
             <a href="{% url 'transactiontable_view_name' %}" class="button is-link">Listeye Dön</a>
             <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
@@ -31,9 +150,7 @@
                         <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
                         <div class="control">
                             {{ filter.form.islem_tarihi|add_class:"input date-picker" }}
-                            {% comment %} <input type="text" placeholder="Baslangic" name="islem_tarihi_after" id="id_islem_tarihi_0" class="aaa input date-picker">
-                            <input type="text" placeholder="Bitis" name="islem_tarihi_before" id="id_islem_tarihi_1" class="aaa input date-picker"> {% endcomment %}
-                        </div>
+                                    </div>
                     </div>
                     <div class="field">
                         <label class="label" for="{{ filter.form.exelusers.id_for_label }}">Excel Kullanicilari</label>
@@ -64,7 +181,7 @@
         <h1 class="title has-text-centered">Silinen İşlem Tablosu</h1>
         <!-- Render the table with pagination and sorting -->
         {% render_table table %}
-    </div>
+    </div> {% endcomment %}
     <script>
         // In your JavaScript (external .js resource or <script> tag)
         $(document).ready(function() {

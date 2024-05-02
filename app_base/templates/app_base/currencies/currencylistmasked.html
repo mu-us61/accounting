@@ -1,6 +1,70 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
+
+{% block yanpanel %}
+<div class="left-part bg-light dashboard-right-part fixed-left-part">
+    <!-- Mobile toggle button -->
+    <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+    <!-- Mobile toggle button -->
+    <div class="scrollable position-relative" style="height: calc(100vh - 50px);">
+        
+        
+          <div class="list-group p-3">
+      
+            <a href="{% url 'currencycreate_view_name' %}" class="list-group-item list-group-item-action list-group-item-warning">Para Birimi Ekle</a>
+            <br>
+            <a href="{% url 'currencylist_view_name' %}" class="list-group-item list-group-item-action list-group-item-warning">Para Birimi Listesi</a>
+            <br>
+            
+               </div>
+    </div>
+</div>
+{% endblock yanpanel %}
+
 {% block content %}
-    <div class="container">
+
+<div class="container">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                {% comment %} <div class="d-flex justify-content-between mb-3">
+                    <a href="{% url 'currencycreate_view_name' %}" class="btn btn-success">Para Birimi Ekle</a>
+                    <a href="{% url 'currencylist_view_name' %}" class="btn btn-success">Para Birimi Listesi</a>
+                </div> {% endcomment %}
+                <h1 class="text-center">Silinen Para Birimi Listesi</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">İsmi</th>
+                                <th scope="col">Kısaltması</th>
+                                <th scope="col">Eylem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for currency in currencies %}
+                                <tr>
+                                    <td>{{ currency.name }}</td>
+                                    <td>{{ currency.abbreviation }}</td>
+                                    <td>
+                                        <a href="{% url 'currencyupdate_view_name' currency.pk %}" class="btn btn-primary">Düzenle</a>
+                                        <a href="{% url 'currencydelete_view_name' currency.pk %}" class="btn btn-danger">Sil</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3">Para Birimi Bulunmadı</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+    {% comment %} <div class="container">
         <section class="section">
             <div class="columns is-centered">
                 <div class="column is-three-quarters">
@@ -35,31 +99,6 @@
                 </div>
             </div>
         </section>
-    </div>
+    </div> {% endcomment %}
 {% endblock content %}
-{% comment %} {% extends 'base.html' %}
-{% block content %}
-    <h1 class="title">Currency List</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Abbreviation</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for currency in currencies %}
-                <tr>
-                    <td>{{ currency.name }}</td>
-                    <td>{{ currency.abbreviation }}</td>
-                    <td>
-                        <a href="{% url 'currency_update' currency.pk %}" class="button is-primary">Edit</a>
-                        <a href="{% url 'currency_delete' currency.pk %}" class="button is-danger">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'currency_create' %}" class="button is-success">Add Currency</a>
-{% endblock %} {% endcomment %}
+

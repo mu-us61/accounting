@@ -1,46 +1,69 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% load render_table from django_tables2 %}
 {% load widget_tweaks %}
-{% block content %}
-    <div class="column is-half m-auto" x-data="{ mufiltre: false }">
-        <a class="button is-primary" href="{% url 'groupcreate_view_name' %}">Yeni Grup oluştur</a>
-        <a class="button is-primary" href="{% url 'grouplistmasked_view_name' %}">Silinenler</a>
-        <a class="button is-link" x-on:click="mufiltre = !mufiltre">Filtre</a>
-        <div class="box" x-bind:class="{ 'is-hidden': mufiltre }">
-            <!-- Filter Form -->
+{% block yanpanel %}
+<div class="left-part bg-light dashboard-right-part fixed-left-part">
+    <!-- Mobile toggle button -->
+    <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+    <!-- Mobile toggle button -->
+    <div class="scrollable position-relative" style="height: calc(100vh - 50px);">
+        
+        
+          <div class="list-group p-3">
+            <a class="list-group-item list-group-item-action list-group-item-warning" href="{% url 'groupcreate_view_name' %}">Yeni Grup oluştur</a>
+            
+            <br>
+            <a href="{% url 'grouplistmasked_view_name' %}" class="list-group-item list-group-item-action list-group-item-warning">Silinen Gruplar</a>
+            
+            
+               </div>
+    </div>
+</div>
+{% endblock yanpanel %}
+{% block filtrepanel %}
+<aside class="customizer">
+    <a href="javascript:void(0)" class="service-panel-toggle"><i data-feather="settings" class="feather-sm fa fa-spin"></i></a>
+    <div class="customizer-body">
+        <div class="container">
+
             <form method="get">
-                {% comment %} <div class="field">
-                    <label class="label" for="{{ filter.form.islem_tarihi.start.id_for_label }}">Islem Tarihi</label>
-                    <div class="control">{{ filter.form.islem_tarihi|add_class:"input date-picker" }}</div>
-                </div> {% endcomment %}
-                {% comment %} <div class="field">
-                    <label class="label" for="{{ filter.form.etkinlik_last_updated.start.id_for_label }}">Son Degistirilme Tarihi</label>
-                    <div class="control">{{ filter.form.etkinlik_last_updated|add_class:"input date-picker" }}</div>
-                </div> {% endcomment %}
-                <div class="field">
-                    <label class="label" for="{{ filter.form.name.id_for_label }}">Isim</label>
-                    <div class="control">{{ filter.form.name|add_class:"select select22" }}</div>
+                
+
+
+                <div class="mb-3 mt-3">
+                    <label class="form-label" for="{{ filter.form.name.id_for_label }}">Isim</label>
+                    <div class="input-group">
+                        {{ filter.form.username|add_class:"form-control select2" }}
+                    </div>
                 </div>
-                {% comment %} <div class="field">
-                    <label class="label" for="{{ filter.form.etkinlik_name.id_for_label }}">Etkinlik Ismi</label>
-                    <div class="control">{{ filter.form.etkinlik_name|add_class:"input custom-class" }}</div>
-                </div>
-                <div class="field">
-                    <label class="label" for="{{ filter.form.etkinlik_tags.id_for_label }}">Harcama Kalemleri</label>
-                    <div class="control">{{ filter.form.etkinlik_tags|add_class:"select select22" }}</div>
-                </div> {% endcomment %}
-                <div class="control">
-                    <button type="submit" class="button is-primary">Filterele</button>
+                
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-info">Filtrele</button>
                 </div>
             </form>
         </div>
-        <h1 class="has-text-centered has-text-weight-bold is-size-3">Grup Listesi</h1>
-        <div class="table-responsive">{% render_table table %}</div>
+        
     </div>
+</aside>
+{% endblock filtrepanel %}
+{% block content %}
+<div class="row col-md-6 page-titles">
+    <div class="col-md-6  align-self-center">
+        <h3 class="text-themecolor mb-0">Kullanıcı Grupları</h3>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        <h4 class="card-title">Kullanıcı Grupları Listesi</h4>
+    </div>
+    <div class="table-responsive">{% render_table table %}</div>
+</div>
     <script>
         // In your JavaScript (external .js resource or <script> tag)
         $(document).ready(function() {
-            $('.select22').select2({
+            $('.select2').select2({
                 placeholder: "Seçiniz",
                 allowClear: true,
                 width: '100%',
@@ -48,3 +71,4 @@
         });
 </script>
 {% endblock content %}
+

@@ -1,6 +1,30 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% block content %}
-    <div class="column is-half m-auto">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center">Mobile Uygulama İndir</h1>
+                    <br>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'downloadmobile' 'mobile_files/vakif.apk' %}" download class="d-flex align-items-center"><span class="iconify me-2" data-icon="devicon:android"></span> Android Uygulamasını İndir</a>
+                        </li>
+                        <br>
+                        <li>
+                            <a class="d-flex align-items-center"><span class="iconify me-2" data-icon="devicon:apple"></span> Link yok şu anda - iOS Uygulamasını İndir</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% comment %} <div class="column is-half m-auto">
         <div class="box">
             <h1 class="title has-text-centered">Mobile Uygulama İndir</h1>
             <br>
@@ -14,5 +38,5 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> {% endcomment %}
 {% endblock content %}

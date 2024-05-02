@@ -1,7 +1,19 @@
-{% extends 'base.html' %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
 {% load static %}
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
+
+<div class="row col-md-6 page-titles">
+    <div class="col-md-6  align-self-center">
+        <h3 class="text-themecolor mb-0">Excel Kullanıcı Yüklemesi</h3>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center">
+        <h4 class="card-title">Excel Kullanıcı Yüklemesi</h4>
+    </div>
+    {% comment %} <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="myfile">
         <button type="submit">Upload</button>
@@ -10,6 +22,31 @@
     <p>ornek</p>
     <br>
     <br>
-    <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image">
+    <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image"> {% endcomment %}
+
+    <form  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="myfile" class="form-label">Dosya Seç</label>
+            <input type="file" class="form-control" id="myfile" name="myfile">
+        </div>
+        <button type="submit" class="btn btn-info">Yükle</button>
+    </form>
+    
+    <p>burada excelde ilk satır "name" olmalı, sonraki satır "phonenumber" olmalı bu şekilde alıyor</p>
+    <p>örnek</p>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'Images/excel_ornegi.png' %}" class="img-fluid" alt="Örnek Resim" style="width: 100%; height: auto;">
+        </div>
+    </div>
+    
+</div>
+
+
+    
+    
     {% comment %} <img src="{% static 'Images/hayvakfi.png' %}" alt="hayvakfi" width="30" height="30" class="image " style="margin-right: 5px;"> {% endcomment %}
 {% endblock %}

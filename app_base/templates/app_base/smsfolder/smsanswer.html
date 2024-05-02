@@ -1,6 +1,26 @@
-{% extends "base.html" %}
+{% extends "admin-pro/src/main/index.html" %}
+{% comment %} {% extends "base.html" %} {% endcomment %}
 {% block content %}
-    <h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">
+                {% if success %}
+                    SMS başarıyla gönderildi
+                {% else %}
+                    SMS gönderme başarısız oldu
+                {% endif %}
+            </h1>
+            <p>Status Code: {{ status_code }}</p>
+            <p>Response Content: {{ response_content }}</p>
+            <p>İlk bakiye: {{ balances.0 }}</p>
+            <p>Şimdiki bakiye: {{ balances.1 }}</p>
+        </div>
+    </div>
+</div>
+
+    {% comment %} <h1>
         {% if success %}
             SMS basari ile gonderildi
         {% else %}
@@ -10,5 +30,5 @@
     <p>Status Code: {{ status_code }}</p>
     <p>Response Content: {{ response_content }}</p>
     <p>ilk bakiye {{ balances.0 }}</p>
-    <p>simdiki bakiye {{ balances.1 }}</p>
+    <p>simdiki bakiye {{ balances.1 }}</p> {% endcomment %}
 {% endblock content %}
