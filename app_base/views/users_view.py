@@ -1,11 +1,11 @@
 from ..forms import MuUserForm
-from ..models import MuUser
+from ..models import MuUser, MuGroup, Yetkiler
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
-from ..tables import MuUserTable
+from ..tables import MuUserTable, DeletedMuUserTable
 
 from ..filters import MuUserFilter, MuUserFilterMasked
 
@@ -50,7 +50,7 @@ class UserListView(SingleTableMixin, FilterView):
 
 
 class UserListMaskedView(SingleTableMixin, FilterView):
-    table_class = MuUserTable
+    table_class = DeletedMuUserTable
     model = MuUser
     template_name = "app_base/users/userlistmasked.html"
     # context_table_name = "etkinlik_table"
@@ -61,14 +61,102 @@ class UserListMaskedView(SingleTableMixin, FilterView):
         return self.model.all_objects.get_deleted()
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from ..models import MuUser  # Import your User model here
+
+
+# @require_POST
+# def reactivate_user(request):
+#     if request.method == "POST":
+#         user_id = request.POST.get("user_id")
+#         print(user_id)
+#         try:
+#             user = MuUser.objects.get(pk=user_id)
+#             print(user)
+#             user.is_active = True
+#             user.save()
+#             return JsonResponse({"success": True})
+#         except MuUser.DoesNotExist:
+#             return JsonResponse({"success": False, "error": "User not found"})
+#     else:
+#         return JsonResponse({"success": False, "error": "Invalid request method"})
+
+import logging
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from ..models import MuUser
+
+logger = logging.getLogger(__name__)
+
+
+@require_POST
+def reactivate_user(request):
+    try:
+        user_id = request.POST.get("user_id")
+        logger.info("Received request to reactivate user with ID: %s", user_id)
+        user = MuUser.all_objects.get(pk=user_id)
+        user.is_active = True
+        user.save()
+        logger.info("User reactivated successfully")
+        return JsonResponse({"success": True})
+    except MuUser.DoesNotExist:
+        logger.error("User not found with ID: %s", user_id)
+        return JsonResponse({"success": False, "error": "User not found"})
+    except Exception as e:
+        logger.exception("Error occurred while reactivating user")
+        return JsonResponse({"success": False, "error": str(e)})
+
+
+# @login_required
+# @user_passes_test(is_staff)
+# def usercreate_view(request):
+#     if request.method == "POST":
+#         form = MuUserForm(request.POST)
+#         if form.is_valid():
+#             # print("Form data:")
+#             # for field in form:
+#             #     print(f"{field.name}: {field.value()}")
+#             # form.instance.is_active = True
+#             form.save()
+#             # Get or create the default group
+#             default_group, created = MuGroup.objects.get_or_create(name="Default Group")
+
+#             # If the group is newly created, set its permissions to default
+#             if created:
+#                 default_permissions = Yetkiler.objects.create()
+#                 default_group.yetkiler = default_permissions
+#                 default_group.save()
+
+#             # Add the user to the default group
+#             MuUser.groups.add(default_group)
+
+#             return redirect("userlist_view_name")
+#     else:
+#         form = MuUserForm()
+
+#     return render(request, "app_base/users/usercreate.html", {"form": form})
+
+
 @login_required
 @user_passes_test(is_staff)
 def usercreate_view(request):
     if request.method == "POST":
         form = MuUserForm(request.POST)
         if form.is_valid():
-            # form.instance.is_active = True
-            form.save()
+            user = form.save()
+            # Get or create a Yetkiler instance (if necessary)
+            yetkiler_instance, created = Yetkiler.objects.get_or_create(
+                # You can provide default values for the Yetkiler fields here if needed
+            )
+
+            # Get or create the MuGroup instance
+            mu_group_instance, created = MuGroup.objects.get_or_create(name="DefaultGroup", yetkiler=yetkiler_instance)  # Assign the Yetkiler instance to the yetkiler field
+
+            # Add the MuGroup instance to the created user
+            user.gruplar.add(mu_group_instance)
+
             return redirect("userlist_view_name")
     else:
         form = MuUserForm()

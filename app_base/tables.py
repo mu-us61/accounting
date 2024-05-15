@@ -309,22 +309,104 @@ class TagTable(tables.Table):
         fields = ["name"]
 
 
+import django_tables2 as tables
+from .models import MuGroup
+
+
 class GroupTable(tables.Table):
     name = tables.LinkColumn(
         "groupdetail_view_name",
         verbose_name="Grup İsmi",
         text=lambda record: record.name,
-        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        args=[tables.A("pk")],  # Pass the MuGroup's primary key as an argument to the view
         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
     )
+
+    # Define columns for each permission field in Yetkiler model
+    can_read_can_kullanicilar = tables.BooleanColumn(verbose_name="Can Read Can Kullanicilar", accessor="yetkiler__can_read_can_kullanicilar")
+    can_read_kullanici_gruplari = tables.BooleanColumn(verbose_name="Can Read Kullanici Gruplari", accessor="yetkiler__can_read_kullanici_gruplari")
+    can_read_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Can Read Excel Kullanici Yukleme", accessor="yetkiler__can_read_excel_kullanici_yukleme")
+    can_read_excel_kullanicilari = tables.BooleanColumn(verbose_name="Can Read Excel Kullanicilari", accessor="yetkiler__can_read_excel_kullanicilari")
+    can_read_bakiye = tables.BooleanColumn(verbose_name="Can Read Bakiye", accessor="yetkiler__can_read_bakiye")
+    can_read_harcama_kalemi = tables.BooleanColumn(verbose_name="Can Read Harcama Kalemi", accessor="yetkiler__can_read_harcama_kalemi")
+    can_read_para_birimleri = tables.BooleanColumn(verbose_name="Can Read Para Birimleri", accessor="yetkiler__can_read_para_birimleri")
+    can_read_Islemler = tables.BooleanColumn(verbose_name="Can Read Islemler", accessor="yetkiler__can_read_Islemler")
+    can_read_etkinlikler = tables.BooleanColumn(verbose_name="Can Read Etkinlikler", accessor="yetkiler__can_read_etkinlikler")
+    can_read_evraklar = tables.BooleanColumn(verbose_name="Can Read Evraklar", accessor="yetkiler__can_read_evraklar")
+    can_read_aylikharcamalar = tables.BooleanColumn(verbose_name="Can Read Aylik Harcamalar", accessor="yetkiler__can_read_aylikharcamalar")
+    can_read_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Can Read Aylik Ispatli Harcamalar", accessor="yetkiler__can_read_aylikispatliharcamalar")
+    can_read_smsyonetimi = tables.BooleanColumn(verbose_name="Can Read SMS Yonetimi", accessor="yetkiler__can_read_smsyonetimi")
+    can_read_mobileapplinkleri = tables.BooleanColumn(verbose_name="Can Read Mobile App Linkleri", accessor="yetkiler__can_read_mobileapplinkleri")
+
+    can_write_can_kullanicilar = tables.BooleanColumn(verbose_name="Can Write Can Kullanicilar", accessor="yetkiler__can_write_can_kullanicilar")
+    can_write_kullanici_gruplari = tables.BooleanColumn(verbose_name="Can Write Kullanici Gruplari", accessor="yetkiler__can_write_kullanici_gruplari")
+    can_write_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Can Write Excel Kullanici Yukleme", accessor="yetkiler__can_write_excel_kullanici_yukleme")
+    can_write_excel_kullanicilari = tables.BooleanColumn(verbose_name="Can Write Excel Kullanicilari", accessor="yetkiler__can_write_excel_kullanicilari")
+    can_write_bakiye = tables.BooleanColumn(verbose_name="Can Write Bakiye", accessor="yetkiler__can_write_bakiye")
+    can_write_harcama_kalemi = tables.BooleanColumn(verbose_name="Can Write Harcama Kalemi", accessor="yetkiler__can_write_harcama_kalemi")
+    can_write_para_birimleri = tables.BooleanColumn(verbose_name="Can Write Para Birimleri", accessor="yetkiler__can_write_para_birimleri")
+    can_write_Islemler = tables.BooleanColumn(verbose_name="Can Write Islemler", accessor="yetkiler__can_write_Islemler")
+    can_write_etkinlikler = tables.BooleanColumn(verbose_name="Can Write Etkinlikler", accessor="yetkiler__can_write_etkinlikler")
+    can_write_evraklar = tables.BooleanColumn(verbose_name="Can Write Evraklar", accessor="yetkiler__can_write_evraklar")
+    can_write_aylikharcamalar = tables.BooleanColumn(verbose_name="Can Write Aylik Harcamalar", accessor="yetkiler__can_write_aylikharcamalar")
+    can_write_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Can Write Aylik Ispatli Harcamalar", accessor="yetkiler__can_write_aylikispatliharcamalar")
+    can_write_smsyonetimi = tables.BooleanColumn(verbose_name="Can Write SMS Yonetimi", accessor="yetkiler__can_write_smsyonetimi")
+    can_write_mobileapplinkleri = tables.BooleanColumn(verbose_name="Can Write Mobile App Linkleri", accessor="yetkiler__can_write_mobileapplinkleri")
 
     class Meta:
         model = MuGroup
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
-        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
         template_name = "django_tables2/bootstrap5-responsive.html"
-        fields = ["name", "can_write", "can_delete"]
+        fields = [
+            "name",
+            "can_read_can_kullanicilar",
+            "can_read_kullanici_gruplari",
+            "can_read_excel_kullanici_yukleme",
+            "can_read_excel_kullanicilari",
+            "can_read_bakiye",
+            "can_read_harcama_kalemi",
+            "can_read_para_birimleri",
+            "can_read_Islemler",
+            "can_read_etkinlikler",
+            "can_read_evraklar",
+            "can_read_aylikharcamalar",
+            "can_read_aylikispatliharcamalar",
+            "can_read_smsyonetimi",
+            "can_read_mobileapplinkleri",
+            "can_write_can_kullanicilar",
+            "can_write_kullanici_gruplari",
+            "can_write_excel_kullanici_yukleme",
+            "can_write_excel_kullanicilari",
+            "can_write_bakiye",
+            "can_write_harcama_kalemi",
+            "can_write_para_birimleri",
+            "can_write_Islemler",
+            "can_write_etkinlikler",
+            "can_write_evraklar",
+            "can_write_aylikharcamalar",
+            "can_write_aylikispatliharcamalar",
+            "can_write_smsyonetimi",
+            "can_write_mobileapplinkleri",
+        ]
+
+
+# class GroupTable(tables.Table):
+#     name = tables.LinkColumn(
+#         "groupdetail_view_name",
+#         verbose_name="Grup İsmi",
+#         text=lambda record: record.name,
+#         args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+#         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+#     )
+
+#     class Meta:
+#         model = MuGroup
+#         per_page = 10  # Number of items to display per page
+#         attrs = {"class": "table table-striped table-bordered"}
+#         # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+#         template_name = "django_tables2/bootstrap5-responsive.html"
+#         fields = ["name", "can_write", "can_delete"]
 
 
 class MuUserTable(tables.Table):
@@ -342,5 +424,57 @@ class MuUserTable(tables.Table):
         per_page = 10  # Number of items to display per page
         attrs = {"class": "table table-striped table-bordered"}
         # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
+        fields = ["username", "first_name"]
+
+
+# class DeletedMuUserTable(tables.Table):
+#     username = tables.LinkColumn(
+#         "userupdate_view_name",
+#         verbose_name="Kullanıcı",
+#         text=lambda record: record.username,
+#         args=[tables.A("pk")],
+#         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},
+#     )
+#     first_name = tables.Column(verbose_name="Ad Soyad")
+#     reactivate_button = tables.TemplateColumn(
+#         '<button type="button" class="btn btn-primary reactivate-btn" data-id="{{ record.pk }}">Reactivate</button>',
+#         verbose_name="Reactivate",
+#     )
+
+#     class Meta:
+#         model = MuUser
+#         per_page = 10
+#         attrs = {"class": "table table-striped table-bordered"}
+#         template_name = "django_tables2/bootstrap5-responsive.html"
+#         fields = ["username", "first_name"]
+
+# tables.py
+from django import forms
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django_tables2 import TemplateColumn
+from .models import MuUser
+
+
+class ReactivateUserForm(forms.Form):
+    user_id = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class DeletedMuUserTable(tables.Table):
+    username = tables.LinkColumn(
+        "userupdate_view_name",
+        verbose_name="Kullanıcı",
+        text=lambda record: record.username,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
+    first_name = tables.Column(verbose_name="Ad Soyad")
+    reactivate = TemplateColumn(verbose_name="Reactivate", template_name="reactivate_button_column.html")
+
+    class Meta:
+        model = MuUser
+        per_page = 10
+        attrs = {"class": "table table-striped table-bordered"}
         template_name = "django_tables2/bootstrap5-responsive.html"
         fields = ["username", "first_name"]

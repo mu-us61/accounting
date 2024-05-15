@@ -78,34 +78,100 @@ class GroupListMaskedView(SingleTableMixin, FilterView):
 
 
 #     return render(request, "app_base/groups/groupcreate.html")
-@login_required
-@user_passes_test(is_staff)
-@func_write_permission_required
+
+
+from django.shortcuts import render, redirect
+from ..forms import MuGroupForm
+from ..models import MuGroup, Yetkiler
+
+
 def groupcreate_view(request):
     if request.method == "POST":
-        group_name = request.POST.get("group_name")
-        can_write = request.POST.get("can_write") == "on"
-        can_delete = request.POST.get("can_delete") == "on"
+        form = MuGroupForm(request.POST)
+        if form.is_valid():
+            # print(request.POST)
+            # print(form.cleaned_data)
 
-        # Check if the MuGroup with the given name already exists
-        existing_mu_group = MuGroup.objects.filter(name=group_name).first()
+            mu_group = form.save(commit=False)
 
-        if existing_mu_group is None:
-            # MuGroup with this name doesn't exist, create a new one
-            new_mu_group = MuGroup(name=group_name, can_write=can_write, can_delete=can_delete)
-            new_mu_group.save()
+            # Extract only the relevant fields from the form data
+            yetkiler_data = {key: value for key, value in form.cleaned_data.items() if key.startswith("can")}
 
-            # Assign the MuGroup to the user or perform any other necessary actions
-            # For example, if you have a user object, you can do:
-            # user.gruplar.add(new_mu_group)
-            # user.save()
+            # Fetch or create Yetkiler instance based on the extracted data
+            default_yetkiler, _ = Yetkiler.objects.get_or_create(**yetkiler_data)
 
+            # Associate default Yetkiler instance with MuGroup instance
+            mu_group.yetkiler = default_yetkiler
+
+            # Now save the MuGroup instance
+            mu_group.save()
+
+            # # Associate form with a default Yetkiler instance
+            # mu_group = form.save(commit=False)
+            # # print(mu_group.yetkiler.__dict__)
+            # default_yetkiler = Yetkiler.objects.create()
+            # mu_group.yetkiler = default_yetkiler
+            # mu_group.save()
+            # print(mu_group.yetkiler.__dict__)
+
+            # # Create a default Yetkiler instance
+            # default_yetkiler = Yetkiler.objects.create()
+
+            # # Create MuGroup instance and associate it with the default Yetkiler instance
+            # mu_group = form.save(commit=False)
+            # mu_group.yetkiler = default_yetkiler
+            # mu_group.save()
             return redirect("grouplist_view_name")  # Redirect to a group list view
+    else:
+        form = MuGroupForm()
+    return render(request, "app_base/groups/groupcreate.html", {"form": form})
 
-        # If MuGroup with this name already exists, handle accordingly
-        # You might want to display an error message or take other actions
 
-    return render(request, "app_base/groups/groupcreate.html")
+# from django.shortcuts import render, redirect
+# from ..forms import MuGroupForm
+
+
+# def groupcreate_view(request):
+#     if request.method == "POST":
+#         form = MuGroupForm(request.POST)
+#         if form.is_valid():
+#             group = form.save(commit=False)
+#             group.save()
+#             # return redirect("group_detail", pk=group.pk)  # Redirect to group detail page
+#             return redirect("grouplist_view_name")  # Redirect to a group list view
+#     else:
+#         form = MuGroupForm()
+#     return render(request, "app_base/groups/groupcreate.html", {"form": form})
+
+
+# @login_required
+# @user_passes_test(is_staff)
+# @func_write_permission_required
+# def groupcreate_view(request):
+#     if request.method == "POST":
+#         group_name = request.POST.get("group_name")
+#         can_write = request.POST.get("can_write") == "on"
+#         can_delete = request.POST.get("can_delete") == "on"
+
+#         # Check if the MuGroup with the given name already exists
+#         existing_mu_group = MuGroup.objects.filter(name=group_name).first()
+
+#         if existing_mu_group is None:
+#             # MuGroup with this name doesn't exist, create a new one
+#             new_mu_group = MuGroup(name=group_name, can_write=can_write, can_delete=can_delete)
+#             new_mu_group.save()
+
+#             # Assign the MuGroup to the user or perform any other necessary actions
+#             # For example, if you have a user object, you can do:
+#             # user.gruplar.add(new_mu_group)
+#             # user.save()
+
+#             return redirect("grouplist_view_name")  # Redirect to a group list view
+
+#         # If MuGroup with this name already exists, handle accordingly
+#         # You might want to display an error message or take other actions
+
+#     return render(request, "app_base/groups/groupcreate.html")
 
 
 # @login_required

@@ -11,6 +11,7 @@ import string
 from datetime import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 from embed_video.fields import EmbedVideoField
+from django.contrib.auth.models import BaseUserManager
 
 
 # //------------------------~~--------------------------------------------------------------------------
@@ -20,9 +21,6 @@ class AllObjectsManager(models.Manager):
 
     def get_deleted(self):
         return self.get_queryset().filter(is_active=False)
-
-
-from django.contrib.auth.models import BaseUserManager
 
 
 class ActiveObjectsManager(BaseUserManager):
@@ -114,12 +112,46 @@ class Currency(BaseModelSoftDelete):
 # //------------------------~~--------------------------------------------------------------------------
 
 
+class Yetkiler(models.Model):
+    can_read_can_kullanicilar = models.BooleanField(default=False)
+    can_read_kullanici_gruplari = models.BooleanField(default=False)
+    can_read_excel_kullanici_yukleme = models.BooleanField(default=False)
+    can_read_excel_kullanicilari = models.BooleanField(default=False)
+    can_read_bakiye = models.BooleanField(default=False)
+    can_read_harcama_kalemi = models.BooleanField(default=False)
+    can_read_para_birimleri = models.BooleanField(default=False)
+    can_read_Islemler = models.BooleanField(default=False)
+    can_read_etkinlikler = models.BooleanField(default=False)
+    can_read_evraklar = models.BooleanField(default=False)
+    can_read_aylikharcamalar = models.BooleanField(default=False)
+    can_read_aylikispatliharcamalar = models.BooleanField(default=False)
+    can_read_smsyonetimi = models.BooleanField(default=False)
+    can_read_mobileapplinkleri = models.BooleanField(default=False)
+
+    can_write_can_kullanicilar = models.BooleanField(default=False)
+    can_write_kullanici_gruplari = models.BooleanField(default=False)
+    can_write_excel_kullanici_yukleme = models.BooleanField(default=False)
+    can_write_excel_kullanicilari = models.BooleanField(default=False)
+    can_write_bakiye = models.BooleanField(default=False)
+    can_write_harcama_kalemi = models.BooleanField(default=False)
+    can_write_para_birimleri = models.BooleanField(default=False)
+    can_write_Islemler = models.BooleanField(default=False)
+    can_write_etkinlikler = models.BooleanField(default=False)
+    can_write_evraklar = models.BooleanField(default=False)
+    can_write_aylikharcamalar = models.BooleanField(default=False)
+    can_write_aylikispatliharcamalar = models.BooleanField(default=False)
+    can_write_smsyonetimi = models.BooleanField(default=False)
+    can_write_mobileapplinkleri = models.BooleanField(default=False)
+
+
 class MuGroup(Group, BaseModelSoftDelete):
+
     creation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(_("active"), default=True)
     objects = ActiveObjectsManager()
-    can_write = models.BooleanField(_("yazabilme"), default=False)
-    can_delete = models.BooleanField(_("silebilme"), default=False)
+    # can_write = models.BooleanField(_("yazabilme"), default=False)
+    # can_delete = models.BooleanField(_("silebilme"), default=False)
+    yetkiler = models.ForeignKey(Yetkiler, on_delete=models.CASCADE, related_name="gruplar_related")
 
     def save(self, *args, **kwargs):
         # self.is_active = True

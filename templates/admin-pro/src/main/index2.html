@@ -20,6 +20,10 @@
     <link href="../assets/libs/jvectormap/jquery-jvectormap.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link href="../../dist/css/style.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -29,6 +33,8 @@
 </head>
 
 <body>
+
+   
     <!-- -------------------------------------------------------------- -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- -------------------------------------------------------------- -->
@@ -1362,6 +1368,20 @@
                     <div class="col-lg-9 d-flex align-items-stretch">
                         <div class="card w-100">
                             <div class="card-body">
+
+                                <select class="js-example-basic-single" name="state">
+                                    <option value="AL">Alabama</option>
+                                      ...
+                                    <option value="WY">Wyoming</option>
+                                  </select>
+        
+                                  <script>
+        
+                                    $(document).ready(function() {
+                                        $('.js-example-basic-single').select2();
+                                    });
+                                  </script>
+
                                 <div class="d-md-flex">
                                     <div>
                                         <h3 class="card-title mb-1"><span
@@ -2728,7 +2748,7 @@
     <!-- -------------------------------------------------------------- -->
     <!-- All Jquery -->
     <!-- -------------------------------------------------------------- -->
-    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    
     <!-- Bootstrap tether Core javascript -->
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- apps -->
@@ -2743,12 +2763,20 @@
     <!--Menu sidebar -->
     <script src="../../dist/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
+    
     <script src="../../dist/js/feather.min.js"></script>
     <script src="../../dist/js/custom.min.js"></script>
     <!--This page JavaScript -->
     <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
     <!-- Chart JS -->
     <script src="../../dist/js/pages/dashboards/dashboard2.js"></script>
+
+    <!-- 
+        <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    This is a
+    multi-line HTML
+    comment
+-->
 </body>
 
 </html>

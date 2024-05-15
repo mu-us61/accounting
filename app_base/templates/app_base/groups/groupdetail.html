@@ -1,147 +1,261 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="column m-auto">
-        <div class="block">
-            <h1 class="title has-text-centered">{{ group.name }}</h1>
-            <div class="box">
-                <a href="{% url 'groupupdate_view_name' group.id %}" class="button is-link">Grubu Düzenle</a>
-                <a href="{% url 'groupdelete_view_name' group.id %}" class="button is-danger">Grubu Sil</a>
-            </div>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block yanpanel %}
+<div class="left-part bg-light dashboard-right-part fixed-left-part">
+  <!-- Mobile toggle button -->
+  <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+  <!-- Mobile toggle button -->
+  <div class="scrollable position-relative" style="height: calc(100vh - 50px)">
+    <div class="list-group p-3">
+      <div>
+        <br />
+        <h2 class="h5 text-center">Gruba Ekle</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" name="add_user" class="form-control typeahead" placeholder="Kullanıcı ara..." />
+            <button type="submit" name="add_users" class="btn btn-primary w-100">Ekle</button>
+          </div>
+        </form>
+      </div>
+      <div>
+        <br />
+        <br />
+        <h2 class="h5 text-center">Gruptan Sil</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" name="remove_user" class="form-control typeahead" placeholder="Kullanıcı ara..." />
+            <button type="submit" name="remove_users" class="btn btn-danger w-100">Sil</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="list-group p-3">
+      <a class="list-group-item list-group-item-action list-group-item-warning" href="{% url 'groupupdate_view_name' group.id%}">Grubu Düzenle</a>
+
+      <br />
+      <a href="{% url 'groupdelete_view_name' group.id%}" class="list-group-item list-group-item-action list-group-item-warning">Grubu Sil</a>
+    </div>
+  </div>
+</div>
+{% endblock yanpanel %} {% block content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="block">
+        <h1 class="title text-center">Grup Ismi : {{ group.name }}</h1>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col">
+          <h2 class="subtitle">Grup Yetkileri</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Yetkiler</th>
+                <th>Can Read</th>
+                <th>Can Write</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Can Read Kullanıcılar</td>
+                <td>{% if group.yetkiler.can_read_can_kullanicilar %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_can_kullanicilar %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Kullanıcı Grupları</td>
+                <td>{% if group.yetkiler.can_read_kullanici_gruplari %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_kullanici_gruplari %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Excel Kullanıcı Yükleme</td>
+                <td>{% if group.yetkiler.can_read_excel_kullanici_yukleme %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_excel_kullanici_yukleme %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Excel Kullanıcıları</td>
+                <td>{% if group.yetkiler.can_read_excel_kullanicilari %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_excel_kullanicilari %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Bakiye</td>
+                <td>{% if group.yetkiler.can_read_bakiye %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_bakiye %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Harcama Kalemi</td>
+                <td>{% if group.yetkiler.can_read_harcama_kalemi %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_harcama_kalemi %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Para Birimleri</td>
+                <td>{% if group.yetkiler.can_read_para_birimleri %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_para_birimleri %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read İşlemler</td>
+                <td>{% if group.yetkiler.can_read_Islemler %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_Islemler %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Etkinlikler</td>
+                <td>{% if group.yetkiler.can_read_etkinlikler %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_etkinlikler %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Evraklar</td>
+                <td>{% if group.yetkiler.can_read_evraklar %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_evraklar %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Aylık Harcamalar</td>
+                <td>{% if group.yetkiler.can_read_aylikharcamalar %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_aylikharcamalar %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Aylık İşpatlı Harcamalar</td>
+                <td>{% if group.yetkiler.can_read_aylikispatliharcamalar %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_aylikispatliharcamalar %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read SMS Yönetimi</td>
+                <td>{% if group.yetkiler.can_read_smsyonetimi %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_smsyonetimi %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+              <tr>
+                <td>Can Read Mobil Uygulama Linkleri</td>
+                <td>{% if group.yetkiler.can_read_mobileapplinkleri %} ✓ {% else %} &nbsp; {% endif %}</td>
+                <td>{% if group.yetkiler.can_write_mobileapplinkleri %} ✓ {% else %} &nbsp; {% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="columns m-auto">
-            <div class="column">
-                <h2 class="subtitle">Grup Yetkileri</h2>
-                <p>
-                    Yazma İzni:
-                    {% if group.can_write %}
-                        Var
-                    {% else %}
-                        Yok
-                    {% endif %}
-                </p>
-                <p>
-                    Silme İzni:
-                    {% if group.can_delete %}
-                        Var
-                    {% else %}
-                        Yok
-                    {% endif %}
-                </p>
-            </div>
-            {% comment %} <!-- Group Members Column -->
-                        <div class="column">
-                        <h2 class="subtitle">Grup Üyeleri</h2>
-                        <ul>
-                            {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
-                    </ul>
-    </div> {% endcomment %}
+
+        {% comment %}
+        <div class="col">
+          <h2 class="subtitle">Grup Yetkileri</h2>
+        </div>
+        {% endcomment %}
+        <div class="col">
+          <h2 class="subtitle">Grup Üyeleri</h2>
+          <ul>
+            {% for user in muuser %} {% if group in user.gruplar.all %}
+            <li>{{ user.username }}</li>
+            {% endif %} {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+<div class="column m-auto">
+  <div class="block">
+    <h1 class="title has-text-centered">{{ group.name }}</h1>
+  </div>
+  <div class="columns m-auto">
+    <div class="column">
+      <h2 class="subtitle">Grup Yetkileri</h2>
+      <p>Yazma İzni: {% if group.can_write %} Var {% else %} Yok {% endif %}</p>
+      <p>Silme İzni: {% if group.can_delete %} Var {% else %} Yok {% endif %}</p>
+    </div>
+
     <!-- Group Members Column -->
     <div class="column">
-        <h2 class="subtitle">Grup Üyeleri</h2>
-        <ul>
-            {% for user in muuser %}
-                {% if group in user.gruplar.all %}<li>{{ user.username }}</li>{% endif %}
-            {% endfor %}
-        </ul>
+      <h2 class="subtitle">Grup Üyeleri</h2>
+      <ul>
+        {% for user in muuser %} {% if group in user.gruplar.all %}
+        <li>{{ user.username }}</li>
+        {% endif %} {% endfor %}
+      </ul>
     </div>
-    <!-- Add autocomplete input for adding users -->
-    <div class="column">
-        <h2 class="subtitle">Gruba Ekle</h2>
-        <form method="post">
-            {% csrf_token %}
-            <input type="text" name="add_user" class="typeahead" placeholder="Kullanıcı ara...">
-            <button type="submit" name="add_users" class="button is-primary">Ekle</button>
-        </form>
-    </div>
-    <!-- Remove autocomplete input for removing users -->
-    <div class="column">
-        <h2 class="subtitle">Gruptan Sil</h2>
-        <form method="post">
-            {% csrf_token %}
-            <input type="text" name="remove_user" class="typeahead" placeholder="Kullanıcı ara...">
-            <button type="submit" name="remove_users" class="button is-danger">Sil</button>
-        </form>
-    </div>
+  </div>
 </div>
-</div>
+{% endcomment %}
 <!-- Include typeahead.js scripts -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 <script>
-        $(document).ready(function() {
-            // Initialize typeahead for adding and removing users
-        var users = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('username'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/user-autocomplete/?query=%QUERY',
-                wildcard: '%QUERY',
-                cache: false
-            }
-        });
+  $(document).ready(function () {
+    // Initialize typeahead for adding and removing users
+    var users = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("username"),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: "/user-autocomplete/?query=%QUERY",
+        wildcard: "%QUERY",
+        cache: false,
+      },
+    });
 
-        $('.typeahead').typeahead({
-            minLength: 1,
-            highlight: true
-        }, {
-            name: 'users',
-            display: 'username',
-            source: users
-        });
-        });
+    $(".typeahead").typeahead(
+      {
+        minLength: 1,
+        highlight: true,
+      },
+      {
+        name: "users",
+        display: "username",
+        source: users,
+      }
+    );
+  });
 </script>
-{% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="column m-auto">
-        <div class="block">
-            <h1 class="title has-text-centered">{{ group.name }}</h1>
-            <div class="box">
-                <a href="{% url 'groupupdate_view_name' group.id %}" class="button is-link">Grubu Düzenle</a>
-                <a href="{% url 'groupdelete_view_name' group.id %}" class="button is-danger">Grubu Sil</a>
-            </div>
-        </div>
-        <div class="columns m-auto">
-            <div class="column">
-                <h2 class="subtitle">Grup Uyeleri</h2>
-                <ul>
-                    {% for user in group.user_set.all %}<li>{{ user.username }}</li>{% endfor %}
-                </ul>
-            </div>
-            <div class="column">
-                <h2 class="subtitle">Gruba Ekle</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <ul>
-                        {% for user in all_users %}
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="add_user" value="{{ user.id }}" {% if user in group.user_set.all %}checked{% endif %}>
-                                    {{ user.username }}
-                                </label>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <button type="submit" name="add_users" class="button is-primary">Ekle</button>
-                </form>
-            </div>
-            <div class="column">
-                <h2 class="subtitle">Gruptan Sil</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <ul>
-                        {% for user in group.user_set.all %}
-                            <li>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="remove_user" value="{{ user.id }}">
-                                    {{ user.username }}
-                                </label>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <button type="submit" name="remove_users" class="button is-danger">Sil</button>
-                </form>
-            </div>
-        </div>
+{% endblock content %} {% comment %} {% extends "base.html" %} {% block content %}
+<div class="column m-auto">
+  <div class="block">
+    <h1 class="title has-text-centered">{{ group.name }}</h1>
+    <div class="box">
+      <a href="{% url 'groupupdate_view_name' group.id %}" class="button is-link">Grubu Düzenle</a>
+      <a href="{% url 'groupdelete_view_name' group.id %}" class="button is-danger">Grubu Sil</a>
     </div>
+  </div>
+  <div class="columns m-auto">
+    <div class="column">
+      <h2 class="subtitle">Grup Uyeleri</h2>
+      <ul>
+        {% for user in group.user_set.all %}
+        <li>{{ user.username }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="column">
+      <h2 class="subtitle">Gruba Ekle</h2>
+      <form method="post">
+        {% csrf_token %}
+        <ul>
+          {% for user in all_users %}
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" name="add_user" value="{{ user.id }}" {% if user in group.user_set.all %}checked{% endif %} />
+              {{ user.username }}
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+        <button type="submit" name="add_users" class="button is-primary">Ekle</button>
+      </form>
+    </div>
+    <div class="column">
+      <h2 class="subtitle">Gruptan Sil</h2>
+      <form method="post">
+        {% csrf_token %}
+        <ul>
+          {% for user in group.user_set.all %}
+          <li>
+            <label class="checkbox">
+              <input type="checkbox" name="remove_user" value="{{ user.id }}" />
+              {{ user.username }}
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+        <button type="submit" name="remove_users" class="button is-danger">Sil</button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock content %} {% endcomment %}

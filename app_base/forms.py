@@ -22,14 +22,19 @@ class CurrencyForm(forms.ModelForm):
 
 class MuUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+
     # is_active = forms.CheckboxInput()
-    is_active = forms.BooleanField(label="Aktif", required=False)  # Use BooleanField for is_active
+    # is_active = forms.BooleanField(label="Aktif", required=False)  # Use BooleanField for is_active
+    # def __init__(self, *args, **kwargs):
+    #     super(MuUserForm, self).__init__(*args, **kwargs)
+    #     self.fields["is_active"].initial = True
 
     class Meta:
         model = MuUser
         # fields = "__all__"
         # exclude = ["pk"]
-        fields = ["username", "password", "first_name", "is_active"]  # Adjust fields as needed
+        # fields = ["username", "password", "first_name", "is_active"]  # Adjust fields as needed
+        fields = ["username", "password", "first_name"]  # Adjust fields as needed
 
     def clean_username(self):
         return self.cleaned_data["username"].lower()
@@ -41,7 +46,7 @@ class MuUserForm(forms.ModelForm):
         user = super().save(commit=False)
         # Use set_password to hash the password
         user.set_password(self.cleaned_data["password"])
-        user.is_active = self.cleaned_data["is_active"]  # Assign is_active value
+        # user.is_active = self.cleaned_data["is_active"]  # Assign is_active value
         if commit:
             user.save()
         return user
@@ -228,3 +233,63 @@ from django import forms
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
+
+
+# from django import forms
+# from .models import MuGroup, Yetkiler
+
+
+# class MuGroupForm(forms.ModelForm):
+#     class Meta:
+#         model = MuGroup
+#         fields = ["name"]
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         yetkiler = Yetkiler.objects.first()  # Assuming there's only one Yetkiler instance
+#         if yetkiler:
+#             for field_name in yetkiler._meta.get_fields():
+#                 if field_name.name.startswith("can_"):
+#                     self.fields[field_name.name] = forms.BooleanField(required=False, label=field_name.verbose_name)
+
+from django import forms
+from .models import MuGroup, Yetkiler
+
+
+class MuGroupForm(forms.ModelForm):
+    class Meta:
+        model = MuGroup
+        fields = ["name"]
+
+    can_read_can_kullanicilar = forms.BooleanField(label="", required=False)
+    can_read_kullanici_gruplari = forms.BooleanField(label="", required=False)
+    can_read_excel_kullanici_yukleme = forms.BooleanField(label="", required=False)
+    can_read_excel_kullanicilari = forms.BooleanField(label="", required=False)
+    can_read_bakiye = forms.BooleanField(label="", required=False)
+    can_read_harcama_kalemi = forms.BooleanField(label="", required=False)
+    can_read_para_birimleri = forms.BooleanField(label="", required=False)
+    can_read_Islemler = forms.BooleanField(label="", required=False)
+    can_read_etkinlikler = forms.BooleanField(label="", required=False)
+    can_read_evraklar = forms.BooleanField(label="", required=False)
+    can_read_aylikharcamalar = forms.BooleanField(label="", required=False)
+    can_read_aylikispatliharcamalar = forms.BooleanField(label="", required=False)
+    can_read_smsyonetimi = forms.BooleanField(label="", required=False)
+    can_read_mobileapplinkleri = forms.BooleanField(label="", required=False)
+
+    can_write_can_kullanicilar = forms.BooleanField(label="", required=False)
+    can_write_kullanici_gruplari = forms.BooleanField(label="", required=False)
+    can_write_excel_kullanici_yukleme = forms.BooleanField(label="", required=False)
+    can_write_excel_kullanicilari = forms.BooleanField(label="", required=False)
+    can_write_bakiye = forms.BooleanField(label="", required=False)
+    can_write_harcama_kalemi = forms.BooleanField(label="", required=False)
+    can_write_para_birimleri = forms.BooleanField(label="", required=False)
+    can_write_Islemler = forms.BooleanField(label="", required=False)
+    can_write_etkinlikler = forms.BooleanField(label="", required=False)
+    can_write_evraklar = forms.BooleanField(label="", required=False)
+    can_write_aylikharcamalar = forms.BooleanField(label="", required=False)
+    can_write_aylikispatliharcamalar = forms.BooleanField(label="", required=False)
+    can_write_smsyonetimi = forms.BooleanField(label="", required=False)
+    can_write_mobileapplinkleri = forms.BooleanField(label="", required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

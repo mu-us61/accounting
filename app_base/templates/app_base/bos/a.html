@@ -1,0 +1,710 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+        content="">
+    <meta name="description"
+        content="">
+    <meta name="robots" content="noindex,nofollow">
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+    <!-- denemeler cssler -->
+    <script src="{% static "assets/libs/jquery/dist/jquery.min.js" %}"></script>
+    <!-- benim cssler -->
+    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> {% endcomment %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iconify/2.0.0/iconify.min.js" defer ></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script> {% endcomment %}
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
+        <!-- Include flatpickr CSS and JS files -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" defer></script>
+        <!-- benim ccler -->
+    {% comment %} <link rel="canonical" href="https://www.wrappixel.com/templates/adminpro/" /> {% endcomment %}
+    <!-- Favicon icon -->
+    {% comment %} <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png"> {% endcomment %}
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'Images/favicon.ico' %}">
+    {% comment %} <link rel="stylesheet" href="../assets/libs/apexcharts/dist/apexcharts.css"> {% endcomment %}
+    <link rel="stylesheet" href="{% static "assets/libs/apexcharts/dist/apexcharts.css" %}">
+    <!-- Custom CSS -->
+    {% comment %} <link href="../../dist/css/style.min.css" rel="stylesheet"> {% endcomment %}
+    <link href=" {% static "dist/css/style.min.css" %}" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+    <!-- -------------------------------------------------------------- -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- -------------------------------------------------------------- -->
+    <div class="preloader">
+        <svg class="tea lds-ripple" width="37" height="48" viewbox="0 0 37 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M27.0819 17H3.02508C1.91076 17 1.01376 17.9059 1.0485 19.0197C1.15761 22.5177 1.49703 29.7374 2.5 34C4.07125 40.6778 7.18553 44.8868 8.44856 46.3845C8.79051 46.79 9.29799 47 9.82843 47H20.0218C20.639 47 21.2193 46.7159 21.5659 46.2052C22.6765 44.5687 25.2312 40.4282 27.5 34C28.9757 29.8188 29.084 22.4043 29.0441 18.9156C29.0319 17.8436 28.1539 17 27.0819 17Z" stroke="#2962FF" stroke-width="2"></path>
+          <path d="M29 23.5C29 23.5 34.5 20.5 35.5 25.4999C36.0986 28.4926 34.2033 31.5383 32 32.8713C29.4555 34.4108 28 34 28 34" stroke="#2962FF" stroke-width="2"></path>
+          <path id="teabag" fill="#2962FF" fill-rule="evenodd" clip-rule="evenodd" d="M16 25V17H14V25H12C10.3431 25 9 26.3431 9 28V34C9 35.6569 10.3431 37 12 37H18C19.6569 37 21 35.6569 21 34V28C21 26.3431 19.6569 25 18 25H16ZM11 28C11 27.4477 11.4477 27 12 27H18C18.5523 27 19 27.4477 19 28V34C19 34.5523 18.5523 35 18 35H12C11.4477 35 11 34.5523 11 34V28Z"></path>
+          <path id="steamL" d="M17 1C17 1 17 4.5 14 6.5C11 8.5 11 12 11 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#2962FF"></path>
+          <path id="steamR" d="M21 6C21 6 21 8.22727 19 9.5C17 10.7727 17 13 17 13" stroke="#2962FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </div>
+    <!-- -------------------------------------------------------------- -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- -------------------------------------------------------------- -->
+    <div id="main-wrapper">
+        <!-- -------------------------------------------------------------- -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- -------------------------------------------------------------- -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ri-close-line fs-6 ri-menu-2-line"></i>
+                    </a>
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- Logo -->
+                    <!-- -------------------------------------------------------------- -->
+                    <a class="navbar-brand" href="/">
+                        <!-- Logo icon -->
+                        <b class="logo-icon">
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src=" {% static 'Images/favicon.ico' %}" style="width: 40px; margin-left: 5px; margin-right: 8px;"alt="homepage" class="dark-logo" />
+                            <!-- Light Logo icon -->
+                            <img src=" {% static 'Images/favicon.ico' %}" alt="homepage" class="light-logo" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span class="logo-text">
+                            <!-- dark Logo text -->
+                            {% comment %} <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" /> {% endcomment %}
+                            <!-- Light Logo text -->
+                            {% comment %} <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> {% endcomment %}
+                            <b>HAYVAKFI</b>
+                        </span>
+                    </a>
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- End Logo -->
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- -------------------------------------------------------------- -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
+                           data-feather="more-horizontal" class="feather-sm"></i></a>
+                </div>
+                <!-- -------------------------------------------------------------- -->
+                <!-- End Logo -->
+                <!-- -------------------------------------------------------------- -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- toggle and nav items -->
+                    <!-- -------------------------------------------------------------- -->
+                    <ul class="navbar-nav me-auto">
+                        <!-- This is  -->
+                        <li class="nav-item"> <a
+                                class="nav-link sidebartoggler d-none d-md-block waves-effect waves-dark"
+                                href="javascript:void(0)"><i data-feather="menu" class="feather-sm"></i></a> </li>
+                    </ul>
+                    <!-- -------------------------------------------------------------- -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- -------------------------------------------------------------- -->
+                    <ul class="navbar-nav justify-content-end">
+                    
+                        <!-- -------------------------------------------------------------- -->
+                        <!-- Profile -->
+                        <!-- -------------------------------------------------------------- -->
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <img src="{% static "assets/images/users/1.jpg" %}" alt="user" width="30"
+                                    class="profile-pic rounded-circle" />
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end user-dd animated flipInY">
+                                <div class="d-flex no-block align-items-center p-3 bg-primary text-white mb-2">
+                                    <div class=""><img src="{% static "assets/images/users/1.jpg" %}" alt="user" class="rounded-circle" width="60"></div>
+                                    <div class="ms-2">
+                                        <h4 class="mb-0 text-white"> {{ user.username }} </h4>
+                                        {% comment %} <p class=" mb-0">varun@gmail.com</p> {% endcomment %}
+                                    </div>
+                                </div>
+                                {% comment %} <a class="dropdown-item" href="#"><i data-feather="user" class="feather-sm text-info me-1 ms-1"></i> My
+                                    Profile</a>
+                                <a class="dropdown-item" href="#"><i data-feather="credit-card" class="feather-sm text-primary me-1 ms-1"></i>
+                                    My Balance</a> {% endcomment %}
+                                <a class="dropdown-item" href="{% url 'passwordchange_view_name' %}"><span class="iconify" data-icon="material-symbols:password" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span>
+                                    Sifre degisimi</a>
+                                {% comment %} <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i data-feather="settings" class="feather-sm text-warning me-1 ms-1"></i>
+                                    Account Setting</a> {% endcomment %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'logout_view_name' %}"><i data-feather="log-out"
+                                        class="feather-sm text-danger me-1 ms-1"></i> Cikis</a>
+                                {% comment %} <div class="dropdown-divider"></div> {% endcomment %}
+                                {% comment %} <div class="pl-4 p-2"><a href="#"
+                                        class="btn d-block w-100 btn-primary rounded-pill">View Profile</a></div> {% endcomment %}
+                            </div>
+                        </li>
+                        
+                    {% else %}
+                    
+                       <li class="nav-item dropdown" style="height:70px;">
+                            <a class="justify-content-center w-100 btn btn-info d-flex align-items-center" href="{% url 'login_view_name' %}" role="button" style="align-self: center;"><span class="iconify" data-icon="material-symbols:login" style="font-size: 18px; margin-left: 5px; margin-right: 8px;" ></span> Giriş</a>
+                        </li>
+                  
+                   {% endif %}
+                        
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- -------------------------------------------------------------- -->
+        <!-- End Topbar header -->
+        <!-- -------------------------------------------------------------- -->
+        <!-- -------------------------------------------------------------- -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- -------------------------------------------------------------- -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        {% if user.is_authenticated %}
+                        <li class="sidebar-item user-profile">
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"
+                                aria-expanded="false">
+                                <img src=" {% static "assets/images/users/profile.png" %}" alt="user">
+                                <span class="hide-menu">{{ user.username }}</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                            
+                                <li class="sidebar-item">
+                                    <a href="{% url 'passwordchange_view_name' %}" class="sidebar-link p-0">
+                                        <i class="mdi mdi-adjust"></i>
+                                        <span class="hide-menu"> Sifre degisimi </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{% url 'logout_view_name' %}" class="sidebar-link p-0">
+                                        <i class="mdi mdi-adjust"></i>
+                                        <span class="hide-menu"> Cikis </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    
+                {% else %}
+                {% endif %}
+                        
+                        
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"
+                                aria-expanded="false">
+                                <i data-feather="home" class="feather-icon"></i>
+                                <span class="hide-menu">Kisiler <span
+                                        class="side-badge badge bg-info">4</span></span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+
+
+                                {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                    <!-- If the user is staff, enable the button -->
+                                    <li class="sidebar-item">
+                                        <a href="{% url 'userlist_view_name' %}" class="sidebar-link">
+                                            <i class="mdi mdi-adjust"></i>
+                                            <span class="hide-menu"> Kullanicilar</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    {% if user.gruplar.all %}
+                                        {% for group in user.gruplar.all|slice:":1" %}
+                                            {% if group.yetkiler.can_read_can_kullanicilar %}
+                                                <!-- Enable the button -->
+                                                <li class="sidebar-item">
+                                                    <a href="{% url 'userlist_view_name' %}" class="sidebar-link">
+                                                        <i class="mdi mdi-adjust"></i>
+                                                        <span class="hide-menu"> Kullanicilar</span>
+                                                    </a>
+                                                </li>
+                                                <!-- You can add other button attributes here -->
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <!-- Disable the button if the user is not in any group -->
+                                            
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <!-- Handle case when user is not authenticated -->
+                                
+                            {% endif %}
+                            
+
+                            {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                    <!-- If the user is staff, enable the button -->
+                                    <li class="sidebar-item">
+                                        <a href="{% url 'grouplist_view_name' %}" class="sidebar-link">
+                                            <i class="mdi mdi-adjust"></i>
+                                            <span class="hide-menu"> Kullanıcı Grupları </span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    {% if user.gruplar.all %}
+                                        {% for group in user.gruplar.all|slice:":1" %}
+                                            {% if group.yetkiler.can_read_kullanici_gruplari %}
+                                                <!-- Enable the button -->
+                                                <li class="sidebar-item">
+                                                    <a href="{% url 'grouplist_view_name' %}" class="sidebar-link">
+                                                        <i class="mdi mdi-adjust"></i>
+                                                        <span class="hide-menu"> Kullanıcı Grupları </span>
+                                                    </a>
+                                                </li>
+                                                <!-- You can add other button attributes here -->
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <!-- Disable the button if the user is not in any group -->
+                                            
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <!-- Handle case when user is not authenticated -->
+                                
+                            {% endif %}
+                               
+                            
+                            {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                    <!-- If the user is staff, enable the button -->
+                                    <li class="sidebar-item">
+                                        <a href="{% url "upload_exel_view_name" %}" class="sidebar-link">
+                                            <i class="mdi mdi-adjust"></i>
+                                            <span class="hide-menu"> Excel kullanici yukleme </span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    {% if user.gruplar.all %}
+                                        {% for group in user.gruplar.all|slice:":1" %}
+                                            {% if group.yetkiler.can_read_excel_kullanici_yukleme %}
+                                                <!-- Enable the button -->
+                                                <li class="sidebar-item">
+                                                    <a href="{% url "upload_exel_view_name" %}" class="sidebar-link">
+                                                        <i class="mdi mdi-adjust"></i>
+                                                        <span class="hide-menu"> Excel kullanici yukleme </span>
+                                                    </a>
+                                                </li>
+                                                <!-- You can add other button attributes here -->
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <!-- Disable the button if the user is not in any group -->
+                                            
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <!-- Handle case when user is not authenticated -->
+                                
+                            {% endif %}
+
+                            
+
+                            {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                    <!-- If the user is staff, enable the button -->
+                                    <li class="sidebar-item">
+                                        <a href="{% url "exelusers_list" %}" class="sidebar-link">
+                                            <i class="mdi mdi-adjust"></i>
+                                            <span class="hide-menu"> Excel kullanicilari </span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    {% if user.gruplar.all %}
+                                        {% for group in user.gruplar.all|slice:":1" %}
+                                            {% if group.yetkiler.can_read_excel_kullanicilari %}
+                                                <!-- Enable the button -->
+                                                <li class="sidebar-item">
+                                                    <a href="{% url "exelusers_list" %}" class="sidebar-link">
+                                                        <i class="mdi mdi-adjust"></i>
+                                                        <span class="hide-menu"> Excel kullanicilari </span>
+                                                    </a>
+                                                </li>
+                                                <!-- You can add other button attributes here -->
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                            <!-- Disable the button if the user is not in any group -->
+                                            
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <!-- Handle case when user is not authenticated -->
+                                
+                            {% endif %}
+
+                                
+                                
+                            </ul>
+                        </li> 
+                      
+                        
+                            {% if user.is_authenticated %}
+                            {% if user.is_staff %}
+                                <!-- If the user is staff, enable the button -->
+                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                    href="{% url 'balance_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols:account-balance-wallet-sharp" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Bakiye</span></a></li>
+                               
+                            {% else %}
+                                {% if user.gruplar.all %}
+                                    {% for group in user.gruplar.all|slice:":1" %}
+                                        {% if group.yetkiler.can_read_bakiye %}
+                                            <!-- Enable the button -->
+                                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                                href="{% url 'balance_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols:account-balance-wallet-sharp" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Bakiye</span></a></li>
+                                           
+                                            <!-- You can add other button attributes here -->
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                        <!-- Disable the button if the user is not in any group -->
+                                        
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <!-- Handle case when user is not authenticated -->
+                            
+                        {% endif %}
+
+                        
+                        {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <!-- If the user is staff, enable the button -->
+                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="{% url 'taglist_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="fa6-solid:tags" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Harcama Kalemi</span></a></li>
+                                    
+                        {% else %}
+                            {% if user.gruplar.all %}
+                                {% for group in user.gruplar.all|slice:":1" %}
+                                    {% if group.yetkiler.can_read_harcama_kalemi %}
+                                        <!-- Enable the button -->
+                                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                            href="{% url 'taglist_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="fa6-solid:tags" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Harcama Kalemi</span></a></li>
+                                        
+                                        <!-- You can add other button attributes here -->
+                                    {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                    <!-- Disable the button if the user is not in any group -->
+                                    
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <!-- Handle case when user is not authenticated -->
+                        
+                    {% endif %}
+
+
+                    {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <!-- If the user is staff, enable the button -->
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                            href="{% url 'currencylist_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="grommet-icons:currency" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Para Birimleri</span></a></li>
+                                      
+                    {% else %}
+                        {% if user.gruplar.all %}
+                            {% for group in user.gruplar.all|slice:":1" %}
+                                {% if group.yetkiler.can_read_para_birimleri %}
+                                    <!-- Enable the button -->
+                                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                        href="{% url 'currencylist_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="grommet-icons:currency" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Para Birimleri</span></a></li>
+                                    
+                                    <!-- You can add other button attributes here -->
+                                {% endif %}
+                            {% endfor %}
+                            {% else %}
+                                <!-- Disable the button if the user is not in any group -->
+                                
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <!-- Handle case when user is not authenticated -->
+                    
+                {% endif %}
+
+
+                {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <!-- If the user is staff, enable the button -->
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                        href="{% url 'transactiontable_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="iconamoon:history-duotone" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">İşlemler</span></a></li>
+                                       
+                {% else %}
+                    {% if user.gruplar.all %}
+                        {% for group in user.gruplar.all|slice:":1" %}
+                            {% if group.yetkiler.can_read_Islemler %}
+                                <!-- Enable the button -->
+                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                    href="{% url 'transactiontable_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="iconamoon:history-duotone" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">İşlemler</span></a></li>
+                               
+                                <!-- You can add other button attributes here -->
+                            {% endif %}
+                        {% endfor %}
+                        {% else %}
+                            <!-- Disable the button if the user is not in any group -->
+                            
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <!-- Handle case when user is not authenticated -->
+                
+            {% endif %}
+
+
+
+            {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <!-- If the user is staff, enable the button -->
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'etkinlik_list' %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols:youtube-activity" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Etkinlikler</span></a></li>
+                              
+            {% else %}
+                {% if user.gruplar.all %}
+                    {% for group in user.gruplar.all|slice:":1" %}
+                        {% if group.yetkiler.can_read_etkinlikler %}
+                            <!-- Enable the button -->
+                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="{% url 'etkinlik_list' %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols:youtube-activity" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Etkinlikler</span></a></li>
+                        
+                            <!-- You can add other button attributes here -->
+                        {% endif %}
+                    {% endfor %}
+                    {% else %}
+                        <!-- Disable the button if the user is not in any group -->
+                        
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <!-- Handle case when user is not authenticated -->
+            
+        {% endif %}
+
+
+        {% if user.is_authenticated %}
+        {% if user.is_staff %}
+            <!-- If the user is staff, enable the button -->
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                href="{% url 'evrak_list' %}" aria-expanded="false"><span class="iconify" data-icon="gg:file-document" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span> <span class="hide-menu">Evraklar</span></a></li>
+                  
+        {% else %}
+            {% if user.gruplar.all %}
+                {% for group in user.gruplar.all|slice:":1" %}
+                    {% if group.yetkiler.can_read_evraklar %}
+                        <!-- Enable the button -->
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                            href="{% url 'evrak_list' %}" aria-expanded="false"><span class="iconify" data-icon="gg:file-document" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span> <span class="hide-menu">Evraklar</span></a></li>
+                    
+                        <!-- You can add other button attributes here -->
+                    {% endif %}
+                {% endfor %}
+                {% else %}
+                    <!-- Disable the button if the user is not in any group -->
+                    
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <!-- Handle case when user is not authenticated -->
+        
+    {% endif %}
+
+
+    {% if user.is_authenticated %}
+    {% if user.is_staff %}
+        <!-- If the user is staff, enable the button -->
+        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+            href="{% url 'monthlyspendings_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="grommet-icons:money" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Aylık Harcamalar</span></a></li>
+       
+    {% else %}
+        {% if user.gruplar.all %}
+            {% for group in user.gruplar.all|slice:":1" %}
+                {% if group.yetkiler.can_read_aylikharcamalar %}
+                    <!-- Enable the button -->
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                        href="{% url 'monthlyspendings_view_name' %}" aria-expanded="false"><span class="iconify" data-icon="grommet-icons:money" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Aylık Harcamalar</span></a></li>
+               
+                    <!-- You can add other button attributes here -->
+                {% endif %}
+            {% endfor %}
+            {% else %}
+                <!-- Disable the button if the user is not in any group -->
+                
+        {% endif %}
+    {% endif %}
+{% else %}
+    <!-- Handle case when user is not authenticated -->
+    
+{% endif %}
+
+
+{% if user.is_authenticated %}
+{% if user.is_staff %}
+    <!-- If the user is staff, enable the button -->
+    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+        href="{% url "proventags_view_name" %}" aria-expanded="false"><span class="iconify" data-icon="majesticons:paper-fold-text" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Aylık İspatlı Harcamalar</span></a></li>
+ 
+{% else %}
+    {% if user.gruplar.all %}
+        {% for group in user.gruplar.all|slice:":1" %}
+            {% if group.yetkiler.can_read_aylikispatliharcamalar %}
+                <!-- Enable the button -->
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url "proventags_view_name" %}" aria-expanded="false"><span class="iconify" data-icon="majesticons:paper-fold-text" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Aylık İspatlı Harcamalar</span></a></li>
+             
+                <!-- You can add other button attributes here -->
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            <!-- Disable the button if the user is not in any group -->
+            
+    {% endif %}
+{% endif %}
+{% else %}
+<!-- Handle case when user is not authenticated -->
+
+{% endif %}
+
+
+{% if user.is_authenticated %}
+{% if user.is_staff %}
+    <!-- If the user is staff, enable the button -->
+    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+        href="{% url "sms_view_main" %}" aria-expanded="false"><span class="iconify" data-icon="fa6-solid:comment-sms" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">SMS Yönetimi</span></a></li>
+ 
+{% else %}
+    {% if user.gruplar.all %}
+        {% for group in user.gruplar.all|slice:":1" %}
+            {% if group.yetkiler.can_read_smsyonetimi %}
+                <!-- Enable the button -->
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url "sms_view_main" %}" aria-expanded="false"><span class="iconify" data-icon="fa6-solid:comment-sms" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">SMS Yönetimi</span></a></li>
+             
+                <!-- You can add other button attributes here -->
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            <!-- Disable the button if the user is not in any group -->
+            
+    {% endif %}
+{% endif %}
+{% else %}
+<!-- Handle case when user is not authenticated -->
+
+{% endif %}
+
+
+{% if user.is_authenticated %}
+{% if user.is_staff %}
+    <!-- If the user is staff, enable the button -->
+    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+        href="{% url "mobile_view_name" %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols-light:app-promo" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Mobile App linkeleri</span></a></li>
+
+{% else %}
+    {% if user.gruplar.all %}
+        {% for group in user.gruplar.all|slice:":1" %}
+            {% if group.yetkiler.can_read_mobileapplinkleri %}
+                <!-- Enable the button -->
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url "mobile_view_name" %}" aria-expanded="false"><span class="iconify" data-icon="material-symbols-light:app-promo" style="font-size: 18px; margin-left: 5px; margin-right: 8px;"></span><span class="hide-menu">Mobile App linkeleri</span></a></li>
+
+                <!-- You can add other button attributes here -->
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            <!-- Disable the button if the user is not in any group -->
+            
+    {% endif %}
+{% endif %}
+{% else %}
+<!-- Handle case when user is not authenticated -->
+
+{% endif %}
+
+
+ 
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- -------------------------------------------------------------- -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- -------------------------------------------------------------- -->
+        <!-- -------------------------------------------------------------- -->
+        <!-- Page wrapper  -->
+        <!-- -------------------------------------------------------------- -->
+        <div class="page-wrapper">
+            <!-- -------------------------------------------------------------- -->
+            <!-- Container fluid  -->
+            <!-- -------------------------------------------------------------- -->
+            <div class="container-fluid">
+                <div class="reverse-mode">
+                    {% block yanpanel %}{% endblock yanpanel %}
+               
+                    <div class="right-part overflow-auto dashboard-part" style="height: 100%;">
+
+                        {% block content %}{% endblock content %}
+                     
+                    </div>
+                </div>
+            </div>
+            <!-- -------------------------------------------------------------- -->
+            <!-- End Container fluid  -->
+            <!-- -------------------------------------------------------------- -->
+        </div>
+        <!-- -------------------------------------------------------------- -->
+        <!-- End Page wrapper  -->
+        <!-- -------------------------------------------------------------- -->
+    </div>
+    <!-- -------------------------------------------------------------- -->
+    <!-- End Wrapper -->
+    <!-- -------------------------------------------------------------- -->
+    <!-- -------------------------------------------------------------- -->
+    {% block filtrepanel %}{% endblock filtrepanel %}
+    
+
+
+    <script src="{% static "assets/libs/jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "dist/js/app.min.js" %}"></script>
+    <script src="{% static "dist/js/app.init.js" %}"></script>
+    <script src="{% static "dist/js/app-style-switcher.js" %}"></script>
+    <script src="{% static "assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js" %}"></script>
+    <script src="{% static "assets/extra-libs/sparkline/sparkline.js" %}"></script>
+    <script src="{% static "dist/js/waves.js" %}"></script>
+    <script src="{% static "dist/js/sidebarmenu.js" %}"></script>
+    <script src="{% static "dist/js/feather.min.js" %}"></script>
+    <script src="{% static "dist/js/custom.min.js" %}"></script>
+    <script src="{% static "assets/libs/apexcharts/dist/apexcharts.min.js" %}"></script>
+    <script src="{% static "dist/js/pages/dashboards/dashboard1.js" %}"></script>
+    <!-- alpinejss silinebilir ilerde -->
+    <script src="{% static 'Js/alpine.min.js' %}"></script>
+</body>
+
+</html>

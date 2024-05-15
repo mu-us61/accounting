@@ -23,15 +23,17 @@
     <br>
     <br>
     <img src="{% static 'Images/excel_ornegi.png' %}" alt="Example Image"> {% endcomment %}
-
+    
     <form  method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="myfile" class="form-label">Dosya Seç</label>
-            <input type="file" class="form-control" id="myfile" name="myfile">
+            <input type="file" class="form-control" id="myfile" name="myfile" accept=".xls, .xlsx" onchange="handleFile(this.files)">
         </div>
         <button type="submit" class="btn btn-info">Yükle</button>
     </form>
+    <div id="excel-preview"></div>
+    
     
     <p>burada excelde ilk satır "name" olmalı, sonraki satır "phonenumber" olmalı bu şekilde alıyor</p>
     <p>örnek</p>
@@ -44,6 +46,34 @@
     </div>
     
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+<script>
+    function handleFile(files) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const table = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
+
+            // Generate HTML table with Bootstrap 5 styling
+            let html = '<div class="table-responsive"><table class="table table-bordered table-striped">';
+            for (let i = 0; i < table.length; i++) {
+                html += '<tr>';
+                for (let j = 0; j < table[i].length; j++) {
+                    html += '<td>' + table[i][j] + '</td>';
+                }
+                html += '</tr>';
+            }
+            html += '</table></div>';
+            document.getElementById('excel-preview').innerHTML = html;
+        };
+        reader.readAsArrayBuffer(file);
+    }
+</script>
 
 
     

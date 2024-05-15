@@ -1,145 +1,126 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% load render_table from django_tables2 %}
-{% load widget_tweaks %}
-{% block yanpanel %}
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% load render_table from django_tables2 %} {% load widget_tweaks %} {% block yanpanel %}
 <div class="left-part bg-light dashboard-right-part fixed-left-part">
-    <!-- Mobile toggle button -->
-    <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
-    <!-- Mobile toggle button -->
-    <div class="scrollable position-relative" style="height: calc(100vh - 50px);">
-        
-        
-          <div class="list-group p-3">
-      
-            <a href="{% url 'userlist_view_name' %}" class="list-group-item list-group-item-action list-group-item-warning">Kullanıcı listesi</a>
-            <br>
-            
-               </div>
+  <!-- Mobile toggle button -->
+  <a class="ri-menu-fill ri-close-fill btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"></a>
+  <!-- Mobile toggle button -->
+  <div class="scrollable position-relative" style="height: calc(100vh - 50px)">
+    <div class="list-group p-3">
+      <a href="{% url 'userlist_view_name' %}" class="list-group-item list-group-item-action list-group-item-warning">Kullanıcı listesi</a>
+      <br />
     </div>
+  </div>
 </div>
-{% endblock yanpanel %}
-{% block filtrepanel %}
+{% endblock yanpanel %} {% block filtrepanel %}
 <aside class="customizer">
-    <a href="javascript:void(0)" class="service-panel-toggle"><i data-feather="settings" class="feather-sm fa fa-spin"></i></a>
-    <div class="customizer-body">
-        <div class="container">
-
-            <form method="get">
-                <div class="mb-3 mt-3">
-                    <label class="form-label" for="{{ filter.form.username.id_for_label }}">Kullanıcı</label>
-                    <div class="input-group">
-                        {{ filter.form.username|add_class:"form-control select2" }}
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="{{ filter.form.first_name.id_for_label }}">Ad Soyad</label>
-                    <div class="input-group">
-                        {{ filter.form.first_name|add_class:"form-control" }}
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-info">Filtrele</button>
-                </div>
-            </form>
+  <a href="javascript:void(0)" class="service-panel-toggle"><i data-feather="settings" class="feather-sm fa fa-spin"></i></a>
+  <div class="customizer-body">
+    <div class="container">
+      <form method="get">
+        <div class="mb-3 mt-3">
+          <label class="form-label" for="{{ filter.form.username.id_for_label }}">Kullanıcı</label>
+          <div class="input-group">{{ filter.form.username|add_class:"form-control select2" }}</div>
         </div>
-        
+        <div class="mb-3">
+          <label class="form-label" for="{{ filter.form.first_name.id_for_label }}">Ad Soyad</label>
+          <div class="input-group">{{ filter.form.first_name|add_class:"form-control" }}</div>
+        </div>
+        <div class="mb-3">
+          <button type="submit" class="btn btn-info">Filtrele</button>
+        </div>
+      </form>
     </div>
+  </div>
 </aside>
-{% endblock filtrepanel %}
-{% block content %}
+{% endblock filtrepanel %} {% block content %}
 <div class="row col-md-6 page-titles">
-    <div class="col-md-6  align-self-center">
-        <h3 class="text-themecolor mb-0">Silinen Kullanıcılar</h3>
-    </div>
+  <div class="col-md-6 align-self-center">
+    <h3 class="text-themecolor mb-0">Silinen Kullanıcılar</h3>
+  </div>
 </div>
 
 <div class="card">
-    <div class="card-body text-center">
-        <h4 class="card-title">Silinen Kullanıcılar Listesi</h4>
-    </div>
-    <div class="table-responsive">{% render_table table %}</div>
+  <div class="card-body text-center">
+    <h4 class="card-title">Silinen Kullanıcılar Listesi</h4>
+  </div>
+  <div class="table-responsive">{% render_table table %}</div>
 </div>
 
-
-   
-    <script>
-        // In your JavaScript (external .js resource or <script> tag)
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "Seçiniz",
-                allowClear: true,
-                width: '100%',
-            });
-        });
+<script>
+  // In your JavaScript (external .js resource or <script> tag)
+  $(document).ready(function () {
+    $(".select2").select2({
+      placeholder: "Seçiniz",
+      allowClear: true,
+      width: "100%",
+    });
+  });
 </script>
-{% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="column m-auto">
-        <div class="block">
-            <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-primary" href="{% url 'usercreate_view_name' %}">Yeni kullanıcı oluştur</a>
-            <a class="button is-primary" href="{% url 'userlist_view_name' %}">Kullanıcı Listesi</a>
-        </div>
-        <h1 class="has-text-centered has-text-weight-bold is-size-3">Silinen Kullanıcılar</h1>
-        <div class="table-container">
-            <table class="table is-fullwidth is-striped is-hoverable is-bordered">
-                <thead>
-                    <tr>
-                        <th>Kullanıcı Adı</th>
-                        <th>İsim</th>
-                        <th>Düzenle</th>
-                        <th>Sil</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for muser in page %}
-                        <tr>
-                            <td>{{ muser.username }}</td>
-                            <td>{{ muser.first_name }}</td>
-                            <td>
-                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-link" href="{% url 'userupdate_view_name' muser.pk %}">Düzenle</a>
-                            </td>
-                            <td>
-                                <a {% if not user.is_staff %}disabled onclick="return false;"{% endif %} class="button is-danger" href="{% url 'userdelete_view_name' muser.pk %}">Sil</a>
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="5">Kayıtlı kullanıcı yok.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination is-centered" role="navigation">
-            <ul class="pagination-list">
-                {% if page.has_previous %}
-                    <li>
-                        <a class="pagination-link" href="?page=1">«</a>
-                    </li>
-                    <li>
-                        <a class="pagination-link" href="?page={{ page.previous_page_number }}">previous</a>
-                    </li>
-                {% endif %}
-                <li>
-                    <span class="pagination-ellipsis">…</span>
-                </li>
-                <li>
-                    <span class="pagination-link is-current">{{ page.number }}</span>
-                </li>
-                <li>
-                    <span class="pagination-ellipsis">…</span>
-                </li>
-                {% if page.has_next %}
-                    <li>
-                        <a class="pagination-link" href="?page={{ page.next_page_number }}">next</a>
-                    </li>
-                    <li>
-                        <a class="pagination-link" href="?page={{ page.paginator.num_pages }}">»</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+
+{% endblock content %} {% comment %} {% extends "base.html" %} {% block content %}
+<div class="column m-auto">
+  <div class="block">
+    <a {% if not user.is_staff %}disabled onclick="return false;" {% endif %} class="button is-primary" href="{% url 'usercreate_view_name' %}">Yeni kullanıcı oluştur</a>
+    <a class="button is-primary" href="{% url 'userlist_view_name' %}">Kullanıcı Listesi</a>
+  </div>
+  <h1 class="has-text-centered has-text-weight-bold is-size-3">Silinen Kullanıcılar</h1>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped is-hoverable is-bordered">
+      <thead>
+        <tr>
+          <th>Kullanıcı Adı</th>
+          <th>İsim</th>
+          <th>Düzenle</th>
+          <th>Sil</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for muser in page %}
+        <tr>
+          <td>{{ muser.username }}</td>
+          <td>{{ muser.first_name }}</td>
+          <td>
+            <a {% if not user.is_staff %}disabled onclick="return false;" {% endif %} class="button is-link" href="{% url 'userupdate_view_name' muser.pk %}">Düzenle</a>
+          </td>
+          <td>
+            <a {% if not user.is_staff %}disabled onclick="return false;" {% endif %} class="button is-danger" href="{% url 'userdelete_view_name' muser.pk %}">Sil</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">Kayıtlı kullanıcı yok.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination is-centered" role="navigation">
+    <ul class="pagination-list">
+      {% if page.has_previous %}
+      <li>
+        <a class="pagination-link" href="?page=1">«</a>
+      </li>
+      <li>
+        <a class="pagination-link" href="?page={{ page.previous_page_number }}">previous</a>
+      </li>
+      {% endif %}
+      <li>
+        <span class="pagination-ellipsis">…</span>
+      </li>
+      <li>
+        <span class="pagination-link is-current">{{ page.number }}</span>
+      </li>
+      <li>
+        <span class="pagination-ellipsis">…</span>
+      </li>
+      {% if page.has_next %}
+      <li>
+        <a class="pagination-link" href="?page={{ page.next_page_number }}">next</a>
+      </li>
+      <li>
+        <a class="pagination-link" href="?page={{ page.paginator.num_pages }}">»</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
 {% endblock content %} {% endcomment %}

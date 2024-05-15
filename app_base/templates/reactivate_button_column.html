@@ -1,0 +1,6 @@
+<!-- reactivate_button_column.html -->
+<form method="post" action="{% url 'reactivate_user' %}">
+  {% csrf_token %}
+  <input type="hidden" name="user_id" value="{{ record.pk }}" />
+  <button type="submit" class="btn btn-primary">Reactivate</button>
+</form>

@@ -30,6 +30,7 @@ urlpatterns = [
     path("user/create/", views.usercreate_view, name="usercreate_view_name"),
     path("user/<int:pk>/update/", views.userupdate_view, name="userupdate_view_name"),
     path("user/<int:pk>/delete/", views.userdelete_view, name="userdelete_view_name"),
+    path("reactivate_user/", views.reactivate_user, name="reactivate_user"),
     # //----------------------------------------------------------------------------------------------------
     # Transaction URLs
     path("transactionlist/", views.TransactionListView.as_view(), name="transactionlist_view_name"),  # kisisel islemler
