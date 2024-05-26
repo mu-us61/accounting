@@ -1,46 +1,45 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <!-- evrak_detail.html -->
-            <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Detayı</h1>
-            <div class="block">
-                <p>
-                    <strong>ExcelKullanıcı İsmi:</strong> {{ exelusers.name }}
-                </p>
-            </div>
-            {% comment %} <div class="block">
-                <p>
-                    <strong>ExelKullanıcı Soyismi:</strong> {{ exelusers.surname }}
-                </p>
-            </div> {% endcomment %}
-            <div class="block">
-                <p>
-                    <strong>ExcelKullanıcı Telefonu:</strong> {{ exelusers.phonenumber }}
-                </p>
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <a class="button is-primary" href="{% url 'exelusers_update' exelusers.pk %}">ExcelKullanıcı Düzenle</a>
-                </div>
-                <div class="control">
-                    <a class="button is-link" href="{% url 'exelusers_list' %}">ExcelKullanıcı Listesine Dön</a>
-                </div>
-            </div>
-        </div>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
+<div class="column col-md-6 mx-auto">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="text-center fw-bold fs-3">ExcelKullanıcı Detayı</h1>
+      <div class="mb-3">
+        <p class="fw-bold">ExcelKullanıcı İsmi:</p>
+        <p>{{ exelusers.name }}</p>
+      </div>
+
+      <div class="mb-3">
+        <p class="fw-bold">ExcelKullanıcı Telefonu:</p>
+        <p>{{ exelusers.phonenumber }}</p>
+      </div>
     </div>
-    {% comment %} <!-- exelusers_detail.html -->
-                    <h1>Exel User Detail</h1>
-                    <p>
-                        <strong>Name:</strong> {{ exelusers.name }}
-    </p>
-    <p>
-        <strong>Surname:</strong> {{ exelusers.surname }}
-    </p>
-    <p>
-        <strong>Phone Number:</strong> {{ exelusers.phonenumber }}
-    </p>
-    <!-- Display other fields as needed -->
-<a href="{% url 'exelusers_list' %}">Back to Exel User List</a> {% endcomment %}
-{% endblock content %}
+    <div class="card-footer d-flex justify-content-between">
+      <a class="btn btn-primary" href="{% url 'exelusers_update' exelusers.pk %}">ExcelKullanıcı Düzenle</a>
+      <a class="btn btn-secondary" href="{% url 'exelusers_list' %}">ExcelKullanıcı Listesine Dön</a>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <!-- evrak_detail.html -->
+    <h1 class="has-text-centered has-text-weight-bold is-size-3">ExcelKullanıcı Detayı</h1>
+    <div class="block">
+      <p><strong>ExcelKullanıcı İsmi:</strong> {{ exelusers.name }}</p>
+    </div>
+
+    <div class="block">
+      <p><strong>ExcelKullanıcı Telefonu:</strong> {{ exelusers.phonenumber }}</p>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <a class="button is-primary" href="{% url 'exelusers_update' exelusers.pk %}">ExcelKullanıcı Düzenle</a>
+      </div>
+      <div class="control">
+        <a class="button is-link" href="{% url 'exelusers_list' %}">ExcelKullanıcı Listesine Dön</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endcomment %} {% endblock content %}

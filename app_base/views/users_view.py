@@ -1,5 +1,5 @@
 from ..forms import MuUserForm
-from ..models import MuUser, MuGroup, Yetkiler
+from ..models import MuUser, MuGroup
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
@@ -100,7 +100,7 @@ def reactivate_user(request):
         user.is_active = True
         user.save()
         logger.info("User reactivated successfully")
-        return JsonResponse({"success": True})
+        return redirect("userlist_view_name")
     except MuUser.DoesNotExist:
         logger.error("User not found with ID: %s", user_id)
         return JsonResponse({"success": False, "error": "User not found"})

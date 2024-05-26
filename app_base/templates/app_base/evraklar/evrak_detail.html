@@ -1,79 +1,57 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <!-- evrak_detail.html -->
-            <h1 class="has-text-centered has-text-weight-bold is-size-3">Evrak Detayı</h1>
-            <div class="block">
-                <p>
-                    <strong>Evrak İsmi:</strong> {{ evrak.evrak_name }}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Açıklamasi:</strong> {{ evrak.evrak_description }}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Türü:</strong> {{ evrak.get_evrak_type_display }}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Evrak Tarihi:</strong>{{ evrak.evrak_date }}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Evrağı yükleyen:</strong>{{ evrak.evrak_owner }}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Harcama Kalemi:</strong>
-                    {% if evrak.evrak_tags.all %}{{ evrak.evrak_tags.all|join:', ' }}{% endif %}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>Resim:</strong>
-                    {% if evrak.evrak_picture %}
-                        <a href="{{ evrak.evrak_picture.url }}" target="_blank">Resme Bak</a>
-                    {% else %}
-                        Resim yok
-                    {% endif %}
-                </p>
-            </div>
-            <div class="block">
-                <p>
-                    <strong>PDF:</strong>
-                    {% if evrak.evrak_pdf %}
-                        <a href="{{ evrak.evrak_pdf.url }}" target="_blank">PDF'ye Bak</a>
-                    {% else %}
-                        Evrak yok
-                    {% endif %}
-                </p>
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <a class="button is-primary" href="{% url 'evrak_update' evrak.pk %}">Evrağı Düzenle</a>
-                </div>
-                <div class="control">
-                    <a class="button is-link" href="{% url 'evrak_list' %}">Evrak Listesine Dön</a>
-                </div>
-            </div>
-        </div>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <!-- evrak_detail.html -->
+    <h1 class="has-text-centered has-text-weight-bold is-size-3">Evrak Detayı</h1>
+    <div class="block">
+      <p><strong>Evrak Takip No:</strong> {{ evrak.evrak_takipno }}</p>
     </div>
-{% endblock content %}
-{% comment %} class EvrakModel(models.Model):
-    evrak_date = models.DateTimeField(auto_now_add=True)
-    evrak_last_updated = models.DateTimeField(auto_now=True)
-    evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
-    evrak_tags = models.ManyToManyField(Tag, blank=True)
-    evrak_name = models.CharField(max_length=250)
-    evrak_description = models.TextField()
-    evrak_type = models.CharField(max_length=7, choices=EVRAK_TYPE_CHOICES, default="gelen")
-    evrak_picture = models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True)
-evrak_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True) {% endcomment %}
+    <div class="block">
+      <p><strong>Evrak İsmi:</strong> {{ evrak.evrak_name }}</p>
+    </div>
+    <div class="block">
+      <p><strong>Açıklamasi:</strong> {{ evrak.evrak_description }}</p>
+    </div>
+    <div class="block">
+      <p><strong>Türü:</strong> {{ evrak.get_evrak_type_display }}</p>
+    </div>
+    <div class="block">
+      <p><strong>Evrak Tarihi:</strong>{{ evrak.evrak_date }}</p>
+    </div>
+    <div class="block">
+      <p><strong>Evrağı yükleyen:</strong>{{ evrak.evrak_owner }}</p>
+    </div>
+    <div class="block">
+      <p>
+        <strong>Harcama Kalemi:</strong>
+        {% if evrak.evrak_tags.all %}{{ evrak.evrak_tags.all|join:', ' }}{% endif %}
+      </p>
+    </div>
+    <div class="block">
+      <p>
+        <strong>Resim:</strong>
+        {% if evrak.evrak_picture %}
+        <a href="{{ evrak.evrak_picture.url }}" target="_blank">Resme Bak</a>
+        {% else %} Resim yok {% endif %}
+      </p>
+    </div>
+    <div class="block">
+      <p>
+        <strong>PDF:</strong>
+        {% if evrak.evrak_pdf %}
+        <a href="{{ evrak.evrak_pdf.url }}" target="_blank">PDF'ye Bak</a>
+        {% else %} Evrak yok {% endif %}
+      </p>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <a class="button is-primary" href="{% url 'evrak_update' evrak.pk %}">Evrağı Düzenle</a>
+      </div>
+      <div class="control">
+        <a class="button is-link" href="{% url 'evrak_list' %}">Evrak Listesine Dön</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} {% comment %} class EvrakModel(models.Model): evrak_date = models.DateTimeField(auto_now_add=True) evrak_last_updated = models.DateTimeField(auto_now=True) evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT) evrak_tags = models.ManyToManyField(Tag, blank=True) evrak_name = models.CharField(max_length=250) evrak_description = models.TextField() evrak_type = models.CharField(max_length=7, choices=EVRAK_TYPE_CHOICES, default="gelen") evrak_picture =
+models.ImageField(upload_to=generate_unique_imagename, blank=True, null=True) evrak_pdf = models.FileField(upload_to=generate_unique_filename, blank=True, null=True) {% endcomment %}

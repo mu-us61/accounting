@@ -1,122 +1,81 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% load widget_tweaks %}
-{% block content %}
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% load widget_tweaks %} {% block content %}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title text-center">
-                        {% if tag %}
-                            Harcama Kalemi Düzenle
-                        {% else %}
-                            Harcama Kalemi Oluştur
-                        {% endif %}
-                    </h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="{{ form.name.id_for_label }}" class="form-label">Harcama Kalemi İsmi Giriniz</label>
-                            <div class="input-group">
-                                {% render_field form.name class="form-control" placeholder="Enter tag name" %}
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                {% render_field form.is_active class="form-check-input" %}
-                                <label for="{{ form.is_active.id_for_label }}" class="form-check-label">Aktif</label>
-                            </div>
-                        </div>
-                        <div class="mb-3 d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                {% if tag %}
-                                    Düzenle
-                                {% else %}
-                                    Oluştur
-                                {% endif %}
-                            </button>
-                        </div>
-                        <div class="mb-3 d-grid gap-2">
-                            <a href="{% url 'taglist_view_name' %}" class="btn btn-link">Harcama Kalemi Listesine Dön</a>
-                        </div>
-                    </form>
-                </div>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center">{% if tag %} Harcama Kalemi Düzenle {% else %} Harcama Kalemi Oluştur {% endif %}</h2>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="{{ form.name.id_for_label }}" class="form-label">Harcama Kalemi İsmi Giriniz</label>
+              <div class="input-group">{% render_field form.name class="form-control" placeholder="Enter tag name" %}</div>
             </div>
+            {% comment %}
+            <div class="mb-3">
+              <div class="form-check">
+                {% render_field form.is_active class="form-check-input" %}
+                <label for="{{ form.is_active.id_for_label }}" class="form-check-label">Aktif</label>
+              </div>
+            </div>
+            {% endcomment %}
+            <div class="mb-3 d-grid gap-2">
+              <button type="submit" class="btn btn-primary">{% if tag %} Düzenle {% else %} Oluştur {% endif %}</button>
+            </div>
+            <div class="mb-3 d-grid gap-2">
+              <a href="{% url 'taglist_view_name' %}" class="btn btn-link">Harcama Kalemi Listesine Dön</a>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
-    {% comment %} <div class="column is-half m-auto">
-        <div class="box">
-            <h2 class="title has-text-centered">
-                {% if tag %}
-                    Harcama Kalemi Düzenle
-                {% else %}
-                    Harcama Kalemi Oluştur
-                {% endif %}
-            </h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="field">
-                    <label for="{{ form.name.id_for_label }}" class="label">Harcama Kalemi İsmi Giriniz</label>
-                    <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
-                </div>
-                <div class="field">
-                    <label for="{{ form.is_active.id_for_label }}" class="label">Aktif</label>
-                    <div class="control">{% render_field form.is_active class="checkbox" %}</div>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button type="submit" class="button is-primary">
-                            {% if tag %}
-                                Düzenle
-                            {% else %}
-                                Oluştur
-                            {% endif %}
-                        </button>
-                    </div>
-                    <div class="control">
-                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
-                    </div>
-                </div>
-            </form>
+{% comment %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <h2 class="title has-text-centered">{% if tag %} Harcama Kalemi Düzenle {% else %} Harcama Kalemi Oluştur {% endif %}</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label for="{{ form.name.id_for_label }}" class="label">Harcama Kalemi İsmi Giriniz</label>
+        <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
+      </div>
+      <div class="field">
+        <label for="{{ form.is_active.id_for_label }}" class="label">Aktif</label>
+        <div class="control">{% render_field form.is_active class="checkbox" %}</div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">{% if tag %} Düzenle {% else %} Oluştur {% endif %}</button>
         </div>
-    </div> {% endcomment %}
-{% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% load widget_tweaks %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <h2 class="title has-text-centered">
-                {% if tag %}
-                Harcama Kalemi Düzenle
-                {% else %}
-                Harcama Kalemi Oluştur
-                {% endif %}
-            </h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="field">
-                    <label for="{{ form.name.id_for_label }}" class="label">Harcama Kalemi İsmi Giriniz</label>
-                    <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button type="submit" class="button is-primary">
-                            {% if tag %}
-                                Düzenle
-                            {% else %}
-                                Oluştur
-                            {% endif %}
-                        </button>
-                    </div>
-                    <div class="control">
-                        <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
-                    </div>
-                </div>
-            </form>
+        <div class="control">
+          <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
         </div>
-    </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endcomment %} {% endblock content %} {% comment %} {% extends "base.html" %} {% load widget_tweaks %} {% block content %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <h2 class="title has-text-centered">{% if tag %} Harcama Kalemi Düzenle {% else %} Harcama Kalemi Oluştur {% endif %}</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label for="{{ form.name.id_for_label }}" class="label">Harcama Kalemi İsmi Giriniz</label>
+        <div class="control">{% render_field form.name class="input" placeholder="Enter tag name" %}</div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">{% if tag %} Düzenle {% else %} Oluştur {% endif %}</button>
+        </div>
+        <div class="control">
+          <a href="{% url 'taglist_view_name' %}" class="button is-link">Harcama Kalemi Listesine Dön</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock content %} {% endcomment %}

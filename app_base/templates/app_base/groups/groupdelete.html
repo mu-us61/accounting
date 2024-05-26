@@ -1,37 +1,18 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <h2 class="title has-text-centered">Grubu Silme İşlemi</h2>
-            <div class="content">
-                <p>"{{ group.name }}" adlı grubu silmek istediğinizden eminmisiniz ?</p>
-            </div>
-            <form method="post">
-                {% csrf_token %}
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button type="submit" class="button is-danger">Evet, Sil</button>
-                    </div>
-                    <div class="control">
-                        <a href="{% url 'grouplist_view_name' %}" class="button is-link">Hayır, İptal</a>
-                    </div>
-                </div>
-            </form>
-        </div>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
+<div class="card mx-auto" style="max-width: 600px">
+  <div class="card-body">
+    <h2 class="card-title text-center">Grubu Silme İşlemi</h2>
+    <div class="card-text">
+      <p>"{{ group.name }}" adlı grubu silmek istediğinizden emin misiniz?</p>
     </div>
-{% endblock content %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <h1>Grubu Silme İşlemi</h1>
-    <p>"{{ group.name }}" adlı grubu silmek istediğinizden eminmisiniz ?</p>
     <form method="post">
-        {% csrf_token %}
-        <div class="field">
-            <div class="control">
-                <button class="button is-danger" type="submit">Sil</button>
-            </div>
-        </div>
+      {% csrf_token %}
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <a href="{% url 'grouplist_view_name' %}" class="btn btn-secondary">Hayır, İptal</a>
+      </div>
     </form>
-    <a href="{% url 'usergroups_view_name' %}" class="button is-link">İptal</a>
-{% endblock %} {% endcomment %}
+  </div>
+</div>
+
+{% endblock content %}

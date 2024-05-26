@@ -1,70 +1,137 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <form method="post">
-                {% csrf_token %}
-                <div class="field">
-                    <label class="label">Grup İsmi</label>
-                    <div class="control">
-                        <input class="input" type="text" name="group_name" value="{{ group.name }}">
-                    </div>
-                </div>
-                {% comment %} <div class="field">
-                    <label class="label">Aktif</label>
-                    <div class="control">
-                        <input class="checkbox" type="checkbox" name="is_active" {% if group.is_active %}checked{% endif %}>
-                    </div>
-                </div> {% endcomment %}
-                <div class="field">
-                    <label class="checkbox">
-                        <input type="checkbox" id="is_active" name="is_active" {% if group.is_active %}checked{% endif %}>
-                        Aktif
-                    </label>
-                </div>
-                <div class="field">
-                    <label class="checkbox">
-                        <input type="checkbox" id="can_write" name="can_write" {% if group.can_write %}checked{% endif %}>
-                        Yazma İzni
-                    </label>
-                </div>
-                <div class="field">
-                    <label class="checkbox">
-                        <input type="checkbox" id="can_delete" name="can_delete" {% if group.can_delete %}checked{% endif %}>
-                        Silme İzni
-                    </label>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-primary" type="submit">Onay</button>
-                    </div>
-                    <a href="{% url 'grouplist_view_name' %}" class="button is-link">Grup Listesine Dön</a>
-                </div>
-            </form>
-        </div>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
+
+<div class="row col-md-6 page-titles">
+  <div class="col-md-6 align-self-center">
+    <h3 class="text-themecolor mb-0">Grup Güncelle</h3>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2>Grup Güncelle</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_name">Grup İsmi:</label>
+      <input type="text" name="name" class="form-control" id="id_name" />
     </div>
-{% endblock %}
-{% comment %} {% extends "base.html" %}
-{% block content %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <form method="post">
-                {% csrf_token %}
-                <div class="field">
-                    <label class="label">Grup İsmi</label>
-                    <div class="control">
-                        <input class="input" type="text" name="group_name" value="{{ group.name }}">
-                    </div>
-                </div>
-    
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-primary" type="submit">Onay</button>
-                    </div>
-                    <a href="{% url 'grouplist_view_name' %}" class="button is-link">Grup Listesine Dön</a>
-                </div>
-            </form>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>İzinler</th>
+          <th>Okuma</th>
+          <th>Yazma</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kullanıcılar</td>
+          <td><input type="checkbox" name="can_read_can_kullanicilar" id="id_can_read_can_kullanicilar" /></td>
+          <td><input type="checkbox" name="can_write_can_kullanicilar" id="id_can_write_can_kullanicilar" /></td>
+        </tr>
+        <tr>
+          <td>Kullanıcı Grupları</td>
+          <td><input type="checkbox" name="can_read_kullanici_gruplari" id="id_can_read_kullanici_gruplari" /></td>
+          <td><input type="checkbox" name="can_write_kullanici_gruplari" id="id_can_write_kullanici_gruplari" /></td>
+        </tr>
+        <tr>
+          <td>Excel Kullanıcı Yükleme</td>
+          <td><input type="checkbox" name="can_read_excel_kullanici_yukleme" id="id_can_read_excel_kullanici_yukleme" /></td>
+          <td><input type="checkbox" name="can_write_excel_kullanici_yukleme" id="id_can_write_excel_kullanici_yukleme" /></td>
+        </tr>
+        <tr>
+          <td>Excel Kullanıcıları</td>
+          <td><input type="checkbox" name="can_read_excel_kullanicilari" id="id_can_read_excel_kullanicilari" /></td>
+          <td><input type="checkbox" name="can_write_excel_kullanicilari" id="id_can_write_excel_kullanicilari" /></td>
+        </tr>
+        <tr>
+          <td>Bakiye</td>
+          <td><input type="checkbox" name="can_read_bakiye" id="id_can_read_bakiye" /></td>
+          <td><input type="checkbox" name="can_write_bakiye" id="id_can_write_bakiye" /></td>
+        </tr>
+        <tr>
+          <td>Harcama Kalemi</td>
+          <td><input type="checkbox" name="can_read_harcama_kalemi" id="id_can_read_harcama_kalemi" /></td>
+          <td><input type="checkbox" name="can_write_harcama_kalemi" id="id_can_write_harcama_kalemi" /></td>
+        </tr>
+        <tr>
+          <td>Para Birimleri</td>
+          <td><input type="checkbox" name="can_read_para_birimleri" id="id_can_read_para_birimleri" /></td>
+          <td><input type="checkbox" name="can_write_para_birimleri" id="id_can_write_para_birimleri" /></td>
+        </tr>
+        <tr>
+          <td>İşlemler</td>
+          <td><input type="checkbox" name="can_read_Islemler" id="id_can_read_Islemler" /></td>
+          <td><input type="checkbox" name="can_write_Islemler" id="id_can_write_Islemler" /></td>
+        </tr>
+        <tr>
+          <td>Etkinlikler</td>
+          <td><input type="checkbox" name="can_read_etkinlikler" id="id_can_read_etkinlikler" /></td>
+          <td><input type="checkbox" name="can_write_etkinlikler" id="id_can_write_etkinlikler" /></td>
+        </tr>
+        <tr>
+          <td>Evraklar</td>
+          <td><input type="checkbox" name="can_read_evraklar" id="id_can_read_evraklar" /></td>
+          <td><input type="checkbox" name="can_write_evraklar" id="id_can_write_evraklar" /></td>
+        </tr>
+        <tr>
+          <td>Aylık Harcamalar</td>
+          <td><input type="checkbox" name="can_read_aylikharcamalar" id="id_can_read_aylikharcamalar" /></td>
+          <td><input type="checkbox" name="can_write_aylikharcamalar" id="id_can_write_aylikharcamalar" /></td>
+        </tr>
+        <tr>
+          <td>Aylık İspatlı Harcamalar</td>
+          <td><input type="checkbox" name="can_read_aylikispatliharcamalar" id="id_can_read_aylikispatliharcamalar" /></td>
+          <td><input type="checkbox" name="can_write_aylikispatliharcamalar" id="id_can_write_aylikispatliharcamalar" /></td>
+        </tr>
+        <tr>
+          <td>Sms Yönetimi</td>
+          <td><input type="checkbox" name="can_read_smsyonetimi" id="id_can_read_smsyonetimi" /></td>
+          <td><input type="checkbox" name="can_write_smsyonetimi" id="id_can_write_smsyonetimi" /></td>
+        </tr>
+        <tr>
+          <td>Mobile App Linkleri</td>
+          <td><input type="checkbox" name="can_read_mobileapplinkleri" id="id_can_read_mobileapplinkleri" /></td>
+          <td><input type="checkbox" name="can_write_mobileapplinkleri" id="id_can_write_mobileapplinkleri" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-info">Onay</button>
+    <a href="{% url 'grouplist_view_name' %}" class="btn btn-primary">Grup Listesine Dön</a>
+  </form>
+</div>
+
+{% comment %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label class="label">Grup İsmi</label>
+        <div class="control">
+          <input class="input" type="text" name="group_name" value="{{ group.name }}" />
         </div>
-    </div>
-{% endblock %} {% endcomment %}
+      </div>
+
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" id="is_active" name="is_active" {% if group.is_active %}checked{% endif %} />
+          Aktif
+        </label>
+      </div>
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" id="can_write" name="can_write" {% if group.can_write %}checked{% endif %} />
+          Yazma İzni
+        </label>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-primary" type="submit">Onay</button>
+        </div>
+        <a href="{% url 'grouplist_view_name' %}" class="button is-link">Grup Listesine Dön</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endcomment %} {% endblock %}

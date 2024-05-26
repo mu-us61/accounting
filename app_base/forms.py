@@ -17,11 +17,12 @@ class CurrencyForm(forms.ModelForm):
 
     class Meta:
         model = Currency
-        fields = ["name", "abbreviation", "is_active"]
+        fields = ["name", "abbreviation"]
+        exclude = ["is_active"]
 
 
 class MuUserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(label="Şifre", widget=forms.PasswordInput)
 
     # is_active = forms.CheckboxInput()
     # is_active = forms.BooleanField(label="Aktif", required=False)  # Use BooleanField for is_active
@@ -140,11 +141,12 @@ class TransactionFilterForm(forms.Form):
 #     def clean_name(self):
 #         return self.cleaned_data["name"].lower()
 class TagForm(forms.ModelForm):
-    is_active = forms.BooleanField(label="Is Active", required=False)
+    # is_active = forms.BooleanField(label="Is Active", required=False)
 
     class Meta:
         model = Tag
-        fields = ["name", "is_active"]
+        fields = ["name"]
+        exclude = ["is_active"]
 
     def clean_name(self):
         return self.cleaned_data["name"].lower()
@@ -216,16 +218,19 @@ from .models import ExelUsers
 #     class Meta:
 #         model = ExelUsers
 #         exclude = []
+
+
 class ExelUsersForm(forms.ModelForm):
-    is_active = forms.BooleanField(label="Is Active", required=False)
+    # is_active = forms.BooleanField(label="Is Active", required=False, initial=True)
 
     class Meta:
         model = ExelUsers
-        exclude = []
+        # fields = "__all__"
+        exclude = ["is_active"]
 
-    def __init__(self, *args, **kwargs):
-        super(ExelUsersForm, self).__init__(*args, **kwargs)
-        self.fields["is_active"].initial = self.instance.is_active if self.instance else False
+    # def __init__(self, *args, **kwargs):
+    #     super(ExelUsersForm, self).__init__(*args, **kwargs)
+    #     self.fields["is_active"].initial = self.instance.is_active if self.instance else False
 
 
 from django import forms
@@ -235,32 +240,12 @@ class UploadFileForm(forms.Form):
     file = forms.FileField()
 
 
-# from django import forms
-# from .models import MuGroup, Yetkiler
-
-
-# class MuGroupForm(forms.ModelForm):
-#     class Meta:
-#         model = MuGroup
-#         fields = ["name"]
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         yetkiler = Yetkiler.objects.first()  # Assuming there's only one Yetkiler instance
-#         if yetkiler:
-#             for field_name in yetkiler._meta.get_fields():
-#                 if field_name.name.startswith("can_"):
-#                     self.fields[field_name.name] = forms.BooleanField(required=False, label=field_name.verbose_name)
-
 from django import forms
-from .models import MuGroup, Yetkiler
+from .models import MuGroup
 
 
 class MuGroupForm(forms.ModelForm):
-    class Meta:
-        model = MuGroup
-        fields = ["name"]
-
+    # Define fields explicitly if you want to add custom labels or behavior later
     can_read_can_kullanicilar = forms.BooleanField(label="", required=False)
     can_read_kullanici_gruplari = forms.BooleanField(label="", required=False)
     can_read_excel_kullanici_yukleme = forms.BooleanField(label="", required=False)
@@ -275,7 +260,6 @@ class MuGroupForm(forms.ModelForm):
     can_read_aylikispatliharcamalar = forms.BooleanField(label="", required=False)
     can_read_smsyonetimi = forms.BooleanField(label="", required=False)
     can_read_mobileapplinkleri = forms.BooleanField(label="", required=False)
-
     can_write_can_kullanicilar = forms.BooleanField(label="", required=False)
     can_write_kullanici_gruplari = forms.BooleanField(label="", required=False)
     can_write_excel_kullanici_yukleme = forms.BooleanField(label="", required=False)
@@ -291,5 +275,37 @@ class MuGroupForm(forms.ModelForm):
     can_write_smsyonetimi = forms.BooleanField(label="", required=False)
     can_write_mobileapplinkleri = forms.BooleanField(label="", required=False)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    class Meta:
+        model = MuGroup
+        fields = [
+            "name",
+            "can_read_can_kullanicilar",
+            "can_read_kullanici_gruplari",
+            "can_read_excel_kullanici_yukleme",
+            "can_read_excel_kullanicilari",
+            "can_read_bakiye",
+            "can_read_harcama_kalemi",
+            "can_read_para_birimleri",
+            "can_read_Islemler",
+            "can_read_etkinlikler",
+            "can_read_evraklar",
+            "can_read_aylikharcamalar",
+            "can_read_aylikispatliharcamalar",
+            "can_read_smsyonetimi",
+            "can_read_mobileapplinkleri",
+            "can_write_can_kullanicilar",
+            "can_write_kullanici_gruplari",
+            "can_write_excel_kullanici_yukleme",
+            "can_write_excel_kullanicilari",
+            "can_write_bakiye",
+            "can_write_harcama_kalemi",
+            "can_write_para_birimleri",
+            "can_write_Islemler",
+            "can_write_etkinlikler",
+            "can_write_evraklar",
+            "can_write_aylikharcamalar",
+            "can_write_aylikispatliharcamalar",
+            "can_write_smsyonetimi",
+            "can_write_mobileapplinkleri",
+        ]
+        exclude = ["is_active", "creation_date"]

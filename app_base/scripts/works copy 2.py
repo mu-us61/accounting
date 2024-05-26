@@ -37,5 +37,10 @@ from app_base.models import MuUser
 
 # user = MuUser.objects.get(pk=4)
 # user = MuUser.objects.all()
-user = MuUser.all_objects.get(pk=4)
-print(user)  # Assign the Yetkiler instance to the yetkiler field
+# user = MuUser.all_objects.get(pk=4)
+# print(user)  # Assign the Yetkiler instance to the yetkiler field
+from app_base.models import ExelUsers
+
+# Create an instance without specifying the is_active field
+user = ExelUsers.objects.create()
+print(user.is_active)  # Check the value of is_active

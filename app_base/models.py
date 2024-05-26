@@ -14,7 +14,6 @@ from embed_video.fields import EmbedVideoField
 from django.contrib.auth.models import BaseUserManager
 
 
-# //------------------------~~--------------------------------------------------------------------------
 class AllObjectsManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset()
@@ -57,11 +56,6 @@ class BaseModelSoftDelete(models.Model):
         abstract = True
 
 
-# class ActiveObjectsManager(models.Manager):
-#     def get_queryset(self):
-#         return super().get_queryset().filter(is_active=True)
-
-
 def generate_unique_filename(instance, filename):
     # Get the file's extension (e.g., '.pdf')
     ext = filename.split(".")[-1]
@@ -87,7 +81,6 @@ def generate_unique_imagename(instance, filename):
     return os.path.join("images", unique_filename)
 
 
-# //------------------------~~--------------------------------------------------------------------------
 class Currency(BaseModelSoftDelete):
     name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=10, unique=True)
@@ -109,10 +102,12 @@ class Currency(BaseModelSoftDelete):
         super().save(*args, **kwargs)
 
 
-# //------------------------~~--------------------------------------------------------------------------
+class MuGroup(Group, BaseModelSoftDelete):
 
+    creation_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    objects = ActiveObjectsManager()
 
-class Yetkiler(models.Model):
     can_read_can_kullanicilar = models.BooleanField(default=False)
     can_read_kullanici_gruplari = models.BooleanField(default=False)
     can_read_excel_kullanici_yukleme = models.BooleanField(default=False)
@@ -143,16 +138,6 @@ class Yetkiler(models.Model):
     can_write_smsyonetimi = models.BooleanField(default=False)
     can_write_mobileapplinkleri = models.BooleanField(default=False)
 
-
-class MuGroup(Group, BaseModelSoftDelete):
-
-    creation_date = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(_("active"), default=True)
-    objects = ActiveObjectsManager()
-    # can_write = models.BooleanField(_("yazabilme"), default=False)
-    # can_delete = models.BooleanField(_("silebilme"), default=False)
-    yetkiler = models.ForeignKey(Yetkiler, on_delete=models.CASCADE, related_name="gruplar_related")
-
     def save(self, *args, **kwargs):
         # self.is_active = True
         super().save(*args, **kwargs)
@@ -160,16 +145,7 @@ class MuGroup(Group, BaseModelSoftDelete):
     def save_fordelete(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-    # def delete(self, using=None, keep_parents=False):
-    #     self.is_active = False
-    #     self.save()
 
-    # class Meta:
-    #     verbose_name = _("MuGroup")
-    #     verbose_name_plural = _("MuGroups")
-
-
-# //------------------------~~--------------------------------------------------------------------------
 class MuUser(AbstractUser, BaseModelSoftDelete):
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(_("Kullanıcı Adı"), max_length=150, unique=True, help_text=_("Max 150 karakter olabilir. Harfler, sayilar ve sadece @/./+/-/_ olabilir"), validators=[username_validator], error_messages={"unique": _("Bu isimde bir kullanici zaten var")})
@@ -199,12 +175,7 @@ class MuUser(AbstractUser, BaseModelSoftDelete):
     def save_fordelete(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-    # user = MuUser.objects.get(id=user_id)
-    # currency = Currency.objects.get(id=currency_id)
-    # balance = user.calculate_currency_balance(currency)  how to use
 
-
-# //------------------------~~--------------------------------------------------------------------------
 class Tag(BaseModelSoftDelete):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -224,7 +195,6 @@ class Tag(BaseModelSoftDelete):
         super().save(*args, **kwargs)
 
 
-# //------------------------~~--------------------------------------------------------------------------
 class ExelUsers(BaseModelSoftDelete):
     name = models.CharField(max_length=250)
     # surname = models.CharField(max_length=250)
@@ -245,7 +215,6 @@ class ExelUsers(BaseModelSoftDelete):
         super().save(*args, **kwargs)
 
 
-# //------------------------~~--------------------------------------------------------------------------
 ISLEMLER_TYPE_CHOICES = [
     ("gelen", "Gelen"),
     ("giden", "Giden"),
@@ -283,8 +252,6 @@ class Islemler(BaseModelSoftDelete):
         super().save(*args, **kwargs)
 
 
-# //------------------------~~--------------------------------------------------------------------------
-
 EVRAK_TYPE_CHOICES = [
     ("gelen", "Gelen"),
     ("giden", "Giden"),
@@ -292,6 +259,7 @@ EVRAK_TYPE_CHOICES = [
 
 
 class EvrakModel(BaseModelSoftDelete):
+    evrak_takipno = models.CharField(max_length=250, blank=True, null=True)
     evrak_date = models.DateTimeField(auto_now_add=True)
     evrak_last_updated = models.DateTimeField(auto_now=True)
     evrak_owner = models.ForeignKey(MuUser, on_delete=models.PROTECT)
@@ -315,7 +283,6 @@ class EvrakModel(BaseModelSoftDelete):
         super().save(*args, **kwargs)
 
 
-# //------------------------~~--------------------------------------------------------------------------
 class EtkinlikModel(BaseModelSoftDelete):
     etkinlik_date = models.DateTimeField(auto_now_add=True)
     etkinlik_last_updated = models.DateTimeField(auto_now=True)  # Auto-updated on every save

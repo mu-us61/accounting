@@ -1,62 +1,63 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    {% load widget_tweaks %}
-    <div class="column is-half m-auto">
-        <div class="box">
-            <h1 class="has-text-centered has-text-weight-bold is-size-3">Evrak Düzenle</h1>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="field">
-                    <div class="label">Evrak Ismi</div>
-                    <div class="control">{{ form.evrak_name | add_class:"input" }}</div>
-                </div>
-                <div class="field">
-                    <div class="label">Evrak Aciklamasi</div>
-                    <div class="control">{{ form.evrak_description | add_class:"textarea" }}</div>
-                </div>
-                <div class="field">
-                    <div class="label">Evrak Durumu</div>
-                    <div class="control">{{ form.evrak_type | add_class:"select2" }}</div>
-                </div>
-                <div class="field">
-                    <div class="label">Evrak Resmi</div>
-                    <div class="control">{{ form.evrak_picture | add_class:"" }}</div>
-                </div>
-                <div class="field">
-                    <div class="label">Evrak Pdf'si</div>
-                    <div class="control">{{ form.evrak_pdf | add_class:"" }}</div>
-                </div>
-                <div class="field">
-                    <div class="label">Evrak Tagi</div>
-                    <div class="control">{{ form.evrak_tags | add_class:"select2" }}</div>
-                </div>
-                <div class="field">
-                    <label class="label">Aktif</label>
-                    <div class="control">{% render_field form.is_active class="checkbox" %}</div>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button type="submit" class="button is-primary">Düzenle</button>
-                    </div>
-                    <div class="control">
-                        <a class="button is-danger" href="{% url 'evrak_delete' object.pk %}">Sil</a>
-                    </div>
-                    <div class="control">
-                        <a class="button is-link" href="{% url 'evrak_list' %}">Evrak Listesine Geri Don</a>
-                    </div>
-                </div>
-            </form>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %} {% load widget_tweaks %}
+<div class="column is-half m-auto">
+  <div class="box">
+    <h1 class="has-text-centered has-text-weight-bold is-size-3">Evrak Düzenle</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="field">
+        <div class="label">Evrak Takip no</div>
+        <div class="control">{{ form.evrak_takipno | add_class:"input" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Ismi</div>
+        <div class="control">{{ form.evrak_name | add_class:"input" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Aciklamasi</div>
+        <div class="control">{{ form.evrak_description | add_class:"textarea" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Durumu</div>
+        <div class="control">{{ form.evrak_type | add_class:"select2" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Resmi</div>
+        <div class="control">{{ form.evrak_picture | add_class:"" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Pdf'si</div>
+        <div class="control">{{ form.evrak_pdf | add_class:"" }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Evrak Tagi</div>
+        <div class="control">{{ form.evrak_tags | add_class:"select2" }}</div>
+      </div>
+      <div class="field">
+        <label class="label">Aktif</label>
+        <div class="control">{% render_field form.is_active class="checkbox" %}</div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">Düzenle</button>
         </div>
-    </div>
-    <script>
-        $(document).ready(function() {
-            // Initialize Select2 for kimden_geldi, kime_gitti, tags, currency fields
-            $(".select2").select2({
-                placeholder: "Seçiniz",
-                allowClear: true,
-                width: '100%',
-            });
-        });
-    </script>
+        <div class="control">
+          <a class="button is-danger" href="{% url 'evrak_delete' object.pk %}">Sil</a>
+        </div>
+        <div class="control">
+          <a class="button is-link" href="{% url 'evrak_list' %}">Evrak Listesine Geri Don</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    // Initialize Select2 for kimden_geldi, kime_gitti, tags, currency fields
+    $(".select2").select2({
+      placeholder: "Seçiniz",
+      allowClear: true,
+      width: "100%",
+    });
+  });
+</script>
 {% endblock content %}

@@ -81,6 +81,7 @@ class EvrakTable(tables.Table):
         verbose_name="Evrak İsmi",
         # attrs={'td': {'class': 'long-text'}}
     )
+    evrak_takipno = tables.Column(verbose_name="Evrak Takip no")
 
     class Meta:
         model = EvrakModel
@@ -291,6 +292,30 @@ class ExelUsersTable(tables.Table):
         template_name = "django_tables2/bootstrap5-responsive.html"
 
 
+from django_tables2 import TemplateColumn
+
+
+class DeletedExelUsersTable(tables.Table):
+    # name = tables.Column()
+    # surname = tables.Column()
+    phonenumber = tables.Column(verbose_name="Telefon No")
+    name = tables.LinkColumn(
+        "exelusers_detail",  # Replace with your actual view name for evrak details
+        text=lambda record: record.name,
+        args=[tables.A("pk")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+        verbose_name="Excel Kullanıcısı",
+    )
+    reactivate = TemplateColumn(verbose_name="Aktifleştir", template_name="exelusers_reactivate_button_column.html")
+
+    class Meta:
+        model = ExelUsers
+        fields = ["name", "phonenumber"]
+        attrs = {"class": "table table-striped table-bordered"}
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"  # You can choose a different template if needed
+        template_name = "django_tables2/bootstrap5-responsive.html"
+
+
 class TagTable(tables.Table):
     name = tables.LinkColumn(
         "tagdetail_view_name",
@@ -299,6 +324,25 @@ class TagTable(tables.Table):
         args=[tables.A("slug")],  # Pass the evrak's primary key as an argument to the view
         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
     )
+
+    class Meta:
+        model = Tag
+        per_page = 10  # Number of items to display per page
+        attrs = {"class": "table table-striped table-bordered"}
+        # template_name = "app_base/unsorted/django_tables_custom_bulma.html"
+        template_name = "django_tables2/bootstrap5-responsive.html"
+        fields = ["name"]
+
+
+class DeletedTagTable(tables.Table):
+    name = tables.LinkColumn(
+        "tagdetail_view_name",
+        verbose_name="Harcama Kalemi İsmi",
+        text=lambda record: record.name,
+        args=[tables.A("slug")],  # Pass the evrak's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
+    reactivate = TemplateColumn(verbose_name="Aktifleştir", template_name="tag_reactivate_button_column.html")
 
     class Meta:
         model = Tag
@@ -323,35 +367,117 @@ class GroupTable(tables.Table):
     )
 
     # Define columns for each permission field in Yetkiler model
-    can_read_can_kullanicilar = tables.BooleanColumn(verbose_name="Can Read Can Kullanicilar", accessor="yetkiler__can_read_can_kullanicilar")
-    can_read_kullanici_gruplari = tables.BooleanColumn(verbose_name="Can Read Kullanici Gruplari", accessor="yetkiler__can_read_kullanici_gruplari")
-    can_read_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Can Read Excel Kullanici Yukleme", accessor="yetkiler__can_read_excel_kullanici_yukleme")
-    can_read_excel_kullanicilari = tables.BooleanColumn(verbose_name="Can Read Excel Kullanicilari", accessor="yetkiler__can_read_excel_kullanicilari")
-    can_read_bakiye = tables.BooleanColumn(verbose_name="Can Read Bakiye", accessor="yetkiler__can_read_bakiye")
-    can_read_harcama_kalemi = tables.BooleanColumn(verbose_name="Can Read Harcama Kalemi", accessor="yetkiler__can_read_harcama_kalemi")
-    can_read_para_birimleri = tables.BooleanColumn(verbose_name="Can Read Para Birimleri", accessor="yetkiler__can_read_para_birimleri")
-    can_read_Islemler = tables.BooleanColumn(verbose_name="Can Read Islemler", accessor="yetkiler__can_read_Islemler")
-    can_read_etkinlikler = tables.BooleanColumn(verbose_name="Can Read Etkinlikler", accessor="yetkiler__can_read_etkinlikler")
-    can_read_evraklar = tables.BooleanColumn(verbose_name="Can Read Evraklar", accessor="yetkiler__can_read_evraklar")
-    can_read_aylikharcamalar = tables.BooleanColumn(verbose_name="Can Read Aylik Harcamalar", accessor="yetkiler__can_read_aylikharcamalar")
-    can_read_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Can Read Aylik Ispatli Harcamalar", accessor="yetkiler__can_read_aylikispatliharcamalar")
-    can_read_smsyonetimi = tables.BooleanColumn(verbose_name="Can Read SMS Yonetimi", accessor="yetkiler__can_read_smsyonetimi")
-    can_read_mobileapplinkleri = tables.BooleanColumn(verbose_name="Can Read Mobile App Linkleri", accessor="yetkiler__can_read_mobileapplinkleri")
+    can_read_can_kullanicilar = tables.BooleanColumn(verbose_name="Okuma- Kullanıcılar")
+    can_read_kullanici_gruplari = tables.BooleanColumn(verbose_name="Kullanıcı Grupları")
+    can_read_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Okuma- Excel Kullanıcı Yükleme")
+    can_read_excel_kullanicilari = tables.BooleanColumn(verbose_name="Okuma- Excel Kullanıcıları")
+    can_read_bakiye = tables.BooleanColumn(verbose_name="Okuma- Bakiye")
+    can_read_harcama_kalemi = tables.BooleanColumn(verbose_name="Okuma- Harcama Kalemi")
+    can_read_para_birimleri = tables.BooleanColumn(verbose_name="Okuma- Para Birimleri")
+    can_read_Islemler = tables.BooleanColumn(verbose_name="Okuma- İşlemler")
+    can_read_etkinlikler = tables.BooleanColumn(verbose_name="Okuma- Etkinlikler")
+    can_read_evraklar = tables.BooleanColumn(verbose_name="Okuma- Evraklar")
+    can_read_aylikharcamalar = tables.BooleanColumn(verbose_name="Okuma- Aylık Harcamalar")
+    can_read_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Okuma- Aylık İspatlı Harcamalar")
+    can_read_smsyonetimi = tables.BooleanColumn(verbose_name="Okuma- SMS Yönetimi")
+    can_read_mobileapplinkleri = tables.BooleanColumn(verbose_name="Okuma- Mobile App Linkleri")
 
-    can_write_can_kullanicilar = tables.BooleanColumn(verbose_name="Can Write Can Kullanicilar", accessor="yetkiler__can_write_can_kullanicilar")
-    can_write_kullanici_gruplari = tables.BooleanColumn(verbose_name="Can Write Kullanici Gruplari", accessor="yetkiler__can_write_kullanici_gruplari")
-    can_write_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Can Write Excel Kullanici Yukleme", accessor="yetkiler__can_write_excel_kullanici_yukleme")
-    can_write_excel_kullanicilari = tables.BooleanColumn(verbose_name="Can Write Excel Kullanicilari", accessor="yetkiler__can_write_excel_kullanicilari")
-    can_write_bakiye = tables.BooleanColumn(verbose_name="Can Write Bakiye", accessor="yetkiler__can_write_bakiye")
-    can_write_harcama_kalemi = tables.BooleanColumn(verbose_name="Can Write Harcama Kalemi", accessor="yetkiler__can_write_harcama_kalemi")
-    can_write_para_birimleri = tables.BooleanColumn(verbose_name="Can Write Para Birimleri", accessor="yetkiler__can_write_para_birimleri")
-    can_write_Islemler = tables.BooleanColumn(verbose_name="Can Write Islemler", accessor="yetkiler__can_write_Islemler")
-    can_write_etkinlikler = tables.BooleanColumn(verbose_name="Can Write Etkinlikler", accessor="yetkiler__can_write_etkinlikler")
-    can_write_evraklar = tables.BooleanColumn(verbose_name="Can Write Evraklar", accessor="yetkiler__can_write_evraklar")
-    can_write_aylikharcamalar = tables.BooleanColumn(verbose_name="Can Write Aylik Harcamalar", accessor="yetkiler__can_write_aylikharcamalar")
-    can_write_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Can Write Aylik Ispatli Harcamalar", accessor="yetkiler__can_write_aylikispatliharcamalar")
-    can_write_smsyonetimi = tables.BooleanColumn(verbose_name="Can Write SMS Yonetimi", accessor="yetkiler__can_write_smsyonetimi")
-    can_write_mobileapplinkleri = tables.BooleanColumn(verbose_name="Can Write Mobile App Linkleri", accessor="yetkiler__can_write_mobileapplinkleri")
+    can_write_can_kullanicilar = tables.BooleanColumn(verbose_name="Yazma- Kullancılar")
+    can_write_kullanici_gruplari = tables.BooleanColumn(verbose_name="Yazma- Kullanıcı Grupları")
+    can_write_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Yazma- Excel Kullanıcı Yükleme")
+    can_write_excel_kullanicilari = tables.BooleanColumn(verbose_name="Yazma- Excel Kullanıcıları")
+    can_write_bakiye = tables.BooleanColumn(verbose_name="Yazma- Bakiye")
+    can_write_harcama_kalemi = tables.BooleanColumn(verbose_name="Yazma- Harcama Kalemi")
+    can_write_para_birimleri = tables.BooleanColumn(verbose_name="Yazma- Para Birimleri")
+    can_write_Islemler = tables.BooleanColumn(verbose_name="Yazma- İslemler")
+    can_write_etkinlikler = tables.BooleanColumn(verbose_name="Yazma- Etkinlikler")
+    can_write_evraklar = tables.BooleanColumn(verbose_name="Yazma- Evraklar")
+    can_write_aylikharcamalar = tables.BooleanColumn(verbose_name="Yazma- Aylık Harcamalar")
+    can_write_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Yazma- Aylık İspatlı Harcamalar")
+    can_write_smsyonetimi = tables.BooleanColumn(verbose_name="Yazma- SMS Yönetimi")
+    can_write_mobileapplinkleri = tables.BooleanColumn(verbose_name="Yazma- Mobile App Linkleri")
+
+    class Meta:
+        model = MuGroup
+        per_page = 10  # Number of items to display per page
+        attrs = {"class": "table table-striped table-bordered"}
+        template_name = "django_tables2/bootstrap5-responsive.html"
+        fields = [
+            "name",
+            "can_read_can_kullanicilar",
+            "can_read_kullanici_gruplari",
+            "can_read_excel_kullanici_yukleme",
+            "can_read_excel_kullanicilari",
+            "can_read_bakiye",
+            "can_read_harcama_kalemi",
+            "can_read_para_birimleri",
+            "can_read_Islemler",
+            "can_read_etkinlikler",
+            "can_read_evraklar",
+            "can_read_aylikharcamalar",
+            "can_read_aylikispatliharcamalar",
+            "can_read_smsyonetimi",
+            "can_read_mobileapplinkleri",
+            "can_write_can_kullanicilar",
+            "can_write_kullanici_gruplari",
+            "can_write_excel_kullanici_yukleme",
+            "can_write_excel_kullanicilari",
+            "can_write_bakiye",
+            "can_write_harcama_kalemi",
+            "can_write_para_birimleri",
+            "can_write_Islemler",
+            "can_write_etkinlikler",
+            "can_write_evraklar",
+            "can_write_aylikharcamalar",
+            "can_write_aylikispatliharcamalar",
+            "can_write_smsyonetimi",
+            "can_write_mobileapplinkleri",
+        ]
+
+
+from django_tables2 import TemplateColumn
+
+
+class DeletedGroupTable(tables.Table):
+    name = tables.LinkColumn(
+        "groupdetail_view_name",
+        verbose_name="Grup İsmi",
+        text=lambda record: record.name,
+        args=[tables.A("pk")],  # Pass the MuGroup's primary key as an argument to the view
+        attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
+    )
+    reactivate = TemplateColumn(verbose_name="Aktifleştir", template_name="group_reactivate_button_column.html")
+
+    # Define columns for each permission field in Yetkiler model
+    can_read_can_kullanicilar = tables.BooleanColumn(verbose_name="Okuma- Kullanıcılar")
+    can_read_kullanici_gruplari = tables.BooleanColumn(verbose_name="Kullanıcı Grupları")
+    can_read_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Okuma- Excel Kullanıcı Yükleme")
+    can_read_excel_kullanicilari = tables.BooleanColumn(verbose_name="Okuma- Excel Kullanıcıları")
+    can_read_bakiye = tables.BooleanColumn(verbose_name="Okuma- Bakiye")
+    can_read_harcama_kalemi = tables.BooleanColumn(verbose_name="Okuma- Harcama Kalemi")
+    can_read_para_birimleri = tables.BooleanColumn(verbose_name="Okuma- Para Birimleri")
+    can_read_Islemler = tables.BooleanColumn(verbose_name="Okuma- İşlemler")
+    can_read_etkinlikler = tables.BooleanColumn(verbose_name="Okuma- Etkinlikler")
+    can_read_evraklar = tables.BooleanColumn(verbose_name="Okuma- Evraklar")
+    can_read_aylikharcamalar = tables.BooleanColumn(verbose_name="Okuma- Aylık Harcamalar")
+    can_read_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Okuma- Aylık İspatlı Harcamalar")
+    can_read_smsyonetimi = tables.BooleanColumn(verbose_name="Okuma- SMS Yönetimi")
+    can_read_mobileapplinkleri = tables.BooleanColumn(verbose_name="Okuma- Mobile App Linkleri")
+
+    can_write_can_kullanicilar = tables.BooleanColumn(verbose_name="Yazma- Kullancılar")
+    can_write_kullanici_gruplari = tables.BooleanColumn(verbose_name="Yazma- Kullanıcı Grupları")
+    can_write_excel_kullanici_yukleme = tables.BooleanColumn(verbose_name="Yazma- Excel Kullanıcı Yükleme")
+    can_write_excel_kullanicilari = tables.BooleanColumn(verbose_name="Yazma- Excel Kullanıcıları")
+    can_write_bakiye = tables.BooleanColumn(verbose_name="Yazma- Bakiye")
+    can_write_harcama_kalemi = tables.BooleanColumn(verbose_name="Yazma- Harcama Kalemi")
+    can_write_para_birimleri = tables.BooleanColumn(verbose_name="Yazma- Para Birimleri")
+    can_write_Islemler = tables.BooleanColumn(verbose_name="Yazma- İslemler")
+    can_write_etkinlikler = tables.BooleanColumn(verbose_name="Yazma- Etkinlikler")
+    can_write_evraklar = tables.BooleanColumn(verbose_name="Yazma- Evraklar")
+    can_write_aylikharcamalar = tables.BooleanColumn(verbose_name="Yazma- Aylık Harcamalar")
+    can_write_aylikispatliharcamalar = tables.BooleanColumn(verbose_name="Yazma- Aylık İspatlı Harcamalar")
+    can_write_smsyonetimi = tables.BooleanColumn(verbose_name="Yazma- SMS Yönetimi")
+    can_write_mobileapplinkleri = tables.BooleanColumn(verbose_name="Yazma- Mobile App Linkleri")
 
     class Meta:
         model = MuGroup
@@ -470,7 +596,7 @@ class DeletedMuUserTable(tables.Table):
         attrs={"a": {"class": "etkinlik-name-link"}, "td": {"class": "long-text"}},  # Add any additional classes or attributes
     )
     first_name = tables.Column(verbose_name="Ad Soyad")
-    reactivate = TemplateColumn(verbose_name="Reactivate", template_name="reactivate_button_column.html")
+    reactivate = TemplateColumn(verbose_name="Aktifleştir", template_name="reactivate_button_column.html")
 
     class Meta:
         model = MuUser

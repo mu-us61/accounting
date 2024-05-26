@@ -1,92 +1,28 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% load widget_tweaks %}
-{# Load widget_tweaks library #}
-{% block content %}
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% load widget_tweaks %} {# Load widget_tweaks library #} {% block content %}
 <div class="row col-md-6 page-titles">
-    <div class="col-md-6  align-self-center">
-        <h3 class="text-themecolor mb-0">Yeni Kullanıcı Oluştur</h3>
-    </div>
+  <div class="col-md-6 align-self-center">
+    <h3 class="text-themecolor mb-0">Yeni Kullanıcı Oluştur</h3>
+  </div>
 </div>
-<div class="card col-md-6 mx-auto" >
-    <div class="card-body">
-        <h4 class="card-title text-center">Yeni Kullanıcı Oluştur</h4>
+<div class="card col-md-6 mx-auto">
+  <div class="card-body">
+    <h4 class="card-title text-center">Yeni Kullanıcı Oluştur</h4>
 
-        {% comment %} <form method="post" class="needs-validation" novalidate>
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_username" class="form-label">Username:</label>
-                {{ form.username }}
-                <div class="invalid-feedback">
-                    Please provide a valid username.
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="id_password" class="form-label">Password:</label>
-                {{ form.password }}
-                <div class="invalid-feedback">
-                    Please provide a valid password.
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="id_first_name" class="form-label">First Name:</label>
-                {{ form.first_name }}
-                <div class="invalid-feedback">
-                    Please provide a valid first name.
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form> {% endcomment %}
-        
-        {% comment %} <form method="post">
-            {% csrf_token %}
-            <!-- Display form field errors -->
-            {% for field in form %}
-                {% if field.name == "is_active" %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="{{ field.id_for_label }}" name="{{ field.name }}" {{ field }}>
-                        <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
-                        {% if field.errors %}<p class="text-danger">{{ field.errors }}</p>{% endif %}
-                    </div>
-                {% else %}
-                    <div class="mb-3">
-                        <label class="form-label">{{ field.label_tag }}</label>
-                        {{ field|add_class:"form-control" }}
-                        {% if field.errors %}<p class="text-danger">{{ field.errors }}</p>{% endif %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            <div class="mb-3">
-                <button class="btn btn-info" type="submit">Onay</button>
-            </div>
-        </form> {% endcomment %}
+    <form method="post">
+      {% csrf_token %} {% for field in form %} {% if field.name != "is_active" %}
+      <div class="mb-3">
+        <label class="form-label">{{ field.label_tag }}</label>
+        {{ field|add_class:"form-control" }} {% if field.errors %}
+        <p class="text-danger">{{ field.errors }}</p>
+        {% endif %}
+      </div>
+      {% endif %} {% endfor %}
 
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-                {% if field.name != "is_active" %}
-                    <div class="mb-3">
-                        <label class="form-label">{{ field.label_tag }}</label>
-                        {{ field|add_class:"form-control" }}
-                        {% if field.errors %}<p class="text-danger">{{ field.errors }}</p>{% endif %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            {% comment %} <div class="mb-3 form-check">
-                <input class="form-check-input" type="checkbox" id="{{ form.is_active.id_for_label }}" name="{{ form.is_active.name }}" {{ form.is_active }}>
-                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label_tag }}</label>
-                {% if form.is_active.errors %}<p class="text-danger">{{ form.is_active.errors }}</p>{% endif %}
-            </div> {% endcomment %}
-            <div class="mb-3">
-                <button class="btn btn-info" type="submit">Onay</button>
-            </div>
-        </form>
-        
-       
-        
-        
-    </div>
+      <div class="mb-3">
+        <button class="btn btn-info" type="submit"><i class="bi bi-check-circle"></i> Onay</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock content %}
-

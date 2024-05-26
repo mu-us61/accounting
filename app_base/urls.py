@@ -24,6 +24,7 @@ urlpatterns = [
     path("user-autocomplete/", views.user_autocomplete, name="user_autocomplete"),
     path("group/<int:group_id>/update/", views.groupupdate_view, name="groupupdate_view_name"),
     path("group/<int:group_id>/delete/", views.groupdelete_view, name="groupdelete_view_name"),
+    path("reactivate_group/", views.reactivate_group, name="reactivate_group"),
     # //------------------------~~--------------------------------------------------------------------------
     path("userlist/", views.UserListView.as_view(), name="userlist_view_name"),
     path("userlistmasked/", views.UserListMaskedView.as_view(), name="userlistmasked_view_name"),
@@ -51,6 +52,7 @@ urlpatterns = [
     path("tag/<slug:slug>/", views.tagdetail_view, name="tagdetail_view_name"),
     path("tag/<slug:slug>/update/", views.tagupdate_view, name="tagupdate_view_name"),
     path("tag/<slug:slug>/delete/", views.tagdelete_view, name="tagdelete_view_name"),
+    path("reactivate_tag/", views.reactivate_tag, name="reactivate_tag"),
     # //-------------------------------------------------~~-------------------------------------------------
     path("monthlyspendings", views.monthlyspendings_view, name="monthlyspendings_view_name"),
     # path("proventags", views.ProvenTagsView.as_view(), name="proventags_view_name"),
@@ -82,12 +84,14 @@ urlpatterns = [
     path("etkinlik/detail/<int:pk>/", views.EtkinlikDetailView.as_view(), name="etkinlik_detail"),
     # //------------------------~~--------------------------------------------------------------------------
     path("exelusers/create/", views.ExelUsersCreateView.as_view(), name="exelusers_create"),
+    path("download-excel/", views.download_excel, name="download_excel"),
     # path("exelusers/list/", views.ExelUsersListView.as_view(), name="exelusers_list"),
     path("exelusers/list/", views.ExelusersListView.as_view(), name="exelusers_list"),
     path("exelusers/listmasked/", views.ExelusersListMaskedView.as_view(), name="exelusers_listmasked"),
     path("exelusers/update/<int:pk>/", views.ExelUsersUpdateView.as_view(), name="exelusers_update"),
     path("exelusers/delete/<int:pk>/", views.ExelUsersDeleteView.as_view(), name="exelusers_delete"),
     path("exelusers/detail/<int:pk>/", views.ExelUsersDetailView.as_view(), name="exelusers_detail"),
+    path("reactivate_exelusers/", views.reactivate_exelusers, name="reactivate_exelusers"),
     # //------------------------~~--------------------------------------------------------------------------
     path("sms/main/", views.smsler_view, name="sms_view_main"),
     path("sms/send/", views.send_sms, name="send_sms"),

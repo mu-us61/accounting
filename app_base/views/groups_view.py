@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
-from ..tables import GroupTable
+from ..tables import GroupTable, DeletedGroupTable
 from ..filters import MuGroupFilter, MuGroupFilterMasked
 from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin, func_delete_permission_required, func_write_permission_required
 
@@ -47,7 +47,7 @@ class GroupListView(SingleTableMixin, FilterView):
 
 
 class GroupListMaskedView(SingleTableMixin, FilterView):
-    table_class = GroupTable
+    table_class = DeletedGroupTable
     model = MuGroup
     template_name = "app_base/groups/grouplistmasked.html"
     # context_table_name = "etkinlik_table"
@@ -56,6 +56,23 @@ class GroupListMaskedView(SingleTableMixin, FilterView):
     def get_queryset(self):
         # Fetch both active and deleted objects using all_objects manager
         return self.model.all_objects.get_deleted()
+
+
+from django.views.decorators.http import require_POST
+
+
+@require_POST
+def reactivate_group(request):
+    try:
+        group_id = request.POST.get("group_id")
+
+        group = MuGroup.all_objects.get(pk=group_id)
+        group.is_active = True
+        group.save()
+
+        return redirect("grouplist_view_name")
+    except MuGroup.DoesNotExist:
+        pass
 
 
 # @login_required
@@ -82,45 +99,18 @@ class GroupListMaskedView(SingleTableMixin, FilterView):
 
 from django.shortcuts import render, redirect
 from ..forms import MuGroupForm
-from ..models import MuGroup, Yetkiler
+from ..models import MuGroup
 
 
 def groupcreate_view(request):
     if request.method == "POST":
         form = MuGroupForm(request.POST)
         if form.is_valid():
-            # print(request.POST)
-            # print(form.cleaned_data)
+            print(request.POST)
+            print(form.cleaned_data)
 
-            mu_group = form.save(commit=False)
+            form.save()
 
-            # Extract only the relevant fields from the form data
-            yetkiler_data = {key: value for key, value in form.cleaned_data.items() if key.startswith("can")}
-
-            # Fetch or create Yetkiler instance based on the extracted data
-            default_yetkiler, _ = Yetkiler.objects.get_or_create(**yetkiler_data)
-
-            # Associate default Yetkiler instance with MuGroup instance
-            mu_group.yetkiler = default_yetkiler
-
-            # Now save the MuGroup instance
-            mu_group.save()
-
-            # # Associate form with a default Yetkiler instance
-            # mu_group = form.save(commit=False)
-            # # print(mu_group.yetkiler.__dict__)
-            # default_yetkiler = Yetkiler.objects.create()
-            # mu_group.yetkiler = default_yetkiler
-            # mu_group.save()
-            # print(mu_group.yetkiler.__dict__)
-
-            # # Create a default Yetkiler instance
-            # default_yetkiler = Yetkiler.objects.create()
-
-            # # Create MuGroup instance and associate it with the default Yetkiler instance
-            # mu_group = form.save(commit=False)
-            # mu_group.yetkiler = default_yetkiler
-            # mu_group.save()
             return redirect("grouplist_view_name")  # Redirect to a group list view
     else:
         form = MuGroupForm()
@@ -319,29 +309,47 @@ from ..models import MuGroup
 #         "group": group,
 #     }
 #     return render(request, "app_base/groups/groupupdate.html", context)
-@login_required
-@func_write_permission_required
+
+
+# @login_required
+# @func_write_permission_required
+# def groupupdate_view(request, group_id):
+#     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
+
+#     if request.method == "POST":
+#         form = MuGroupForm(request.POST, instance=group)
+#         if form.is_valid():
+#             form.save()
+#             # Redirect to a success page or any other action after updating
+#             return redirect("grouplist_view_name")  # Replace '/success/' with your desired URL
+#         else:
+#             form = MuGroupForm(instance=group)
+
+#     context = {
+#         "group": group,
+#         "form": form,
+#     }
+#     return render(request, "app_base/groups/groupupdate.html", context)
+
+from django.shortcuts import render, get_object_or_404, redirect
+
+
 def groupupdate_view(request, group_id):
     group = get_object_or_404(MuGroup.all_objects, pk=group_id)
-
     if request.method == "POST":
-        group_name = request.POST.get("group_name")
-        is_active = request.POST.get("is_active") == "on"  # Checkbox value handling
-        can_write = request.POST.get("can_write") == "on"  # Checkbox value handling
-        can_delete = request.POST.get("can_delete") == "on"  # Checkbox value handling
+        print(request.POST)
+        form = MuGroupForm(request.POST, instance=group)
 
-        if group_name:
-            group.name = group_name
-            group.is_active = is_active  # Assign the is_active value
-            group.can_write = can_write  # Assign the can_write value
-            group.can_delete = can_delete  # Assign the can_delete value
-            group.save()
-            # Group updated successfully
-            # You can perform any additional actions here
-            return redirect("grouplist_view_name")  # Redirect to a group list view
-
+        if form.is_valid():
+            print(form.cleaned_data)
+            form.save()
+            # Redirect to a success page or any other action after updating
+            return redirect("grouplist_view_name")  # Replace 'grouplist_view_name' with the name of your view
+    else:
+        form = MuGroupForm(instance=group)
     context = {
         "group": group,
+        "form": form,
     }
     return render(request, "app_base/groups/groupupdate.html", context)
 

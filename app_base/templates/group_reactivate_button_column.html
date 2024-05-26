@@ -1,6 +1,6 @@
 <!-- reactivate_button_column.html -->
-<form method="post" action="{% url 'reactivate_user' %}">
+<form method="post" action="{% url 'reactivate_group' %}">
   {% csrf_token %}
-  <input type="hidden" name="user_id" value="{{ record.pk }}" />
+  <input type="hidden" name="group_id" value="{{ record.pk }}" />
   <button type="submit" class="btn btn-primary">Aktifleştir</button>
 </form>

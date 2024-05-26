@@ -45,6 +45,12 @@
                                 {{ filter.form.evrak_owner|add_class:"form-select select22" }}
                             </div>
                             <div class="mb-3">
+                                <label class="form-label" for="{{ filter.form.evrak_takipno.id_for_label }}">Evrak Takip no</label>
+                                <div class="input-group">
+                                    {{ filter.form.evrak_takipno|add_class:"form-control custom-class" }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="{{ filter.form.evrak_name.id_for_label }}">Evrak İsmi</label>
                                 <div class="input-group">
                                     {{ filter.form.evrak_name|add_class:"form-control custom-class" }}

@@ -6,7 +6,7 @@ from ..forms import TagForm
 from ..models import Tag
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
-from ..tables import TagTable
+from ..tables import TagTable, DeletedTagTable
 from ..filters import TagFilter, TagFilterMasked
 from ..izinler import WritePermissionRequiredMixin, DeletePermissionRequiredMixin, func_delete_permission_required, func_write_permission_required
 
@@ -37,7 +37,7 @@ class TagListView(SingleTableMixin, FilterView):
 
 
 class TagListMaskedView(SingleTableMixin, FilterView):
-    table_class = TagTable
+    table_class = DeletedTagTable
     model = Tag
     template_name = "app_base/tags/taglistmasked.html"
     # context_table_name = "etkinlik_table"
@@ -46,6 +46,23 @@ class TagListMaskedView(SingleTableMixin, FilterView):
     def get_queryset(self):
         # Fetch both active and deleted objects using all_objects manager
         return self.model.all_objects.get_deleted()
+
+
+from django.views.decorators.http import require_POST
+
+
+@require_POST
+def reactivate_tag(request):
+    try:
+        tag_id = request.POST.get("tag_id")
+
+        tag = Tag.all_objects.get(pk=tag_id)
+        tag.is_active = True
+        tag.save()
+
+        return redirect("taglist_view_name")
+    except Tag.DoesNotExist:
+        pass
 
 
 # @login_required

@@ -1,35 +1,45 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
-    <div class="columns is-centered">
-        <div class="column is-half">
-            <div class="box mt-4">
-                <h2 class="title has-text-centered">Silme Onayı</h2>
-                <div class="content">
-                    <p>Bu tagi silmeyi onaylıyor musunuz "{{ tag.name }}"?</p>
-                </div>
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button type="submit" class="button is-danger">Evet, Sil</button>
-                        </div>
-                        <div class="control">
-                            <a href="{% url 'taglist_view_name' %}" class="button is-link">Hayır, İptal</a>
-                        </div>
-                    </div>
-                </form>
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mt-4">
+        <div class="card-body">
+          <h2 class="card-title text-center">Silme Onayı</h2>
+          <p class="card-text">Bu tagi silmeyi onaylıyor musunuz "{{ tag.name }}"?</p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-danger">Evet, Sil</button>
+              <a href="{% url 'taglist_view_name' %}" class="btn btn-link">Hayır, İptal</a>
             </div>
+          </form>
         </div>
+      </div>
     </div>
-{% endblock content %}
-{% comment %} {% extends "app_base/base.html" %}
-{% block content %}
-    <h2>Silme Onayi</h2>
-    <p>Bu tagi silmeyi onayliyormusunuz "{{ tag.name }}"?</p>
-    <form method="post">
+  </div>
+</div>
+
+{% comment %}
+<div class="columns is-centered">
+  <div class="column is-half">
+    <div class="box mt-4">
+      <h2 class="title has-text-centered">Silme Onayı</h2>
+      <div class="content">
+        <p>Bu tagi silmeyi onaylıyor musunuz "{{ tag.name }}"?</p>
+      </div>
+      <form method="post">
         {% csrf_token %}
-        <button type="submit">Evet, Sil</button>
-    </form>
-    <a href="{% url 'tag_list_name' %}">Hayir, Iptal</a>
-{% endblock content %} {% endcomment %}
+        <div class="field is-grouped">
+          <div class="control">
+            <button type="submit" class="button is-danger">Evet, Sil</button>
+          </div>
+          <div class="control">
+            <a href="{% url 'taglist_view_name' %}" class="button is-link">Hayır, İptal</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endcomment %} {% endblock content %}

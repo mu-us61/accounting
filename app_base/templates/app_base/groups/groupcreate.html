@@ -1,198 +1,101 @@
-{% extends "admin-pro/src/main/index.html" %}
-{% comment %} {% extends "base.html" %} {% endcomment %}
-{% block content %}
+{% extends "admin-pro/src/main/index.html" %} {% comment %} {% extends "base.html" %} {% endcomment %} {% block content %}
 <div class="row col-md-6 page-titles">
-    <div class="col-md-6  align-self-center">
-        <h3 class="text-themecolor mb-0">Yeni Grup Oluştur</h3>
-    </div>
+  <div class="col-md-6 align-self-center">
+    <h3 class="text-themecolor mb-0">Yeni Grup Oluştur</h3>
+  </div>
 </div>
 
 <div class="container mt-5">
-    <h2>Create Group</h2>
-    <form method="post">
-        {% csrf_token %}
-
-        {% comment %} <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}"> {% endcomment %}
-        <div class="mb-3">
-            <label for="id_name">Group Name:</label>
-            <input type="text" name="name" class="form-control" id="id_name">
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Permission</th>
-                    <th>Can Read</th>
-                    <th>Can Write</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Read Users</td>
-                    <td><input type="checkbox" name="can_read_can_kullanicilar" id="id_can_read_can_kullanicilar"></td>
-                    <td><input type="checkbox" name="can_write_can_kullanicilar" id="id_can_write_can_kullanicilar"></td>
-                </tr>
-                <tr>
-                    <td>Read User Groups</td>
-                    <td><input type="checkbox" name="can_read_kullanici_gruplari" id="id_can_read_kullanici_gruplari"></td>
-                    <td><input type="checkbox" name="can_write_kullanici_gruplari" id="id_can_write_kullanici_gruplari"></td>
-                </tr>
-                <tr>
-                    <td>Read Excel Kullanıcı Yükleme</td>
-                    <td><input type="checkbox" name="can_read_excel_kullanici_yukleme" id="id_can_read_excel_kullanici_yukleme"></td>
-                    <td><input type="checkbox" name="can_write_excel_kullanici_yukleme" id="id_can_write_excel_kullanici_yukleme"></td>
-                </tr>
-                <tr>
-                    <td>Read Excel Kullanıcıları</td>
-                    <td><input type="checkbox" name="can_read_excel_kullanicilari" id="id_can_read_excel_kullanicilari"></td>
-                    <td><input type="checkbox" name="can_write_excel_kullanicilari" id="id_can_write_excel_kullanicilari"></td>
-                </tr>
-                <tr>
-                    <td>Read Bakiye</td>
-                    <td><input type="checkbox" name="can_read_bakiye" id="id_can_read_bakiye"></td>
-                    <td><input type="checkbox" name="can_write_bakiye" id="id_can_write_bakiye"></td>
-                </tr>
-                <tr>
-                    <td>Read Harcama Kalemi</td>
-                    <td><input type="checkbox" name="can_read_harcama_kalemi" id="id_can_read_harcama_kalemi"></td>
-                    <td><input type="checkbox" name="can_write_harcama_kalemi" id="id_can_write_harcama_kalemi"></td>
-                </tr>
-                <tr>
-                    <td>Read Para Birimleri</td>
-                    <td><input type="checkbox" name="can_read_para_birimleri" id="id_can_read_para_birimleri"></td>
-                    <td><input type="checkbox" name="can_write_para_birimleri" id="id_can_write_para_birimleri"></td>
-                </tr>
-                <tr>
-                    <td>Read Islemler</td>
-                    <td><input type="checkbox" name="can_read_Islemler" id="id_can_read_Islemler"></td>
-                    <td><input type="checkbox" name="can_write_Islemler" id="id_can_write_Islemler"></td>
-                </tr>
-                <tr>
-                    <td>Read Etkinlikler</td>
-                    <td><input type="checkbox" name="can_read_etkinlikler" id="id_can_read_etkinlikler"></td>
-                    <td><input type="checkbox" name="can_write_etkinlikler" id="id_can_write_etkinlikler"></td>
-                </tr>
-                <tr>
-                    <td>Read Evraklar</td>
-                    <td><input type="checkbox" name="can_read_evraklar" id="id_can_read_evraklar"></td>
-                    <td><input type="checkbox" name="can_write_evraklar" id="id_can_write_evraklar"></td>
-                </tr>
-                <tr>
-                    <td>Read Aylikharcamalar</td>
-                    <td><input type="checkbox" name="can_read_aylikharcamalar" id="id_can_read_aylikharcamalar"></td>
-                    <td><input type="checkbox" name="can_write_aylikharcamalar" id="id_can_write_aylikharcamalar"></td>
-                </tr>
-                <tr>
-                    <td>Read Aylikispatliharcamalar</td>
-                    <td><input type="checkbox" name="can_read_aylikispatliharcamalar" id="id_can_read_aylikispatliharcamalar"></td>
-                    <td><input type="checkbox" name="can_write_aylikispatliharcamalar" id="id_can_write_aylikispatliharcamalar"></td>
-                </tr>
-                <tr>
-                    <td>Read Smsyonetimi</td>
-                    <td><input type="checkbox" name="can_read_smsyonetimi" id="id_can_read_smsyonetimi"></td>
-                    <td><input type="checkbox" name="can_write_smsyonetimi" id="id_can_write_smsyonetimi"></td>
-                </tr>
-                <tr>
-                    <td>Read Mobileapplinkleri</td>
-                    <td><input type="checkbox" name="can_read_mobileapplinkleri" id="id_can_read_mobileapplinkleri"></td>
-                    <td><input type="checkbox" name="can_write_mobileapplinkleri" id="id_can_write_mobileapplinkleri"></td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary">Create Group</button>
-    </form>
+  <h2>Grup Oluştur</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_name">Grup İsmi:</label>
+      <input type="text" name="name" class="form-control" id="id_name" />
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>İzinler</th>
+          <th>Okuma</th>
+          <th>Yazma</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kullanıcılar</td>
+          <td><input type="checkbox" name="can_read_can_kullanicilar" id="id_can_read_can_kullanicilar" /></td>
+          <td><input type="checkbox" name="can_write_can_kullanicilar" id="id_can_write_can_kullanicilar" /></td>
+        </tr>
+        <tr>
+          <td>Kullanıcı Grupları</td>
+          <td><input type="checkbox" name="can_read_kullanici_gruplari" id="id_can_read_kullanici_gruplari" /></td>
+          <td><input type="checkbox" name="can_write_kullanici_gruplari" id="id_can_write_kullanici_gruplari" /></td>
+        </tr>
+        <tr>
+          <td>Excel Kullanıcı Yükleme</td>
+          <td><input type="checkbox" name="can_read_excel_kullanici_yukleme" id="id_can_read_excel_kullanici_yukleme" /></td>
+          <td><input type="checkbox" name="can_write_excel_kullanici_yukleme" id="id_can_write_excel_kullanici_yukleme" /></td>
+        </tr>
+        <tr>
+          <td>Excel Kullanıcıları</td>
+          <td><input type="checkbox" name="can_read_excel_kullanicilari" id="id_can_read_excel_kullanicilari" /></td>
+          <td><input type="checkbox" name="can_write_excel_kullanicilari" id="id_can_write_excel_kullanicilari" /></td>
+        </tr>
+        <tr>
+          <td>Bakiye</td>
+          <td><input type="checkbox" name="can_read_bakiye" id="id_can_read_bakiye" /></td>
+          <td><input type="checkbox" name="can_write_bakiye" id="id_can_write_bakiye" /></td>
+        </tr>
+        <tr>
+          <td>Harcama Kalemi</td>
+          <td><input type="checkbox" name="can_read_harcama_kalemi" id="id_can_read_harcama_kalemi" /></td>
+          <td><input type="checkbox" name="can_write_harcama_kalemi" id="id_can_write_harcama_kalemi" /></td>
+        </tr>
+        <tr>
+          <td>Para Birimleri</td>
+          <td><input type="checkbox" name="can_read_para_birimleri" id="id_can_read_para_birimleri" /></td>
+          <td><input type="checkbox" name="can_write_para_birimleri" id="id_can_write_para_birimleri" /></td>
+        </tr>
+        <tr>
+          <td>İşlemler</td>
+          <td><input type="checkbox" name="can_read_Islemler" id="id_can_read_Islemler" /></td>
+          <td><input type="checkbox" name="can_write_Islemler" id="id_can_write_Islemler" /></td>
+        </tr>
+        <tr>
+          <td>Etkinlikler</td>
+          <td><input type="checkbox" name="can_read_etkinlikler" id="id_can_read_etkinlikler" /></td>
+          <td><input type="checkbox" name="can_write_etkinlikler" id="id_can_write_etkinlikler" /></td>
+        </tr>
+        <tr>
+          <td>Evraklar</td>
+          <td><input type="checkbox" name="can_read_evraklar" id="id_can_read_evraklar" /></td>
+          <td><input type="checkbox" name="can_write_evraklar" id="id_can_write_evraklar" /></td>
+        </tr>
+        <tr>
+          <td>Aylık Harcamalar</td>
+          <td><input type="checkbox" name="can_read_aylikharcamalar" id="id_can_read_aylikharcamalar" /></td>
+          <td><input type="checkbox" name="can_write_aylikharcamalar" id="id_can_write_aylikharcamalar" /></td>
+        </tr>
+        <tr>
+          <td>Aylık İspatlı Harcamalar</td>
+          <td><input type="checkbox" name="can_read_aylikispatliharcamalar" id="id_can_read_aylikispatliharcamalar" /></td>
+          <td><input type="checkbox" name="can_write_aylikispatliharcamalar" id="id_can_write_aylikispatliharcamalar" /></td>
+        </tr>
+        <tr>
+          <td>Sms Yönetimi</td>
+          <td><input type="checkbox" name="can_read_smsyonetimi" id="id_can_read_smsyonetimi" /></td>
+          <td><input type="checkbox" name="can_write_smsyonetimi" id="id_can_write_smsyonetimi" /></td>
+        </tr>
+        <tr>
+          <td>Mobile App Linkleri</td>
+          <td><input type="checkbox" name="can_read_mobileapplinkleri" id="id_can_read_mobileapplinkleri" /></td>
+          <td><input type="checkbox" name="can_write_mobileapplinkleri" id="id_can_write_mobileapplinkleri" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-info">Onay</button>
+  </form>
 </div>
 
-{% comment %} <div class="container mt-5">
-    <h2>Create Group</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            {{ form.name.label_tag }}
-            {{ form.name }}
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Permission</th>
-                    <th>Can Read</th>
-                    <th>Can Write</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for field in form %}
-                <tr>
-                    <td>{{ field.label_tag }}</td>
-                    <td>{{ field }}</td>
-                    <td><input type="checkbox" name="{{ field.name }}_write" id="{{ field.id_for_label }}_write"></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary">Create Group</button>
-    </form>
-</div> {% endcomment %}
-{% comment %} <div class="card col-md-6 mx-auto" >
-    <div class="card-body">
-        <h4 class="card-title text-center">Yeni Grup Oluştur</h4>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label" for="group_name">Grup İsmi</label>
-                <input type="text" class="form-control" id="group_name" name="group_name" required>
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="can_write" name="can_write">
-                    <label class="form-check-label" for="can_write">Yazma İzni</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="can_delete" name="can_delete">
-                    <label class="form-check-label" for="can_delete">Silme İzni</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-info">Onay</button>
-            </div>
-        </form>
-        
-        
-        
-    </div>
-</div> {% endcomment %}
-
-
-    {% comment %} <div class="column is-half m-auto">
-        <div class="box">
-            <h2 class="title has-text-centered">Yeni Grup Oluştur</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="field">
-                    <label class="label" for="group_name">Grup İsmi</label>
-                    <div class="control">
-                        <input type="text" class="input" id="group_name" name="group_name" required>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="checkbox">
-                        <input type="checkbox" id="can_write" name="can_write">
-                        Yazma İzni
-                    </label>
-                </div>
-                <div class="field">
-                    <label class="checkbox">
-                        <input type="checkbox" id="can_delete" name="can_delete">
-                        Silme İzni
-                    </label>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <button type="submit" class="button is-primary">Onay</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> {% endcomment %}
 {% endblock content %}
-
